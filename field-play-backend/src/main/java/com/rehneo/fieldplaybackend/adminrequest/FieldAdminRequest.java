@@ -29,7 +29,7 @@ public class FieldAdminRequest {
     private User user;
 
     @Column(name = "created_at", nullable = false)
-    private ZonedDateTime created_at;
+    private ZonedDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)

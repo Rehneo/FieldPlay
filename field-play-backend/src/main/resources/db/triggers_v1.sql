@@ -198,12 +198,12 @@ CREATE OR REPLACE FUNCTION update_user_role_to_field_admin()
     RETURNS TRIGGER AS
 $$
 BEGIN
-    UPDATE users SET role = 'FIELD_ADMIN' where users.id = NEW.field_admin_id;
+    UPDATE users SET role = 'FIELD_ADMIN' where users.id = NEW.user_id;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_user_role_to_field_admin_trigger
+CREATE OR REPLACE TRIGGER update_user_role_to_field_admin_trigger
     BEFORE INSERT
     ON field_admins
     FOR EACH ROW

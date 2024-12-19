@@ -10,8 +10,8 @@ CREATE TYPE field_admin_request_status AS ENUM ('PENDING', 'APPROVED', 'REJECTED
 CREATE TABLE users
 (
     id         SERIAL PRIMARY KEY,
-    name       VARCHAR(32)  NOT NULL,
-    surname    VARCHAR(32)  NOT NULL,
+    firstname  VARCHAR(32)  NOT NULL,
+    lastname   VARCHAR(32)  NOT NULL,
     birth_date DATE         NOT NULL,
     balance    INTEGER      NOT NULL CHECK (balance >= 0) DEFAULT 0,
     username   VARCHAR(128) NOT NULL UNIQUE,
@@ -30,9 +30,9 @@ CREATE TABLE companies
 
 CREATE TABLE field_admins
 (
-    id             SERIAL PRIMARY KEY,
-    field_admin_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    company_id     INTEGER NOT NULL REFERENCES companies (id) ON DELETE CASCADE
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    company_id INTEGER NOT NULL REFERENCES companies (id) ON DELETE CASCADE
 );
 
 CREATE TABLE cities
@@ -60,7 +60,7 @@ CREATE TABLE football_fields
     max_players   INTEGER             NOT NULL CHECK (max_players > 0) DEFAULT 20,
     length        FLOAT               NOT NULL CHECK (length > 0 ),
     width         FLOAT               NOT NULL CHECK (width > 0),
-    height        FLOAT               CHECK (height > 0),
+    height        FLOAT CHECK (height > 0),
     locker_room   BOOLEAN             NOT NULL,
     stands        BOOLEAN             NOT NULL,
     shower        BOOLEAN             NOT NULL,
@@ -111,8 +111,8 @@ CREATE TABLE feedbacks
     user_id           INTEGER                  REFERENCES users (id) ON DELETE SET NULL,
     football_field_id INTEGER                  NOT NULL REFERENCES football_fields (id) ON DELETE CASCADE,
     message           TEXT                     NOT NULL,
-    rating            INTEGER            NOT NULL CHECK (rating > 0 AND rating < 6) DEFAULT 5,
-    created_at        TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+    rating            INTEGER                  NOT NULL CHECK (rating > 0 AND rating < 6) DEFAULT 5,
+    created_at        TIMESTAMP WITH TIME ZONE NOT NULL                                   DEFAULT now()
 );
 
 CREATE TABLE blacklists
@@ -127,7 +127,7 @@ CREATE TABLE blacklists
 CREATE TABLE field_admin_requests
 (
     id          SERIAL PRIMARY KEY,
-    user_id     INTEGER                    NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    user_id     INTEGER UNIQUE             NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     created_at  TIMESTAMP WITH TIME ZONE   NOT NULL DEFAULT NOW(),
     approved_by INTEGER REFERENCES users (id),
     approved_at TIMESTAMP WITH TIME ZONE,

@@ -12,7 +12,7 @@ values ('Удельная', 1),
        ('Рыбацкое', 1),
        ('Беговая', 1);
 
-INSERT INTO users(name, surname, birth_date, balance, username, password, role)
+INSERT INTO users(firstname, lastname, birth_date, balance, username, password, role)
 values ('Кирилл',
         'Эстерман',
         '2004-05-09',
@@ -108,7 +108,7 @@ VALUES ('2024-12-21 13:00:00+00', 'ACTIVE', 3, 700, 4000, 1),
 
 
 
-INSERT INTO users (name, surname, birth_date, balance, username, password, role)
+INSERT INTO users (firstname, lastname, birth_date, balance, username, password, role)
 VALUES ('Иван', 'Иванов', '1985-05-15', 2000, 'ivan.ivanov1', MD5('password1'), 'USER'),
        ('Дмитрий', 'Петров', '1990-03-10', 500, 'dmitry.petrov2', MD5('password2'), 'USER'),
        ('Алексей', 'Сидоров', '1982-12-20', 3000, 'alexei.sidorov3', MD5('password3'), 'USER'),

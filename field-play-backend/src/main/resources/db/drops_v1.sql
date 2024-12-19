@@ -1,0 +1,72 @@
+BEGIN;
+
+DROP TABLE IF EXISTS field_admins;
+DROP TABLE IF EXISTS football_field_admins;
+DROP TABLE IF EXISTS bookings;
+DROP TABLE IF EXISTS sign_ups;
+DROP TABLE IF EXISTS feedbacks;
+DROP TABLE IF EXISTS blacklists;
+DROP TABLE IF EXISTS football_fields;
+DROP TABLE IF EXISTS companies;
+DROP TABLE IF EXISTS field_admin_requests;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS football_fields_metro_stations;
+DROP TABLE IF EXISTS metro_stations;
+DROP TABLE IF EXISTS cities;
+
+DROP TYPE IF EXISTS session_status;
+DROP TYPE IF EXISTS surface_type;
+DROP TYPE IF EXISTS football_field_type;
+DROP TYPE IF EXISTS field_admin_request_status;
+DROP TYPE IF EXISTS user_role;
+
+DROP TRIGGER IF EXISTS update_session_status_to_filled_trigger ON sign_ups;
+DROP TRIGGER IF EXISTS update_session_status_to_booked_trigger ON bookings;
+DROP TRIGGER IF EXISTS check_booking_conflict_with_signup_trigger ON bookings;
+DROP TRIGGER IF EXISTS check_session_booked_status_for_signup_trigger ON sign_ups;
+DROP TRIGGER IF EXISTS check_session_booked_status_for_booking_trigger ON bookings;
+DROP TRIGGER IF EXISTS check_session_filled_status_for_signup_trigger ON sign_ups;
+DROP TRIGGER IF EXISTS check_session_closed_status_for_signup_trigger ON sign_ups;
+DROP TRIGGER IF EXISTS check_session_closed_status_for_booking_trigger ON bookings;
+DROP TRIGGER IF EXISTS check_signing_up_balance_trigger ON sign_ups;
+DROP TRIGGER IF EXISTS check_session_closed_status_trigger ON sessions;
+DROP TRIGGER IF EXISTS deduct_signing_up_price_trigger ON sign_ups;
+DROP TRIGGER IF EXISTS check_booking_balance_trigger ON bookings;
+DROP TRIGGER IF EXISTS update_user_role_to_field_admin_trigger ON field_admins;
+DROP TRIGGER IF EXISTS deduct_booking_price_trigger ON bookings;
+DROP TRIGGER IF EXISTS refund_signing_up_price_trigger ON sign_ups;
+DROP TRIGGER IF EXISTS update_session_status_to_active_trigger ON sign_ups;
+DROP TRIGGER IF EXISTS check_session_start_trigger ON sessions;
+
+DROP FUNCTION IF EXISTS get_signup_count(session_id INTEGER);
+DROP FUNCTION IF EXISTS get_average_rating(field_id INTEGER);
+DROP FUNCTION IF EXISTS update_session_status_to_filled();
+DROP FUNCTION IF EXISTS update_session_status_to_booked();
+DROP FUNCTION IF EXISTS check_booking_conflict_with_signup();
+DROP FUNCTION IF EXISTS check_session_booked_status_for_signup();
+DROP FUNCTION IF EXISTS check_session_booked_status_for_booking();
+DROP FUNCTION IF EXISTS check_session_filled_status_for_signup();
+DROP FUNCTION IF EXISTS check_session_closed_status_for_signup();
+DROP FUNCTION IF EXISTS check_session_closed_status_for_booking();
+DROP FUNCTION IF EXISTS check_session_closed_status();
+DROP FUNCTION IF EXISTS check_signing_up_balance();
+DROP FUNCTION IF EXISTS deduct_signing_up_price();
+DROP FUNCTION IF EXISTS check_booking_balance();
+DROP FUNCTION IF EXISTS update_user_role_to_field_admin();
+DROP FUNCTION IF EXISTS deduct_booking_price();
+DROP FUNCTION IF EXISTS refund_signing_up_price();
+DROP FUNCTION IF EXISTS update_session_status_to_active();
+DROP FUNCTION IF EXISTS check_session_start();
+
+DROP INDEX IF EXISTS sessions_starts_at_idx;
+DROP INDEX IF EXISTS sessions_football_field_id_idx;
+DROP INDEX IF EXISTS bookings_user_id_idx;
+DROP INDEX IF EXISTS bookings_session_id_idx;
+DROP INDEX IF EXISTS signing_ups_user_id_idx;
+DROP INDEX IF EXISTS signing_ups_session_id_idx;
+DROP INDEX IF EXISTS chat_session_id_idx;
+DROP INDEX IF EXISTS feedbacks_football_field_id_idx;
+DROP INDEX IF EXISTS blacklists_user_id_idx;
+DROP INDEX IF EXISTS blacklists_football_field_id_idx;
+
+COMMIT;

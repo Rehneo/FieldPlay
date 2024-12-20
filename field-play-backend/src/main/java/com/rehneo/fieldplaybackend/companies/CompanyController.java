@@ -1,7 +1,6 @@
 package com.rehneo.fieldplaybackend.companies;
 
 
-import com.rehneo.fieldplaybackend.city.CityReadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

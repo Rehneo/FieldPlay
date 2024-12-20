@@ -35,12 +35,12 @@ public class User implements UserDetails {
     @NotNull
     @NotBlank
     @Column(name = "firstname", nullable = false)
-    private String firstname;
+    private String firstName;
 
     @NotNull
     @NotBlank
     @Column(name = "lastname", nullable = false)
-    private String lastname;
+    private String lastName;
 
     @NotNull
     @Column(name = "birth_date", nullable = false)

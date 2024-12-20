@@ -14,7 +14,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-
+jwt:
+  secret: ${JWT_SECRET:5e1585e6cf95c29e289e5d3c14891cd9318174224f3587c77e2871a25b2b5102}
 server:
-  port: ${server_port:8080}
+  port: ${SERVER_PORT:8080}
 

@@ -1,5 +1,7 @@
 package com.rehneo.fieldplaybackend.adminrequest;
 
+import com.rehneo.fieldplaybackend.companies.Company;
+import com.rehneo.fieldplaybackend.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,9 +12,14 @@ import java.util.Optional;
 @Repository
 public interface FieldAdminRequestRepository extends JpaRepository<FieldAdminRequest, Integer> {
 
-    Page<FieldAdminRequest> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
-    Page<FieldAdminRequest> findAllByStatusOrderByCreatedAtDesc(Status status, Pageable pageable);
+    Page<FieldAdminRequest> findAllByCompanyIdOrderByCreatedAtDesc(int companyId, Pageable pageable);
+
+    Page<FieldAdminRequest> findAllByCompanyIdAndStatusOrderByCreatedAtDesc(int companyId,
+                                                                            Status status,
+                                                                            Pageable pageable);
 
     Optional<FieldAdminRequest> findByUserId(int userId);
+
+    boolean existsByUserAndCompany(User user, Company company);
 }

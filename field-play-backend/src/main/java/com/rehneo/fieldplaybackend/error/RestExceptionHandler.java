@@ -1,10 +1,15 @@
 package com.rehneo.fieldplaybackend.error;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ControllerAdvice
 public class RestExceptionHandler {
@@ -17,7 +22,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<ErrorResponse> authenticationException() {
-        final ErrorResponse response = new ErrorResponse("Authentication failed");
+        final ErrorResponse response = new ErrorResponse("Авторизация завершилась неудачно");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
@@ -31,5 +36,16 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorResponse> notFound(ResourceNotFoundException e) {
         final ErrorResponse response = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler({ConstraintViolationException.class})
+    public ResponseEntity<DetailedErrorResponse> constraintViolation(ConstraintViolationException ex) {
+        final List<String> errors = new ArrayList<>();
+        for (final ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            errors.add(violation.getPropertyPath() + ": " + violation.getMessage());
+        }
+
+        final DetailedErrorResponse response = new DetailedErrorResponse("Constraint violation", errors);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
     }
 }

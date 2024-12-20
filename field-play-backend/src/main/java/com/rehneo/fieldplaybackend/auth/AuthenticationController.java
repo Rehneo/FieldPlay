@@ -1,6 +1,9 @@
 package com.rehneo.fieldplaybackend.auth;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -10,13 +13,13 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/sign-up")
-    public AuthenticationResponse signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
-        return authenticationService.signUp(signUpRequest);
+    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.signUp(signUpRequest));
     }
 
     @PostMapping("/sign-in")
-    public AuthenticationResponse signIn(@RequestBody @Valid SignInRequest signInRequest) {
-        return authenticationService.signIn(signInRequest);
+    public ResponseEntity<AuthenticationResponse> signIn(@RequestBody @Valid SignInRequest signInRequest) {
+        return ResponseEntity.ok().body(authenticationService.signIn(signInRequest));
     }
 
 }

@@ -30,11 +30,13 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .firstName(signUpRequest.getFirstName())
                 .lastName(signUpRequest.getLastName())
+                .birthDate(signUpRequest.getBirthDate())
+                .balance(0)
                 .role(Role.USER)
                 .build();
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             throw new UserAlreadyExistsException(
-                    "User with username " + signUpRequest.getUsername() + " already exists"
+                    "Пользователь с логином " + signUpRequest.getUsername() + " уже существует"
             );
         }
         userRepository.save(user);

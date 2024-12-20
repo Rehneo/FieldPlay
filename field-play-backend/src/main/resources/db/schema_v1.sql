@@ -118,24 +118,24 @@ CREATE TABLE feedbacks
 
 CREATE TABLE blacklists
 (
-    id                SERIAL PRIMARY KEY,
-    user_id           INTEGER                  NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    football_field_id INTEGER                  NOT NULL REFERENCES football_fields (id) ON DELETE CASCADE,
-    reason            TEXT                     NOT NULL,
-    created_at        TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-    UNIQUE (user_id, football_field_id)
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER                  NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    company_id INTEGER                  NOT NULL REFERENCES companies (id) ON DELETE CASCADE,
+    reason     TEXT                     NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    UNIQUE (user_id, company_id)
 );
 
 CREATE TABLE field_admin_requests
 (
-    id                SERIAL PRIMARY KEY,
-    user_id           INTEGER                    NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    football_field_id INTEGER                    NOT NULL REFERENCES football_fields (id) ON DELETE CASCADE,
-    created_at        TIMESTAMP WITH TIME ZONE   NOT NULL DEFAULT NOW(),
-    approved_by       INTEGER REFERENCES users (id),
-    approved_at       TIMESTAMP WITH TIME ZONE,
-    status            field_admin_request_status NOT NULL DEFAULT 'PENDING',
-    UNIQUE (user_id, football_field_id)
+    id          SERIAL PRIMARY KEY,
+    user_id     INTEGER                    NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    company_id  INTEGER                    NOT NULL REFERENCES companies (id) ON DELETE CASCADE,
+    created_at  TIMESTAMP WITH TIME ZONE   NOT NULL DEFAULT NOW(),
+    approved_by INTEGER REFERENCES users (id),
+    approved_at TIMESTAMP WITH TIME ZONE,
+    status      field_admin_request_status NOT NULL DEFAULT 'PENDING',
+    UNIQUE (user_id, company_id)
 );
 
 COMMIT;

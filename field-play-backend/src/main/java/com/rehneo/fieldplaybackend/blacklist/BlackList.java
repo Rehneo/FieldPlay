@@ -1,6 +1,7 @@
 package com.rehneo.fieldplaybackend.blacklist;
 
 
+import com.rehneo.fieldplaybackend.companies.Company;
 import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
 import com.rehneo.fieldplaybackend.user.User;
 import jakarta.persistence.*;
@@ -31,8 +32,8 @@ public class BlackList {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "football_field_id", nullable = false)
-    private FootballField footballField;
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 
 
     @NotNull

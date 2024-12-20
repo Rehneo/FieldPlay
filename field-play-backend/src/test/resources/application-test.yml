@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${TEST_DATABASE_HOST:localhost}:${TEST_DATABASE_PORT:5432}/${TEST_DATABASE_NAME:field-play-repository}
+    username: ${TEST_DATABASE_USER:postgres}
+    password: ${TEST_DATABASE_PASSWORD:password}

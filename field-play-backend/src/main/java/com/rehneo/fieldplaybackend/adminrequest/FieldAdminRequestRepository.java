@@ -13,8 +13,6 @@ import java.util.Optional;
 public interface FieldAdminRequestRepository extends JpaRepository<FieldAdminRequest, Integer> {
 
 
-    Page<FieldAdminRequest> findAllByCompanyIdOrderByCreatedAtDesc(int companyId, Pageable pageable);
-
     Page<FieldAdminRequest> findAllByCompanyIdAndStatusOrderByCreatedAtDesc(int companyId,
                                                                             Status status,
                                                                             Pageable pageable);

@@ -2,7 +2,6 @@ package com.rehneo.fieldplaybackend.adminrequest;
 
 
 import com.rehneo.fieldplaybackend.companies.Company;
-import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
 import com.rehneo.fieldplaybackend.user.User;
 import jakarta.persistence.*;
 import lombok.*;

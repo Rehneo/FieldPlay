@@ -6,7 +6,7 @@ import com.rehneo.fieldplaybackend.companies.CompanyRepository;
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdmin;
-import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminRepository;
+import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminService;
 import com.rehneo.fieldplaybackend.user.User;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,54 +22,25 @@ import java.time.ZonedDateTime;
 public class FieldAdminRequestService {
     private final FieldAdminRequestRepository repository;
     private final CompanyRepository companyRepository;
-    private final FieldAdminRepository fieldAdminRepository;
+    private final FieldAdminService fieldAdminService;
     private final UserService userService;
     private final FieldAdminRequestMapper mapper;
 
 
-    public Page<FieldAdminRequestReadDto> findAllByCompany(int companyId, Pageable pageable) {
-        User currentUser = userService.getCurrentUser();
-        if (!fieldAdminRepository.existsByUserIdAndCompanyId(currentUser.getId(), companyId)) {
-            throw new AccessDeniedException("Вы не являетесь админом данной компании");
-        } else {
-            return repository
-                    .findAllByCompanyIdOrderByCreatedAtDesc(companyId, pageable)
-                    .map(mapper::map);
+    public Page<FieldAdminRequestReadDto> findAllByCompanyAndStatus(
+            int companyId,
+            Status status,
+            Pageable pageable) {
+        if (!companyRepository.existsById(companyId)) {
+            throw new ResourceNotFoundException("Компании с id: " + companyId + "не существует");
         }
-    }
-
-
-    public Page<FieldAdminRequestReadDto> findAllPendingByCompany(int companyId, Pageable pageable) {
         User currentUser = userService.getCurrentUser();
-        if (!fieldAdminRepository.existsByUserIdAndCompanyId(currentUser.getId(), companyId)) {
+        if (!fieldAdminService.exists(currentUser.getId(), companyId) && !currentUser.isAdmin()) {
             throw new AccessDeniedException("Вы не являетесь админом данной компании");
-        } else {
-            return repository
-                    .findAllByCompanyIdAndStatusOrderByCreatedAtDesc(companyId, Status.PENDING, pageable)
-                    .map(mapper::map);
         }
-    }
-
-    public Page<FieldAdminRequestReadDto> findAllApprovedByCompany(int companyId, Pageable pageable) {
-        User currentUser = userService.getCurrentUser();
-        if (!fieldAdminRepository.existsByUserIdAndCompanyId(currentUser.getId(), companyId)) {
-            throw new AccessDeniedException("Вы не являетесь админом данной компании");
-        } else {
-            return repository
-                    .findAllByCompanyIdAndStatusOrderByCreatedAtDesc(companyId, Status.APPROVED, pageable)
-                    .map(mapper::map);
-        }
-    }
-
-    public Page<FieldAdminRequestReadDto> findAllRejectedByCompany(int companyId, Pageable pageable) {
-        User currentUser = userService.getCurrentUser();
-        if (!fieldAdminRepository.existsByUserIdAndCompanyId(currentUser.getId(), companyId)) {
-            throw new AccessDeniedException("Вы не являетесь админом данной компании");
-        } else {
-            return repository
-                    .findAllByCompanyIdAndStatusOrderByCreatedAtDesc(companyId, Status.REJECTED, pageable)
-                    .map(mapper::map);
-        }
+        return repository
+                .findAllByCompanyIdAndStatusOrderByCreatedAtDesc(companyId, status, pageable)
+                .map(mapper::map);
     }
 
     public FieldAdminRequestReadDto findByUser() {
@@ -107,7 +78,7 @@ public class FieldAdminRequestService {
                 () -> new ResourceNotFoundException("Запрос с id: " + id + " не найден")
         );
         User currentUser = userService.getCurrentUser();
-        if (!fieldAdminRepository.existsByUserAndCompany(currentUser, adminRequest.getCompany())) {
+        if (!fieldAdminService.exists(currentUser, adminRequest.getCompany()) && !currentUser.isAdmin()) {
             throw new AccessDeniedException(
                     "Недостаточно прав для обработки данного запроса. " +
                             "Вы не являетесь админом компании" + adminRequest.getCompany().getName());
@@ -120,7 +91,7 @@ public class FieldAdminRequestService {
         adminRequest.setApprovedBy(currentUser);
         if (approved) {
             adminRequest.setStatus(Status.APPROVED);
-            fieldAdminRepository.save(FieldAdmin.builder()
+            fieldAdminService.save(FieldAdmin.builder()
                     .user(adminRequest.getUser())
                     .company(adminRequest.getCompany())
                     .build());

@@ -16,17 +16,6 @@ public class FieldAdminRequestController {
 
     private final FieldAdminRequestService service;
 
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('FILED_ADMIN')")
-    public ResponseEntity<Page<FieldAdminRequestReadDto>> findAllByCompany(
-            @RequestParam int companyId,
-            Pageable pageable
-    ) {
-        Page<FieldAdminRequestReadDto> requests = service.findAllByCompany(companyId, pageable);
-        return ResponseEntity.ok()
-                .header("X-Total-Count", String.valueOf(requests.getTotalElements()))
-                .body(requests);
-    }
 
     @GetMapping("/pending")
     @PreAuthorize("hasRole('ADMIN') or hasRole('FILED_ADMIN')")
@@ -34,10 +23,20 @@ public class FieldAdminRequestController {
             @RequestParam int companyId,
             Pageable pageable
     ) {
-        Page<FieldAdminRequestReadDto> requests = service.findAllPendingByCompany(companyId, pageable);
+        Page<FieldAdminRequestReadDto> requests = service.findAllByCompanyAndStatus(
+                companyId,
+                Status.PENDING,
+                pageable);
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(requests.getTotalElements()))
                 .body(requests);
+    }
+
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<FieldAdminRequestReadDto> findMy() {
+        FieldAdminRequestReadDto request = service.findByUser();
+        return ResponseEntity.ok(request);
     }
 
     @GetMapping("/approved")
@@ -46,7 +45,10 @@ public class FieldAdminRequestController {
             @RequestParam int companyId,
             Pageable pageable
     ) {
-        Page<FieldAdminRequestReadDto> requests = service.findAllApprovedByCompany(companyId, pageable);
+        Page<FieldAdminRequestReadDto> requests = service.findAllByCompanyAndStatus(
+                companyId,
+                Status.APPROVED,
+                pageable);
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(requests.getTotalElements()))
                 .body(requests);
@@ -58,7 +60,10 @@ public class FieldAdminRequestController {
             @RequestParam int companyId,
             Pageable pageable
     ) {
-        Page<FieldAdminRequestReadDto> requests = service.findAllRejectedByCompany(companyId, pageable);
+        Page<FieldAdminRequestReadDto> requests = service.findAllByCompanyAndStatus(
+                companyId,
+                Status.REJECTED,
+                pageable);
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(requests.getTotalElements()))
                 .body(requests);

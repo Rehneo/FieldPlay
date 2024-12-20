@@ -42,7 +42,7 @@ public class FootballField {
     private City city;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "football_fields_metro_stations",
             joinColumns = @JoinColumn(name = "football_field_id"),

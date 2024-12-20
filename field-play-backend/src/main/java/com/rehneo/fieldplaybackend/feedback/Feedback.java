@@ -29,7 +29,7 @@ public class Feedback {
 
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "football_field_id", nullable = false)
     private FootballField footballField;
 

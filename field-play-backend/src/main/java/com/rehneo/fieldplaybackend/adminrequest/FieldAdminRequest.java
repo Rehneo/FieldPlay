@@ -1,6 +1,7 @@
 package com.rehneo.fieldplaybackend.adminrequest;
 
 
+import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
 import com.rehneo.fieldplaybackend.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,8 +26,12 @@ public class FieldAdminRequest {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "football_field_id", nullable = false)
+    private FootballField footballField;
 
     @Column(name = "created_at", nullable = false)
     private ZonedDateTime createdAt;

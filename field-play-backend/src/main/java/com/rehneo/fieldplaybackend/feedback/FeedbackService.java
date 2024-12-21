@@ -3,6 +3,10 @@ package com.rehneo.fieldplaybackend.feedback;
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.footballfield.FootballFieldRepository;
+import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
+import com.rehneo.fieldplaybackend.search.SearchMapper;
+import com.rehneo.fieldplaybackend.session.Session;
+import com.rehneo.fieldplaybackend.session.SessionReadDto;
 import com.rehneo.fieldplaybackend.user.User;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ public class FeedbackService {
     private final UserService userService;
     private final FootballFieldRepository fieldRepository;
     private final FeedbackMapper mapper;
+    private final SearchMapper<Feedback> searchMapper;
 
     @Transactional
     public void delete(int id) {
@@ -39,6 +44,12 @@ public class FeedbackService {
     public Page<FeedbackReadDto> findAllMy(Pageable pageable) {
         return repository.findAllByUser(userService.getCurrentUser(), pageable).map(mapper::map);
     }
+
+    public Page<FeedbackReadDto> search(SearchCriteriaDto criteria, Pageable pageable) {
+        Page<Feedback> feedbacks = repository.findAll(searchMapper.map(criteria), pageable);
+        return feedbacks.map(mapper::map);
+    }
+
 
     @Transactional
     public FeedbackReadDto create(FeedbackCreateDto createDto) {

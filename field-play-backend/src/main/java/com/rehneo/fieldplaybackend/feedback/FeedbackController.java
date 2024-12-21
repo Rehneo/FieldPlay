@@ -1,6 +1,8 @@
 package com.rehneo.fieldplaybackend.feedback;
 
 
+import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
+import com.rehneo.fieldplaybackend.session.SessionReadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,17 @@ public class FeedbackController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Page<FeedbackReadDto>> findAllMy(Pageable pageable) {
         Page<FeedbackReadDto> feedbacks = service.findAllMy(pageable);
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(feedbacks.getTotalElements()))
+                .body(feedbacks);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<Page<FeedbackReadDto>> search(
+            @RequestBody(required = false) SearchCriteriaDto searchCriteria,
+            Pageable pageable
+    ) {
+        Page<FeedbackReadDto> feedbacks = service.search(searchCriteria, pageable);
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(feedbacks.getTotalElements()))
                 .body(feedbacks);

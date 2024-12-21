@@ -1,14 +1,12 @@
 package com.rehneo.fieldplaybackend.metrostation;
 
+import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/v1/metro-stations", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -26,4 +24,16 @@ public class MetroStationController {
                 .header("X-Total-Count", String.valueOf(stations.getTotalElements()))
                 .body(stations);
     }
+
+    @PostMapping("/search")
+    public ResponseEntity<Page<MetroStationReadDto>> search(
+            @RequestBody(required = false) SearchCriteriaDto searchCriteria,
+            Pageable pageable
+    ) {
+        Page<MetroStationReadDto> stations = service.search(searchCriteria, pageable);
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(stations.getTotalElements()))
+                .body(stations);
+    }
+
 }

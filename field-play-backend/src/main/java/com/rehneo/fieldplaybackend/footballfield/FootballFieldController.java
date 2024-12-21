@@ -1,9 +1,11 @@
-package com.rehneo.fieldplaybackend.footballfield.data;
+package com.rehneo.fieldplaybackend.footballfield;
 
 
-import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldCreateOrEditDto;
+import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldCreateDto;
+import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldEditDto;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldFullReadDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +26,15 @@ public class FootballFieldController {
 
     @PostMapping
     @PreAuthorize("hasRole('FIELD_ADMIN')")
-    public ResponseEntity<FootballFieldFullReadDto> create(@RequestBody FootballFieldCreateOrEditDto createDto) {
-        return ResponseEntity.ok().body(service.create(createDto));
+    public ResponseEntity<FootballFieldFullReadDto> create(@RequestBody FootballFieldCreateDto createDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(createDto));
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('FIELD_ADMIN')")
+    public ResponseEntity<FootballFieldFullReadDto> update(
+            @PathVariable int id, @RequestBody FootballFieldEditDto editDto
+    ) {
+        return ResponseEntity.ok().body(service.edit(id, editDto));
     }
 }

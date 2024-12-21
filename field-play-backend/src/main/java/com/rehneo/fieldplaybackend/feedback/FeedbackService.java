@@ -2,7 +2,7 @@ package com.rehneo.fieldplaybackend.feedback;
 
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
-import com.rehneo.fieldplaybackend.footballfield.data.FootballFieldRepository;
+import com.rehneo.fieldplaybackend.footballfield.FootballFieldRepository;
 import com.rehneo.fieldplaybackend.user.User;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.ZonedDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +22,7 @@ public class FeedbackService {
     @Transactional
     public void delete(int id) {
         Feedback feedback = repository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Отзыва с id: " + id + "не существует")
+                () -> new ResourceNotFoundException("Отзыва с id: " + id + " не существует")
         );
         User currentUser = userService.getCurrentUser();
         if (currentUser.isAdmin() || currentUser.getId() == feedback.getUser().getId()) {
@@ -48,7 +46,9 @@ public class FeedbackService {
         Feedback feedback = Feedback.builder()
                 .user(currentUser)
                 .footballField(fieldRepository.findById(createDto.getFieldId()).orElseThrow(
-                        () -> new ResourceNotFoundException("Футбольного поля с id: " + createDto.getFieldId() + "не существует")
+                        () -> new ResourceNotFoundException(
+                                "Футбольного поля с id: " + createDto.getFieldId() + " не существует"
+                        )
                 ))
                 .message(createDto.getMessage())
                 .rating(createDto.getRating())

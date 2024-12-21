@@ -32,7 +32,7 @@ public class Company {
     @Column(name = "balance", nullable = false)
     private Integer balance;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private User owner;
 }

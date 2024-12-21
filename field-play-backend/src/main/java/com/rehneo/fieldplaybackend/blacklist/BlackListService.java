@@ -27,7 +27,7 @@ public class BlackListService {
 
     public Page<BlackListReadDto> findAllByCompany(int companyId, Pageable pageable) {
         if (!companyRepository.existsById(companyId)) {
-            throw new ResourceNotFoundException("Компании с id: " + companyId + "не существует");
+            throw new ResourceNotFoundException("Компании с id: " + companyId + " не существует");
         }
         User currentUser = userService.getCurrentUser();
         if (fieldAdminService.exists(currentUser.getId(), companyId) || currentUser.isAdmin()) {
@@ -42,7 +42,7 @@ public class BlackListService {
     @Transactional
     public void delete(int id) {
         BlackList blackList = repository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Записи с id: " + id + "не существует в черном списке")
+                () -> new ResourceNotFoundException("Записи с id: " + id + " не существует в черном списке")
         );
         User currentUser = userService.getCurrentUser();
         if (
@@ -59,10 +59,14 @@ public class BlackListService {
 
         BlackList blackList = BlackList.builder()
                 .user(userRepository.findById(createDto.getUserId()).orElseThrow(
-                        () -> new UserNotFoundException("Пользователя с id: " + createDto.getUserId() + "не существует")
+                        () -> new UserNotFoundException(
+                                "Пользователя с id: " + createDto.getUserId() + " не существует"
+                        )
                 ))
                 .company(companyRepository.findById(createDto.getCompanyId()).orElseThrow(
-                        () -> new ResourceNotFoundException("Компании с id: " + createDto.getCompanyId() + "не существует")
+                        () -> new ResourceNotFoundException(
+                                "Компании с id: " + createDto.getCompanyId() + " не существует"
+                        )
                 ))
                 .reason(createDto.getReason())
                 .build();

@@ -4,6 +4,7 @@ package com.rehneo.fieldplaybackend.feedback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +40,7 @@ public class FeedbackController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<FeedbackReadDto> create(@RequestBody FeedbackCreateDto createDto) {
-        return ResponseEntity.ok().body(service.create(createDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(createDto));
     }
 
     @DeleteMapping("/{id}")

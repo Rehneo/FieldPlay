@@ -74,7 +74,7 @@ public class FieldAdminRequestController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<FieldAdminRequestReadDto> create(@RequestParam int companyId) {
         FieldAdminRequestReadDto request = service.create(companyId);
-        return ResponseEntity.ok().body(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(request);
     }
 
 

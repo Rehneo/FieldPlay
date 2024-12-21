@@ -32,7 +32,7 @@ public class FieldAdminRequestService {
             Status status,
             Pageable pageable) {
         if (!companyRepository.existsById(companyId)) {
-            throw new ResourceNotFoundException("Компании с id: " + companyId + "не существует");
+            throw new ResourceNotFoundException("Компании с id: " + companyId + " не существует");
         }
         User currentUser = userService.getCurrentUser();
         if (!fieldAdminService.exists(currentUser.getId(), companyId) && !currentUser.isAdmin()) {
@@ -52,7 +52,7 @@ public class FieldAdminRequestService {
     @Transactional
     public FieldAdminRequestReadDto create(int companyId) {
         Company company = companyRepository.findById(companyId).orElseThrow(() ->
-                new ResourceNotFoundException("Компании с id: " + companyId + "не существует")
+                new ResourceNotFoundException("Компании с id: " + companyId + " не существует")
         );
         User user = userService.getCurrentUser();
         if (repository.existsByUserAndCompany(user, company)) {
@@ -62,7 +62,6 @@ public class FieldAdminRequestService {
             );
         }
         FieldAdminRequest adminRequest = FieldAdminRequest.builder()
-                .createdAt(ZonedDateTime.now())
                 .company(company)
                 .user(user)
                 .status(Status.PENDING)

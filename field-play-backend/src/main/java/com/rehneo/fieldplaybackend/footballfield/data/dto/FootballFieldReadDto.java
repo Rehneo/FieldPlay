@@ -3,7 +3,7 @@ package com.rehneo.fieldplaybackend.footballfield.data.dto;
 
 import com.rehneo.fieldplaybackend.footballfield.data.FootballFieldType;
 import com.rehneo.fieldplaybackend.footballfield.data.SurfaceType;
-import com.rehneo.fieldplaybackend.metrostation.MetroStation;
+import com.rehneo.fieldplaybackend.metrostation.MetroStationReadDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,9 +18,9 @@ import java.util.List;
 public class FootballFieldReadDto {
     private int id;
     private String name;
-    private List<MetroStation> stations;
+    private List<MetroStationReadDto> stations;
     private String address;
     private FootballFieldType type;
     private SurfaceType surfaceType;
-    private double avgRating;
+    private Double avgRating;
 }

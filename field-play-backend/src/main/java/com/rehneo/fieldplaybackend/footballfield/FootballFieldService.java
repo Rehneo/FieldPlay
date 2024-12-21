@@ -1,4 +1,4 @@
-package com.rehneo.fieldplaybackend.footballfield.data;
+package com.rehneo.fieldplaybackend.footballfield;
 
 import com.rehneo.fieldplaybackend.city.CityRepository;
 import com.rehneo.fieldplaybackend.companies.Company;
@@ -6,7 +6,9 @@ import com.rehneo.fieldplaybackend.companies.CompanyRepository;
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminService;
-import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldCreateOrEditDto;
+import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
+import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldCreateDto;
+import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldEditDto;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldFullReadDto;
 import com.rehneo.fieldplaybackend.metrostation.MetroStationRepository;
 import com.rehneo.fieldplaybackend.user.User;
@@ -29,18 +31,18 @@ public class FootballFieldService {
 
     public FootballFieldFullReadDto findById(int id) {
         FootballField field = repository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Футбольно поле с id: " + id + "не существует")
+                () -> new ResourceNotFoundException("Футбольного поля с id: " + id + " не существует")
         );
         FootballFieldFullReadDto readDto = mapper.mapFull(field);
-        readDto.setAvgRating(readDto.getAvgRating());
+        readDto.setAvgRating(repository.getAvgRating(field.getId()));
         return readDto;
     }
 
     @Transactional
-    public FootballFieldFullReadDto create(FootballFieldCreateOrEditDto createDto) {
+    public FootballFieldFullReadDto create(FootballFieldCreateDto createDto) {
         Company company = companyRepository.findById(createDto.getCompanyId()).orElseThrow(
                 () -> new ResourceNotFoundException(
-                        "Компании с id: " + createDto.getCompanyId() + "не существует"
+                        "Компании с id: " + createDto.getCompanyId() + " не существует"
                 )
         );
         User currentUser = userService.getCurrentUser();
@@ -50,7 +52,7 @@ public class FootballFieldService {
         FootballField field = FootballField.builder()
                 .city(cityRepository.findById(createDto.getCityId()).orElseThrow(
                         () -> new ResourceNotFoundException(
-                                "Города с id: " + createDto.getCityId() + "не существует"
+                                "Города с id: " + createDto.getCityId() + " не существует"
                         )
                 ))
                 .name(createDto.getName())
@@ -73,16 +75,18 @@ public class FootballFieldService {
         return mapper.mapFull(field);
     }
 
-//    @Transactional
-//    public FootballFieldFullReadDto edit(FootballFieldCreateOrEditDto editDto) {
-//        FootballField field = repository.findById(editDto.getId()).orElseThrow(
-//                () -> new ResourceNotFoundException("Футбольно поле с id: " + editDto.getId() + "не существует")
-//        );
-//        User currentUser = userService.getCurrentUser();
-//        if (!fieldAdminService.exists(currentUser.getId(), field.getCompany().getId())) {
-//            throw new AccessDeniedException("Вы не являетесь админом данной компании");
-//        }
-//    }
-
-
+    @Transactional
+    public FootballFieldFullReadDto edit(int fieldId, FootballFieldEditDto editDto) {
+        FootballField field = repository.findById(fieldId).orElseThrow(
+                () -> new ResourceNotFoundException("Футбольного поля с id: " + fieldId + " не существует")
+        );
+        User currentUser = userService.getCurrentUser();
+        if (!fieldAdminService.exists(currentUser.getId(), field.getCompany().getId())) {
+            throw new AccessDeniedException("Вы не являетесь админом данной компании");
+        }
+        mapper.update(editDto, field);
+        field.setMetroStations(stationRepository.findAllById(editDto.getStationIds()));
+        repository.save(field);
+        return mapper.mapFull(field);
+    }
 }

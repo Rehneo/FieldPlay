@@ -1,5 +1,6 @@
 package com.rehneo.fieldplaybackend.footballfield.data.dto;
 
+
 import com.rehneo.fieldplaybackend.footballfield.data.FootballFieldType;
 import com.rehneo.fieldplaybackend.footballfield.data.SurfaceType;
 import jakarta.validation.constraints.NotBlank;
@@ -10,18 +11,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FootballFieldCreateOrEditDto {
-    private int id;
+public class FootballFieldEditDto {
     @NotNull(message = "Имя футбольного поля должно присутствовать")
     @NotBlank(message = "Имя футбольного поля не должно быть пустым")
     private String name;
-    private List<Integer> stationIds;
+    private List<Integer> stationIds = new ArrayList<>();
     @NotNull(message = "Адрес футбольного поля должен присутствовать")
     @NotBlank(message = "Адрес футбольного поля не должен быть пустым")
     private String address;
@@ -50,8 +51,4 @@ public class FootballFieldCreateOrEditDto {
     private Boolean lighting;
     @NotNull(message = "Наличие парковки должно присутствовать")
     private Boolean parkingSpace;
-    @NotNull(message = "Город футбольного поля должен присутствовать")
-    private Integer cityId;
-    @NotNull(message = "Компания футбольного поля должна присутствовать")
-    private Integer companyId;
 }

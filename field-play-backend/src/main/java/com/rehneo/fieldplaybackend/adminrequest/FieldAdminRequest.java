@@ -48,4 +48,9 @@ public class FieldAdminRequest {
 
     @Column(name = "approved_at")
     private ZonedDateTime approvedAt;
+
+    @PrePersist
+    private void prePersist() {
+        createdAt = ZonedDateTime.now();
+    }
 }

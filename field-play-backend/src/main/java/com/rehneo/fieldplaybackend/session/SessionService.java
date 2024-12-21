@@ -5,7 +5,7 @@ import com.rehneo.fieldplaybackend.error.AccessDeniedException;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminService;
 import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
-import com.rehneo.fieldplaybackend.footballfield.data.FootballFieldRepository;
+import com.rehneo.fieldplaybackend.footballfield.FootballFieldRepository;
 import com.rehneo.fieldplaybackend.user.User;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;

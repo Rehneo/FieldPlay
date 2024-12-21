@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +39,7 @@ public class BlackListService {
         }
     }
 
+    @Transactional
     public void delete(int id) {
         BlackList blackList = repository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Записи с id: " + id + "не существует в черном списке")
@@ -52,6 +54,7 @@ public class BlackListService {
         }
     }
 
+    @Transactional
     public BlackListReadDto create(BlackListCreateDto createDto) {
 
         BlackList blackList = BlackList.builder()

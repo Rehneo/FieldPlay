@@ -13,9 +13,8 @@ import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -48,7 +47,7 @@ public class FootballField {
             joinColumns = @JoinColumn(name = "football_field_id"),
             inverseJoinColumns = @JoinColumn(name = "metro_station_id")
     )
-    private Set<MetroStation> metroStations = new HashSet<>();
+    private List<MetroStation> metroStations = new ArrayList<>();
 
 
     @NotNull
@@ -104,7 +103,7 @@ public class FootballField {
 
     @NotNull
     @Column(name = "parking_space", nullable = false)
-    private Boolean parking_space;
+    private Boolean parkingSpace;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

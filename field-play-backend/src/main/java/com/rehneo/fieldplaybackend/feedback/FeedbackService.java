@@ -1,17 +1,15 @@
 package com.rehneo.fieldplaybackend.feedback;
 
-import com.rehneo.fieldplaybackend.blacklist.BlackList;
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.footballfield.data.FootballFieldRepository;
 import com.rehneo.fieldplaybackend.user.User;
-import com.rehneo.fieldplaybackend.user.UserNotFoundException;
-import com.rehneo.fieldplaybackend.user.UserRepository;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 
@@ -23,6 +21,7 @@ public class FeedbackService {
     private final FootballFieldRepository fieldRepository;
     private final FeedbackMapper mapper;
 
+    @Transactional
     public void delete(int id) {
         Feedback feedback = repository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Отзыва с id: " + id + "не существует")
@@ -43,6 +42,7 @@ public class FeedbackService {
         return repository.findAllByUser(userService.getCurrentUser(), pageable).map(mapper::map);
     }
 
+    @Transactional
     public FeedbackReadDto create(FeedbackCreateDto createDto) {
         User currentUser = userService.getCurrentUser();
         Feedback feedback = Feedback.builder()

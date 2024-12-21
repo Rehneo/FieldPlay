@@ -19,7 +19,8 @@ public interface SessionRepository extends JpaRepository<Session, Integer> {
 
     Page<Session> findAllByStartsAtBetween(ZonedDateTime start, ZonedDateTime end, Pageable pageable);
 
-    Page<Session> findAllByStartsAtBetweenAndFootballFieldId(
+    Page<Session> findAllByStatusAndStartsAtBetweenAndFootballFieldId(
+            Status status,
             ZonedDateTime start,
             ZonedDateTime end,
             int fieldId,
@@ -29,16 +30,8 @@ public interface SessionRepository extends JpaRepository<Session, Integer> {
     @Query(value = "SELECT get_signup_count(:sessionId)", nativeQuery = true)
     int getSignUpCount(int sessionId);
 
-
-    @Query(value = "SELECT s FROM Session s " +
-            "JOIN SignUp su ON s.id = su.session.id " +
-            "WHERE su.user.id = :userId " +
-            "UNION " +
-            "SELECT s FROM Session s " +
-            "JOIN Booking b ON s.id = b.session.id " +
-            "WHERE b.user.id = :userId " +
-            "ORDER BY s.startsAt DESC")
-    Page<Session> findAllByUserId(int userId, Pageable pageable);
+    @Query(value = "SELECT get_max_players(:sessionId)", nativeQuery = true)
+    int getMaxPlayers(int sessionId);
 
 
     @Query(value = "SELECT s FROM Session s " +

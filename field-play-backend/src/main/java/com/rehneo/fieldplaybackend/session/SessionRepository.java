@@ -5,13 +5,14 @@ import com.rehneo.fieldplaybackend.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.ZonedDateTime;
 
 @Repository
-public interface SessionRepository extends JpaRepository<Session, Integer> {
+public interface SessionRepository extends JpaRepository<Session, Integer>, JpaSpecificationExecutor<Session> {
 
     Page<Session> findAllByFootballField(FootballField field, Pageable pageable);
 

@@ -6,6 +6,8 @@ import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminService;
 import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
 import com.rehneo.fieldplaybackend.footballfield.FootballFieldRepository;
+import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
+import com.rehneo.fieldplaybackend.search.SearchMapper;
 import com.rehneo.fieldplaybackend.user.User;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class SessionService {
     private final UserService userService;
     private final FieldAdminService fieldAdminService;
     private final FootballFieldRepository fieldRepository;
+    private final SearchMapper<Session> searchMapper;
 
 
     public Page<SessionReadDto> findAllMy(Pageable pageable) {
@@ -34,6 +37,11 @@ public class SessionService {
                     return dto;
                 }
         );
+    }
+
+    public Page<SessionReadDto> search(SearchCriteriaDto criteria, Pageable pageable) {
+        Page<Session> sessions = repository.findAll(searchMapper.map(criteria), pageable);
+        return sessions.map(mapper::map);
     }
 
     @Transactional

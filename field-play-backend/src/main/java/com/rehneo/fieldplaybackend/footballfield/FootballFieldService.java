@@ -10,10 +10,16 @@ import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldCreateDto;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldEditDto;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldFullReadDto;
+import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldReadDto;
 import com.rehneo.fieldplaybackend.metrostation.MetroStationRepository;
+import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
+import com.rehneo.fieldplaybackend.search.SearchMapper;
+import com.rehneo.fieldplaybackend.session.Session;
 import com.rehneo.fieldplaybackend.user.User;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +30,7 @@ public class FootballFieldService {
     private final FootballFieldMapper mapper;
     private final CompanyRepository companyRepository;
     private final CityRepository cityRepository;
+    private final SearchMapper<FootballField> searchMapper;
     private final MetroStationRepository stationRepository;
     private final FieldAdminService fieldAdminService;
     private final UserService userService;
@@ -36,6 +43,11 @@ public class FootballFieldService {
         FootballFieldFullReadDto readDto = mapper.mapFull(field);
         readDto.setAvgRating(repository.getAvgRating(field.getId()));
         return readDto;
+    }
+
+    public Page<FootballFieldReadDto> search(SearchCriteriaDto criteria, Pageable pageable) {
+        Page<FootballField> fields = repository.findAll(searchMapper.map(criteria), pageable);
+        return fields.map(mapper::map);
     }
 
     @Transactional

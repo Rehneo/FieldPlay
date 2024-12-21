@@ -1,9 +1,8 @@
 package com.rehneo.fieldplaybackend.search;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import com.rehneo.fieldplaybackend.city.City;
+import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
@@ -52,6 +51,14 @@ public class SearchSpecification<T> implements Specification<T> {
                     root.get(criteria.getKey()),
                     criteria.getValue().toString()
             );
+            case NESTED_CITY_ID -> {
+                Join<T, City> cityJoin = root.join("city");
+                yield cb.equal(cityJoin.<Integer>get("id"), criteria.getValue());
+            }
+            case NESTED_FIELD_ID -> {
+                Join<T, FootballField> fieldJoin = root.join("footballField");
+                yield cb.equal(fieldJoin.<Integer>get("id"), criteria.getValue());
+            }
         };
     }
 }

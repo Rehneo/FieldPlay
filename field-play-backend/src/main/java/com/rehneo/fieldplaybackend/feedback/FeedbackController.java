@@ -2,7 +2,6 @@ package com.rehneo.fieldplaybackend.feedback;
 
 
 import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
-import com.rehneo.fieldplaybackend.session.SessionReadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -7,12 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
-public class RestExceptionHandler {
+public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ConflictException.class})
     public ResponseEntity<ErrorResponse> conflict(ConflictException e) {
@@ -36,6 +37,12 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorResponse> notFound(ResourceNotFoundException e) {
         final ErrorResponse response = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler({BadRequestException.class})
+    public ResponseEntity<ErrorResponse> badRequest(BadRequestException e) {
+        final ErrorResponse response = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler({ConstraintViolationException.class})

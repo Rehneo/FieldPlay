@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +17,21 @@ import java.util.List;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ConflictException.class})
-    public ResponseEntity<ErrorResponse> conflict(ConflictException e) {
+    public ResponseEntity<ErrorResponse> conflict(Exception e) {
         final ErrorResponse response = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler({SQLException.class})
+    public ResponseEntity<ErrorResponse> sql(SQLException ex) {
+        String sqlState = ex.getSQLState();
+        if (sqlState.equals("P0001")) {
+            final ErrorResponse response = new ErrorResponse(ex.getLocalizedMessage().split("\n")[0]);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } else {
+            final ErrorResponse response = new ErrorResponse(ex.getLocalizedMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     @ExceptionHandler({AuthenticationException.class})

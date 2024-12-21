@@ -3,7 +3,6 @@ package com.rehneo.fieldplaybackend.booking;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.session.Session;
 import com.rehneo.fieldplaybackend.session.SessionRepository;
-import com.rehneo.fieldplaybackend.signups.SignUp;
 import com.rehneo.fieldplaybackend.user.User;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;

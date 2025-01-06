@@ -19,5 +19,5 @@ public class UserReadDto {
     private String username;
     private Integer balance;
     private Role role;
-    private Date birth_date;
+    private Date birthDate;
 }

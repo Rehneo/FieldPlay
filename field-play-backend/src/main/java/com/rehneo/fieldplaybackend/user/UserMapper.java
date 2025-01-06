@@ -12,7 +12,7 @@ public class UserMapper {
                 .balance(user.getBalance())
                 .role(user.getRole())
                 .username(user.getUsername())
-                .birth_date(user.getBirthDate())
+                .birthDate(user.getBirthDate())
                 .build();
     }
 }

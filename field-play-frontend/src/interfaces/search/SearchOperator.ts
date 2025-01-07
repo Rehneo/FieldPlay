@@ -1,0 +1,11 @@
+export enum SearchOperator {
+    CONTAINS = 'CONTAINS',
+    EQUAL = 'EQUAL',
+    STR_EQUAL = 'STR_EQUAL',
+    BEFORE = 'BEFORE',
+    AFTER = 'AFTER',
+    GREATER_THAN = 'GREATER_THAN',
+    LESS_THAN = 'LESS_THAN',
+    NESTED_CITY_ID = 'NESTED_CITY_ID',
+    NESTED_FIELD_ID = 'NESTED_FIELD_ID'
+}

@@ -18,7 +18,7 @@ public interface FieldAdminRepository extends JpaRepository<FieldAdmin, Integer>
 
     Page<FieldAdmin> findAllByUserId(int userId, Pageable pageable);
 
-    boolean existsByUserIdAndCompanyId(int userId, Integer fieldId);
+    boolean existsByUserIdAndCompanyId(int userId, Integer companyId);
 
     boolean existsByUserAndCompany(User user, Company company);
 

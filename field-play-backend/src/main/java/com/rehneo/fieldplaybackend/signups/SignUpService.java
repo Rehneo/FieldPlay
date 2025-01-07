@@ -1,5 +1,7 @@
 package com.rehneo.fieldplaybackend.signups;
 
+import com.rehneo.fieldplaybackend.blacklist.BlackListRepository;
+import com.rehneo.fieldplaybackend.error.AccessDeniedException;
 import com.rehneo.fieldplaybackend.error.BadRequestException;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.session.Session;
@@ -18,6 +20,7 @@ public class SignUpService {
     private final SessionRepository sessionRepository;
     private final UserService userService;
     private final SignUpMapper mapper;
+    private final BlackListRepository blackListRepository;
 
 
     @Transactional
@@ -26,6 +29,12 @@ public class SignUpService {
                 () -> new ResourceNotFoundException("Сессия с id: " + sessionId + " не найдена")
         );
         User currentUser = userService.getCurrentUser();
+        if(blackListRepository.existsByUserIdAndCompanyId(
+                currentUser.getId(),
+                session.getFootballField().getCompany().getId()
+        )){
+            throw new AccessDeniedException("Вы находитесь в черном списке данной компании");
+        }
         SignUp signUp = SignUp.builder()
                 .user(currentUser)
                 .session(session)

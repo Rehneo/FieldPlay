@@ -11,5 +11,7 @@ public interface BlackListRepository extends JpaRepository<BlackList, Integer> {
     Page<BlackList> findAllByCompanyId(int companyId, Pageable pageable);
 
     Page<BlackList> findAllByCompany(Company company, Pageable pageable);
+
+    boolean existsByUserIdAndCompanyId(int userId, Integer companyId);
 }
 

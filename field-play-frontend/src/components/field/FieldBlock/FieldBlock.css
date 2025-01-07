@@ -1,0 +1,58 @@
+.field-block {
+    width: 420px;
+    height: 190px;
+    display: flex;
+    gap: 10px;
+    background-color: white;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.field-block .image-container {
+    background-color: gray;
+    width: 190px;
+    height: 190px;
+}
+
+.field-block .info-container {
+    background-color: white;
+    width: 220px;
+    height: 190px;
+}
+
+.field-block .info-container h3 {
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.detail{
+    display: flex;
+}
+
+.detail span{
+    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.field-block .details {
+    width: 210px;
+    height: 80px;
+    font-weight: 300;
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.field-block .rating {
+    display: flex;
+    font-weight: 600;
+}
+

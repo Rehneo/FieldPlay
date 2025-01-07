@@ -2,6 +2,7 @@ import {createBrowserRouter} from "react-router-dom";
 import SignInPage from "../pages/auth/SignInPage.tsx";
 import App from "../App.tsx";
 import SignUpPage from "../pages/auth/SignUpPage.tsx";
+import FieldSelectionPage from "../pages/field/FieldSelectionPage.tsx";
 
 export const router = createBrowserRouter([
 
@@ -10,7 +11,8 @@ export const router = createBrowserRouter([
         element: <App/>,
         children: [
             {path: "sign-in", element: <SignInPage/>},
-            {path: "sign-up", element: <SignUpPage/>}
+            {path: "sign-up", element: <SignUpPage/>},
+            {path: "fields", element: <FieldSelectionPage/>}
         ]
     }
 ])

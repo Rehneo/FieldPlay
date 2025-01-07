@@ -28,11 +28,11 @@
     text-overflow: ellipsis
 }
 
-.detail{
+.detail {
     display: flex;
 }
 
-.detail span{
+.detail span {
     margin-left: 5px;
     white-space: nowrap;
     overflow: hidden;

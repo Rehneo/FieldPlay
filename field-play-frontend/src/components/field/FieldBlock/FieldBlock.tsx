@@ -5,8 +5,13 @@ import metroIcon from '../../../assets/metro.svg'
 import fieldIcon from '../../../assets/field.svg'
 import addressIcon from '../../../assets/address.svg'
 import starIcon from '../../../assets/star.svg'
+import React from "react";
 
-const FieldBlock = (field: FieldReadDto) => {
+interface FieldBlockProps {
+    field: FieldReadDto;
+}
+
+const FieldBlock: React.FC<FieldBlockProps> = ({field}) => {
 
     const getSurfaceTypeDisplay = (surfaceType: SurfaceType) => {
         switch (surfaceType) {
@@ -43,7 +48,7 @@ const FieldBlock = (field: FieldReadDto) => {
                 </div>
                 <div className="rating detail">
                     <img src={starIcon} className="icon" alt="Star Icon"/>
-                    <span>{field.avgRating? field.avgRating: '-'}</span>
+                    <span>{field.avgRating ? field.avgRating : '-'}</span>
                 </div>
             </div>
         </div>

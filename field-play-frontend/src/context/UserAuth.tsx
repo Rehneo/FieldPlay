@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: Props) => {
                 localStorage.setItem("user", JSON.stringify(res?.data.user));
                 setToken(res?.data.token);
                 setUser(res?.data.user);
-                navigate("/main");
+                navigate("/fields");
             }
         }).catch(error => {
             if (error.response && error.response.status === 409) {
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: Props) => {
                 localStorage.setItem("user", JSON.stringify(res?.data.user));
                 setToken(res?.data.token);
                 setUser(res?.data.user);
-                navigate("/main");
+                navigate("/fields");
             }
         }).catch(error => {
             if (error.response && error.response.status === 401) {

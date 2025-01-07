@@ -1,5 +1,4 @@
 import {Role} from "./Role.ts";
-import {DateTime} from "luxon";
 
 export default interface User {
     id: number;
@@ -8,5 +7,5 @@ export default interface User {
     username: string;
     role: Role;
     balance: number;
-    birthDate: DateTime;
+    birthDate: Date;
 }

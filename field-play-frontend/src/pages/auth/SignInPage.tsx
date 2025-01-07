@@ -37,14 +37,14 @@ const SignInPage = () => {
                     <input
                         type="username"
                         className="px-4 py-3 w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm"
-                        placeholder="Username"
+                        placeholder="Логин"
                         {...register("username")}
                     />
                     {errors.username ? <p className="text-red-600">{errors.username.message}</p> : ""}
                     <input
                         type="password"
                         className="px-4 py-3 mt-4 w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm"
-                        placeholder="Password"
+                        placeholder="Пароль"
                         {...register("password")}
                     />
                     {errors.password ? <p className="text-red-600">{errors.password.message}</p> : ""}

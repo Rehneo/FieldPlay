@@ -1,9 +1,7 @@
-import {DateTime} from "luxon";
-
 export default interface SignUpRequest {
     firstName: string;
     lastName: string;
-    birthDate: DateTime;
+    birthDate: Date;
     username: string;
     password: string;
 }

@@ -11,7 +11,7 @@ class AuthService {
     }
 
     register = async (request: SignUpRequest): Promise<AxiosResponse<AuthResponse>> => {
-        return apiService.post<AuthResponse>('/auth/register', request);
+        return apiService.post<AuthResponse>('/auth/sign-up', request);
     }
 }
 

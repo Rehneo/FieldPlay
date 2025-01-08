@@ -50,7 +50,7 @@ const SignInPage = () => {
                     {errors.password ? <p className="text-red-600">{errors.password.message}</p> : ""}
                     <button
                         type="submit"
-                        className="mt-4 px-4 py-3  leading-6 text-base rounded-md border border-transparent text-white focus:outline-none bg-green-500 hover:text-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer inline-flex items-center w-full justify-center font-medium"
+                        className="mt-4 px-4 py-3  leading-6 text-base rounded-md border border-transparent text-white focus:outline-none bg-green-700 hover:text-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer inline-flex items-center w-full justify-center font-medium"
                     >
                         Войти
                     </button>
@@ -60,7 +60,7 @@ const SignInPage = () => {
                         <p className="mt-1 text-xs font-light text-gray-500">
                             Нет аккаунта?
                             <Link to={"/sign-up"}
-                                  className="ml-1 font-medium text-green-400"> Регистрация
+                                  className="ml-1 font-medium text-green-700"> Регистрация
                             </Link>
                         </p>
                     </div>

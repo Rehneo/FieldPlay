@@ -1,6 +1,7 @@
 import FieldReadDto from "../../../interfaces/field/FieldReadDto.ts";
 import FieldBlock from "../FieldBlock/FieldBlock.tsx";
 import React from "react";
+import "./FieldBlockContainer.css"
 
 interface FieldBlockContainerProps {
     fields: FieldReadDto[];

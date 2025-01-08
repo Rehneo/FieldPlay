@@ -92,16 +92,16 @@ const SignUpPage = () => {
                     {errors.password ? <p className="text-red-600">{errors.password.message}</p> : ""}
                     <button
                         type="submit"
-                        className="mt-4 px-4 py-3  leading-6 text-base rounded-md border border-transparent text-white focus:outline-none bg-green-500 hover:text-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer inline-flex items-center w-full justify-center font-medium"
+                        className="mt-4 px-4 py-3  leading-6 text-base rounded-md border border-transparent text-white focus:outline-none bg-green-700 hover:text-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer inline-flex items-center w-full justify-center font-medium"
                     >
                         Регистрация
                     </button>
                     {authErrorMessage ?
-                        <p className="mt-4 px-4 py-3  flex justify-center text-red-600">{authErrorMessage}</p> : ""}
+                        <p className="mt-4 px-4 py-3  flex justify-center text-red-700">{authErrorMessage}</p> : ""}
                     <div className="flex flex-col items-center mt-5">
                         <p className="mt-1 text-xs font-light text-gray-500">
                             Уже есть аккаунт?
-                            <Link to={"/sign-in"} className="ml-1 font-medium text-green-400">
+                            <Link to={"/sign-in"} className="ml-1 font-medium text-green-700">
                                 Войти
                             </Link>
                         </p>

@@ -1,6 +1,6 @@
 import "./FieldBlock.css";
 import FieldReadDto from "../../../interfaces/field/FieldReadDto.ts";
-import {SurfaceType} from "../../../interfaces/field/SurfaceType.ts";
+import {getSurfaceTypeDisplay} from "../../../interfaces/field/SurfaceType.ts";
 import metroIcon from '../../../assets/metro.svg'
 import fieldIcon from '../../../assets/field.svg'
 import addressIcon from '../../../assets/address.svg'
@@ -12,20 +12,6 @@ interface FieldBlockProps {
 }
 
 const FieldBlock: React.FC<FieldBlockProps> = ({field}) => {
-
-    const getSurfaceTypeDisplay = (surfaceType: SurfaceType) => {
-        switch (surfaceType) {
-            case SurfaceType.NATURAL:
-                return "Трава";
-            case SurfaceType.ARTIFICIAL:
-                return "Искусственная трава";
-            case SurfaceType.PARQUET:
-                return "Паркет";
-            case SurfaceType.LINOLEUM:
-                return "Линолеум";
-        }
-    };
-
     return (
         <div className="field-block">
             <div className="image-container">

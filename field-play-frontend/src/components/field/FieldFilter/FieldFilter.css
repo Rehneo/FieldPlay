@@ -1,0 +1,30 @@
+.field-filter-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    gap: 15px;
+    padding: 10px;
+    box-shadow: 1px 2px 2px 0 rgba(0, 0, 0, 0.25);
+}
+
+.field-type-button {
+    height: 50px;
+    width: 100%;
+}
+
+.button-font{
+    font-family: Inter, sans-serif;
+    font-style: italic;
+}
+
+.type-filter-container {
+    margin-left: 10px;
+    display: flex;
+    width: 300px;
+}
+
+.apply-container{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}

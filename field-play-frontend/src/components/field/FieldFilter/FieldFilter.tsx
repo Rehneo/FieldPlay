@@ -69,7 +69,7 @@ const FieldFilter: React.FC<FieldFilterProps> = ({onApply}) => {
 
     const handleApply = () => {
         const criteria: SearchCriteria[] = [];
-        if (address) {
+        if (address.length > 0) {
             criteria.push({
                 key: 'address',
                 value: address,
@@ -103,16 +103,22 @@ const FieldFilter: React.FC<FieldFilterProps> = ({onApply}) => {
     }
 
     return <ThemeProvider theme={theme}>
-        <Button color="primary" onClick={handleOpen} className="button-font">
-            Фильтры
-        </Button>
+        <div className="filter-container">
+            <TextField
+                label="Адрес"
+                value={address}
+                variant="standard"
+                sx={{marginBottom: 2, width: "100%"}}
+                onChange={(e) => {
+                    setAddress(e.target.value)
+                    handleApply();
+                }}/>
+            <Button color="primary" onClick={handleOpen} className="button-font">
+                Фильтры
+            </Button>
+        </div>
         <Collapse in={open} timeout="auto" unmountOnExit>
             <div className="field-filter-container">
-                <TextField
-                    label="Адрес"
-                    value={address}
-                    variant="standard"
-                    onChange={(e) => setAddress(e.target.value)}/>
                 <div className="type-filter-container">
                     <Button variant={selectedFieldType == 'OUTDOOR' ? 'contained' : 'outlined'}
                             onClick={() => {
@@ -129,18 +135,20 @@ const FieldFilter: React.FC<FieldFilterProps> = ({onApply}) => {
                         Крытая
                     </Button>
                 </div>
-                <MultipleSelect values={surfaceTypes}
-                                selectedValues={selectedSurfaceTypes}
-                                setSelectedValues={setSelectedSurfaceTypes}
-                                label='Покрытие'
-                                display={getSurfaceTypeDisplay}
-                />
-                <MultipleSelect values={featureTypes}
-                                selectedValues={selectedFeatures}
-                                setSelectedValues={setSelectedFeatures}
-                                label='Инфраструктура'
-                                display={getFeatureTypeDisplay}
-                />
+                <div className="surface-type-container">
+                    <MultipleSelect values={surfaceTypes}
+                                    selectedValues={selectedSurfaceTypes}
+                                    setSelectedValues={setSelectedSurfaceTypes}
+                                    label='Покрытие'
+                                    display={getSurfaceTypeDisplay}
+                    />
+                    <MultipleSelect values={featureTypes}
+                                    selectedValues={selectedFeatures}
+                                    setSelectedValues={setSelectedFeatures}
+                                    label='Инфраструктура'
+                                    display={getFeatureTypeDisplay}
+                    />
+                </div>
                 <div className="apply-container">
                     <Button className="button-font" variant='contained' onClick={handleApply}>Применить</Button>
                     <Button className="button-font" variant='contained' onClick={handleClear}>Очистить</Button>

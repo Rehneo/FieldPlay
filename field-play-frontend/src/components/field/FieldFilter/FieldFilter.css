@@ -4,7 +4,15 @@
     max-width: 500px;
     gap: 15px;
     padding: 10px;
+    margin-bottom: 10px;
     box-shadow: 1px 2px 2px 0 rgba(0, 0, 0, 0.25);
+}
+
+.filter-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 500px;
 }
 
 .field-type-button {
@@ -18,9 +26,16 @@
 }
 
 .type-filter-container {
-    margin-left: 10px;
+    margin: 0 auto;
     display: flex;
     width: 300px;
+}
+
+.surface-type-container {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .apply-container{

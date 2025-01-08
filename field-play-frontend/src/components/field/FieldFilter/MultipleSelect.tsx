@@ -34,7 +34,7 @@ interface MultipleSelectProps {
     selectedValues: string[];
     setSelectedValues: (selectedValues: string[]) => void;
     label: string;
-    display: (value: string) => string;
+    display: (value: string) => string | undefined;
 }
 
 const MultipleSelect: React.FC<MultipleSelectProps> = (props) =>{
@@ -52,7 +52,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = (props) =>{
 
     return (
         <div>
-            <FormControl sx={{ml:1, width: 300}}>
+            <FormControl sx={{width: 300}}>
                 <InputLabel id="demo-multiple-name-label">{label}</InputLabel>
                 <Select
                     labelId="demo-multiple-name-label"

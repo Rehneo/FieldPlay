@@ -1,0 +1,38 @@
+.user-session-block {
+    display: flex;
+    flex-direction: row;
+    width: 300px;
+    gap: 10px;
+}
+
+.session-details {
+    width: 150px;
+    height: 150px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.session-info {
+    width: 140px;
+}
+
+.player-count {
+    font-weight: 600;
+    align-self: center;
+    margin: 0 auto;
+    font-size: 30px;
+}
+
+.session-hours{
+    align-self: center;
+}
+
+.session-field-date {
+    font-weight: 300;
+    margin-top: 10px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+}

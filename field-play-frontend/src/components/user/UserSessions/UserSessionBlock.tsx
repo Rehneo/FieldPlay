@@ -1,0 +1,41 @@
+import SessionReadDto from "../../../interfaces/session/SessionReadDto.ts";
+import React from "react";
+import {Status} from "../../../interfaces/session/Status.ts";
+import "./UserSessionBlock.css"
+import {DateTime} from "luxon";
+
+interface UserSessionBlockProps {
+    session: SessionReadDto;
+}
+
+
+const UserSessionBlock: React.FC<UserSessionBlockProps> = ({session}) => {
+    return <div className="user-session-block">
+        <div className="session-details">
+            <div className="player-count">
+                {session.signUpCount < session.minPlayers
+                    ? <span className="text-red-600">{session.signUpCount}</span>
+                    : <span className="text-green-700">{session.signUpCount}</span>
+                }
+                <span>/</span>
+                <span>{session.maxPlayers}</span>
+            </div>
+            <span className="session-hours">{
+                session.startsAt.hour + ":00" + " - " + (session.startsAt.hour + 1) + ":00"
+            }</span>
+        </div>
+        <div className="session-info">
+            {session.status == Status.CLOSED
+                ? <span className="text-red-600">Завершенный</span>
+                : <span className="text-green-700">Активный</span>
+            }
+            <div className="session-field-date">
+                <span className="field-name">{session.fieldName}</span>
+                <span className="session-date">{DateTime.fromISO(session.startsAt.toString())
+                    .toLocaleString(DateTime.DATE_MED)}</span>
+            </div>
+        </div>
+    </div>
+}
+
+export default UserSessionBlock;

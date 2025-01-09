@@ -37,13 +37,13 @@ interface MultipleSelectProps {
     display: (value: string) => string | undefined;
 }
 
-const MultipleSelect: React.FC<MultipleSelectProps> = (props) =>{
+const MultipleSelect: React.FC<MultipleSelectProps> = (props) => {
     const {values, selectedValues, setSelectedValues, label, display} = props;
     const theme = useTheme();
 
     const handleChange = (event: SelectChangeEvent<typeof selectedValues>) => {
         const {
-            target: { value },
+            target: {value},
         } = event;
         setSelectedValues(
             typeof value === 'string' ? value.split(',') : value,
@@ -53,14 +53,12 @@ const MultipleSelect: React.FC<MultipleSelectProps> = (props) =>{
     return (
         <div>
             <FormControl sx={{width: 300}}>
-                <InputLabel id="demo-multiple-name-label">{label}</InputLabel>
+                <InputLabel>{label}</InputLabel>
                 <Select
-                    labelId="demo-multiple-name-label"
-                    id="demo-multiple-name"
                     multiple
                     value={selectedValues}
                     onChange={handleChange}
-                    input={<OutlinedInput label={label} />}
+                    input={<OutlinedInput label={label}/>}
                     MenuProps={MenuProps}
                     variant='outlined'>
                     {values.map((value) => (

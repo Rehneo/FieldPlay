@@ -29,7 +29,7 @@ const FieldBlock: React.FC<FieldBlockProps> = ({field}) => {
                     </div>
                     <div className="detail">
                         <img src={metroIcon} className="icon" alt="Metro Icon"/>
-                        <span>{field.stations[0].name}</span>
+                        <span>{(field.stations && field.stations.length > 0) ? field.stations[0].name : '-'}</span>
                     </div>
                 </div>
                 <div className="rating detail">

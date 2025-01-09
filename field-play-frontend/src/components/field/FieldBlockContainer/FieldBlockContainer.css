@@ -1,6 +1,6 @@
 .field-block-container {
     width: 1320px;
-    height: 610px;
+    height: auto;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;

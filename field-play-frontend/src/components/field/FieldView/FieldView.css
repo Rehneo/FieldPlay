@@ -1,9 +1,15 @@
 .field-view-container {
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .field-select-label{
     font-weight: 600;
     text-transform: uppercase;
     font-size: 40px;
+}
+
+.pagination{
+    margin: 20px auto 0;
 }

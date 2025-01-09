@@ -6,15 +6,17 @@
     flex-direction: column;
 }
 
-.personal-label{
+.personal-label {
     font-weight: 600;
     font-size: 20px;
 }
-.role-label{
+
+.role-label {
     font-weight: 300;
     font-size: 16px;
 }
-.personal-line{
+
+.personal-line {
     border-color: black;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -34,11 +36,12 @@
     flex-direction: column;
 }
 
-.photo-label{
+.photo-label {
     margin: 0 auto;
     align-self: center;
 }
-.photo-container{
+
+.photo-container {
     background-color: gray;
     width: 300px;
     height: 300px;
@@ -46,6 +49,6 @@
     justify-content: space-between;
 }
 
-.full-name-label{
+.full-name-label {
     font-weight: 600;
 }

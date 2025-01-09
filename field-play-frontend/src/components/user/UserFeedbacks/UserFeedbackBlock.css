@@ -1,0 +1,21 @@
+.user-feedback-block {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.feedback-info-container {
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    font-weight: 300;
+    gap: 5px;
+}
+
+.feedback-date {
+    margin-left: 10px;
+}
+
+.feedback-message {
+    font-size: 14px;
+}

@@ -13,7 +13,7 @@ public class FeedbackReadDto {
     private UserReadDto user;
     private int fieldId;
     private String fieldName;
-    private Rating rating;
+    private int rating;
     private String message;
-    private ZonedDateTime created_at;
+    private ZonedDateTime createdAt;
 }

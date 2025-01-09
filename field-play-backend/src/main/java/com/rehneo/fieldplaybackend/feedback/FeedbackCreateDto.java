@@ -19,6 +19,6 @@ public class FeedbackCreateDto {
     @NotBlank(message = "Сообщение отзыва не должно быть пустым")
     private String message;
     @NotNull(message = "Рейтинг отзыва должен присутствовать")
-    private Rating rating;
+    private Integer rating;
 
 }

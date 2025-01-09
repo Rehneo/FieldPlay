@@ -33,9 +33,9 @@ public class Feedback {
     @JoinColumn(name = "football_field_id", nullable = false)
     private FootballField footballField;
 
-    @Enumerated(EnumType.ORDINAL)
+    @NotNull
     @Column(name = "rating")
-    private Rating rating;
+    private Integer rating;
 
     @NotNull
     @Column(name = "message", nullable = false)

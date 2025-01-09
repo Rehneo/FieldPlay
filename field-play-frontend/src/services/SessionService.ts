@@ -8,7 +8,7 @@ import {SortRequest} from "../interfaces/sort/SortRequest.ts";
 
 class SessionService {
     getAllMy = async (page: number, size: number): Promise<AxiosResponse<Page<SessionReadDto>>> => {
-        return apiService.get<Page<SessionReadDto>>(`/sessions/?page=${page}&size=${size}`)
+        return apiService.get<Page<SessionReadDto>>(`/sessions/my?page=${page}&size=${size}`)
     }
 
     search = async (search: SearchRequest | null, page: number, size: number, sort: SortRequest | null): Promise<AxiosResponse<Page<SessionReadDto>>> => {

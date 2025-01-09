@@ -75,6 +75,11 @@ public class SecurityConfiguration {
     }
 
     private static final String[] AUTH_WHITELIST = {
-            "/api/v1/auth/**"
+            "/api/v1/auth/**",
+            "/api/v1/football-fields/**",
+            "/api/v1/metro-stations/**",
+            "/api/v1/feedbacks/**",
+            "/api/v1/sessions/**",
+            "/api/v1/cities/**"
     };
 }

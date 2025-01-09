@@ -3,9 +3,11 @@ import {Avatar} from "@mui/material";
 import cityIcon from '../../../assets/city.svg'
 import footballIcon from '../../../assets/football.svg'
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../../../context/UserAuth.tsx";
 
 const UserHeader = () => {
     const navigate = useNavigate();
+    const {user} = useAuth();
 
     return <header className="header">
         <div className="user-container">
@@ -13,7 +15,7 @@ const UserHeader = () => {
                     className="avatar"
                     alt="User"
                     sx={{width: 50, height: 50}}/>
-            <span>1000 р.</span>
+            <span>{user?.balance} р.</span>
         </div>
         <div className="logo-container" onClick={() => navigate("/fields")}>
             <img src={footballIcon} className="icon" alt="Football Icon"/>

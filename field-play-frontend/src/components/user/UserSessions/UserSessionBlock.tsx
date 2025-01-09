@@ -10,6 +10,7 @@ interface UserSessionBlockProps {
 
 
 const UserSessionBlock: React.FC<UserSessionBlockProps> = ({session}) => {
+    const startsAt = DateTime.fromISO(session.startsAt.toString());
     return <div className="user-session-block">
         <div className="session-details">
             <div className="player-count">
@@ -21,7 +22,7 @@ const UserSessionBlock: React.FC<UserSessionBlockProps> = ({session}) => {
                 <span>{session.maxPlayers}</span>
             </div>
             <span className="session-hours">{
-                session.startsAt.hour + ":00" + " - " + (session.startsAt.hour + 1) + ":00"
+                startsAt.hour + ":00" + " - " + (startsAt.hour + 1) + ":00"
             }</span>
         </div>
         <div className="session-info">
@@ -31,8 +32,7 @@ const UserSessionBlock: React.FC<UserSessionBlockProps> = ({session}) => {
             }
             <div className="session-field-date">
                 <span className="field-name">{session.fieldName}</span>
-                <span className="session-date">{DateTime.fromISO(session.startsAt.toString())
-                    .toLocaleString(DateTime.DATE_MED)}</span>
+                <span className="session-date">{startsAt.toLocaleString(DateTime.DATE_MED)}</span>
             </div>
         </div>
     </div>

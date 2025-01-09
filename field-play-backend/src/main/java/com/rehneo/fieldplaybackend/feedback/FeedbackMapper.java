@@ -15,7 +15,7 @@ public class FeedbackMapper {
                 .user(userMapper.map(feedback.getUser()))
                 .fieldId(feedback.getFootballField().getId())
                 .fieldName(feedback.getFootballField().getName())
-                .created_at(feedback.getCreatedAt())
+                .createdAt(feedback.getCreatedAt())
                 .message(feedback.getMessage())
                 .rating(feedback.getRating())
                 .build();

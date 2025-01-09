@@ -3,6 +3,8 @@ import SignInPage from "../pages/auth/SignInPage.tsx";
 import App from "../App.tsx";
 import SignUpPage from "../pages/auth/SignUpPage.tsx";
 import FieldSelectionPage from "../pages/field/FieldSelectionPage.tsx";
+import PersonalPage from "../pages/user/PersonalPage.tsx";
+import ProtectedUserRoute from "./ProtectedUserRoute.tsx";
 
 export const router = createBrowserRouter([
 
@@ -12,7 +14,8 @@ export const router = createBrowserRouter([
         children: [
             {path: "sign-in", element: <SignInPage/>},
             {path: "sign-up", element: <SignUpPage/>},
-            {path: "fields", element: <FieldSelectionPage/>}
+            {path: "fields", element: <FieldSelectionPage/>},
+            {path: "me", element: <ProtectedUserRoute children={<PersonalPage/>}/>}
         ]
     }
 ])

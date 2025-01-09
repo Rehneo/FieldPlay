@@ -1,5 +1,4 @@
-.field-select-container {
+.personal-page-container {
     display: flex;
     flex-direction: column;
-    gap: 60px;
 }

@@ -19,7 +19,7 @@ type Props = { children: React.ReactNode };
 
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
-export const AuthProvider = ({ children }: Props) => {
+export const AuthProvider = ({children}: Props) => {
     const navigate = useNavigate();
     const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<User | null>(null);
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: Props) => {
                 localStorage.setItem("user", JSON.stringify(res?.data.user));
                 setToken(res?.data.token);
                 setUser(res?.data.user);
-                navigate("/fields");
+                navigate("/");
             }
         }).catch(error => {
             if (error.response && error.response.status === 409) {
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: Props) => {
                 localStorage.setItem("user", JSON.stringify(res?.data.user));
                 setToken(res?.data.token);
                 setUser(res?.data.user);
-                navigate("/fields");
+                navigate("/");
             }
         }).catch(error => {
             if (error.response && error.response.status === 401) {

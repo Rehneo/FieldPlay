@@ -21,7 +21,7 @@ const UserHeader = () => {
                         sx={{width: 50, height: 50}}/>
                 <span>{user?.balance} р.</span>
             </div>
-            <div className="logo-container" onClick={() => navigate("/fields")}>
+            <div className="logo-container" onClick={() => navigate("/")}>
                 <img src={footballIcon} className="icon" alt="Football Icon"/>
                 <span>Field Play</span>
             </div>

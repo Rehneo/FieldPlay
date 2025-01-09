@@ -14,7 +14,7 @@ const DefaultHeader = () => {
                 Вход
             </Button>
         </div>
-        <div className="logo-container" onClick={() => navigate("/fields")}>
+        <div className="logo-container" onClick={() => navigate("/")}>
             <img src={footballIcon} className="icon" alt="Football Icon"/>
             <span>Field Play</span>
         </div>

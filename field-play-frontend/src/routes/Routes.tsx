@@ -14,7 +14,7 @@ export const router = createBrowserRouter([
         children: [
             {path: "sign-in", element: <SignInPage/>},
             {path: "sign-up", element: <SignUpPage/>},
-            {path: "fields", element: <FieldSelectionPage/>},
+            {path: "/", element: <FieldSelectionPage/>},
             {path: "me", element: <ProtectedUserRoute children={<PersonalPage/>}/>}
         ]
     }

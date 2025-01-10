@@ -10,8 +10,8 @@ class FeedbackService {
         return apiService.get<Page<FeedbackReadDto>>(`/feedbacks/my?page=${page}&size=${size}`);
     }
 
-    getAllByField = async (fieldId: number, page: number, size: number): Promise<AxiosResponse<Page<FeedbackReadDto>>> => {
-        return apiService.get<Page<FeedbackReadDto>>(`/feedbacks/?fieldId=${fieldId}&page=${page}&size=${size}`);
+    getAllByField = async (fieldId: number | string, page: number, size: number): Promise<AxiosResponse<Page<FeedbackReadDto>>> => {
+        return apiService.get<Page<FeedbackReadDto>>(`/feedbacks?fieldId=${fieldId}&page=${page}&size=${size}`);
     }
 
     create = async (feedback: FeedbackCreateDto): Promise<AxiosResponse<FeedbackReadDto>> => {

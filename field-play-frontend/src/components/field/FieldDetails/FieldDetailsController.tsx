@@ -17,7 +17,7 @@ const FieldDetailsController: React.FC<FieldDetailsControllerProps> = ({fieldId}
         isLoading: isLoading,
     } = useGetField(fieldId);
 
-    return <div className="flex flex-col">
+    return <div className="flex flex-col m-auto">
         {isLoadingError ? <span className="text-red-600 m-auto">Произошла ошибка при загрузке поля</span> : ''}
         {isLoading || isFetching ? <CircularProgress className="m-auto"/> : field? <FieldDetails field={field}/> : ''}
     </div>

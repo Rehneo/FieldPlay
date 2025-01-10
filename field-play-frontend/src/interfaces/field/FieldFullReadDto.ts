@@ -5,7 +5,7 @@ import {FieldType} from "./FieldType.ts";
 export default interface FieldFullReadDto {
     id: number;
     name: string;
-    stations: MetroStation[];
+    stations?: MetroStation[];
     address: string;
     surfaceType: SurfaceType;
     type: FieldType;
@@ -13,7 +13,7 @@ export default interface FieldFullReadDto {
     maxPlayers: number;
     length: number;
     width: number;
-    height: number;
+    height?: number;
     lockerRoom: boolean;
     stands: boolean;
     shower: boolean;

@@ -26,7 +26,7 @@ const FieldDetails: React.FC<FieldDetailsProps> = ({field}) => {
             <div className="field-info-container">
                 <div className="mt-2 mb-4">
                     <span className="border-r border-black border-opacity-20 font-light p-2 pl-0">
-                        {field.height} x {field.width} {field.height ? 'x' + field.height : ''}
+                        {field.length} x {field.width} {field.height ? 'x' + field.height : ''}
                     </span>
                     <span
                         className="border-r border-black border-opacity-20 font-light p-2">

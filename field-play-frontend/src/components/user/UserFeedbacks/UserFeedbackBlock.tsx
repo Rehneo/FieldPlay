@@ -11,13 +11,13 @@ interface UserFeedbackBlockProps {
 const UserFeedbackBlock: React.FC<UserFeedbackBlockProps> = ({feedback}) => {
     return <div className="user-feedback-block">
         <label className="field-name">{feedback.fieldName}</label>
-        <div className="feedback-info-container">
+        <div className="user-feedback-info-container">
             <img src={starIcon} className="icon" alt="Star Icon"/>
             <span>{feedback.rating}</span>
-            <span className="feedback-date">{DateTime.fromISO(feedback.createdAt.toString())
+            <span className="user-feedback-date">{DateTime.fromISO(feedback.createdAt.toString())
                 .toLocaleString(DateTime.DATE_MED)}</span>
         </div>
-        <div className="feedback-message">
+        <div className="user-feedback-message">
             {feedback.message}
         </div>
     </div>

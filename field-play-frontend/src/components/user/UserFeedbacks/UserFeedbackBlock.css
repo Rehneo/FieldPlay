@@ -4,7 +4,7 @@
     width: 300px;
 }
 
-.feedback-info-container {
+.user-feedback-info-container {
     display: flex;
     flex-direction: row;
     font-size: 14px;
@@ -12,10 +12,10 @@
     gap: 5px;
 }
 
-.feedback-date {
+.user-feedback-date {
     margin-left: 10px;
 }
 
-.feedback-message {
+.user-feedback-message {
     font-size: 14px;
 }

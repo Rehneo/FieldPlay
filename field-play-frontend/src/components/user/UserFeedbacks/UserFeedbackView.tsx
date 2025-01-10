@@ -1,4 +1,3 @@
-import "./UserFeedbackView.css"
 import React, {useState} from "react";
 import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import Page from "../../../interfaces/Page.ts";
@@ -23,9 +22,12 @@ const UserFeedbackView = () => {
         isLoading: isLoading,
     } = useGetFeedbacks(pageIndex);
 
-    return <div className="feedback-view-container">
-        {isLoadingError ? <span className="text-red-600">Произошла ошибка при загрузке отзывов</span> : ''}
-        {isLoading || isFetching ? <CircularProgress/> : ''}
+    return <div className="m-auto flex flex-col">
+        {isLoading || isFetching ? <CircularProgress/> : page.content.length === 0
+            ? isLoadingError
+                ? <span className="text-red-600">Произошла ошибка при загрузке отзывов</span>
+                : <span>Вы пока не оставили ни одного отзыва</span>
+            : ''}
         <UserFeedbackBlockContainer feedbacks={page.content}/>
         <Pagination className="pagination" count={Math.ceil(page.totalElements / 6)} page={pageIndex}
                     onChange={handlePageIndexChange}/>

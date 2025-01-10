@@ -32,7 +32,8 @@ const FeedbackController: React.FC<FeedbackControllerProps> = ({fieldId}) => {
             ? isLoadingError
                 ? <span className="text-red-600">Произошла ошибка при загрузке отзывов</span>
                 : 'Тут пока нет отзывов'
-            : <FeedbackBlockContainer feedbacks={page.content}/>}
+            : ''}
+        <FeedbackBlockContainer feedbacks={page.content}/>
         <Pagination className="pagination"
                     count={Math.ceil(page.totalElements / 6)}
                     page={pageIndex}

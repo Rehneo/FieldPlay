@@ -29,10 +29,16 @@ const UserFieldView = (() => {
     return <div className="field-view-container">
         <span className="field-select-label">Выберите поле</span>
         <FieldFilter onApply={setSearchRequest}/>
-        {isLoadingError ? <span className="text-red-600">Произошла ошибка при загрузке полей</span> : ''}
-        {isLoading || isFetching ? <CircularProgress/> : ''}
+        {isLoading || isFetching ? <CircularProgress/> : page.content.length === 0
+            ? isLoadingError
+                ? <span className="text-red-600">Произошла ошибка при загрузке полей</span>
+                : <span>Ничего не найдено</span>
+            : ''
+        }
         <FieldBlockContainer fields={page.content}/>
-        <Pagination className="pagination" count={Math.ceil(page.totalElements / 9)} page={pageIndex} onChange={handlePageIndexChange}/>
+        <Pagination className="pagination" count={Math.ceil(page.totalElements / 9)}
+                    page={pageIndex}
+                    onChange={handlePageIndexChange}/>
     </div>
 
 })

@@ -30,8 +30,8 @@ const UserHeader = () => {
                 <img src={cityIcon} className="icon" alt="City Icon"/>
             </div>
         </header>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-            <List className="user-list">
+        <Collapse className="user-list" in={open} timeout="auto" unmountOnExit>
+            <List>
                 <ListItem disablePadding>
                     <ListItemButton onClick={() => {
                         navigate("/me")

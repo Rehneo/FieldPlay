@@ -1,4 +1,3 @@
-import "./UserSessionView.css"
 import React, {useState} from "react";
 import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import Page from "../../../interfaces/Page.ts";
@@ -24,9 +23,14 @@ const UserSessionView = () => {
     } = useGetSessions(pageIndex);
 
 
-    return <div className="session-view-container">
+    return <div className="m-auto flex flex-col">
         {isLoadingError ? <span className="text-red-600">Произошла ошибка при загрузке сессий</span> : ''}
-        {isLoading || isFetching ? <CircularProgress/> : ''}
+        {isLoading || isFetching ? <CircularProgress/> : page.content.length === 0
+            ? isLoadingError
+                ? <span className="text-red-600">Произошла ошибка при загрузке сессий</span>
+                : <span>Вы пока не записались ни на одну сессию</span>
+            : ''
+        }
         <UserSessionBlockContainer sessions={page.content}/>
         <Pagination className="pagination" count={Math.ceil(page.totalElements / 6)} page={pageIndex}
                     onChange={handlePageIndexChange}/>

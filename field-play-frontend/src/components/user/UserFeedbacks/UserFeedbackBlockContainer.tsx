@@ -9,7 +9,6 @@ interface UserFeedbackBlockContainerProps {
 
 const UserFeedbackBlockContainer: React.FC<UserFeedbackBlockContainerProps> = ({feedbacks}) => {
     return <div className="user-feedback-container">
-        {feedbacks.length == 0 ? 'Вы пока не оставили ни одного отзыва' : ''}
         {feedbacks.map((feedback) => {
             return <UserFeedbackBlock key={feedback.id} feedback={feedback}/>
         })}

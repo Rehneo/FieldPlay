@@ -1,12 +1,11 @@
 package com.rehneo.fieldplaybackend.feedback;
 
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
+import com.rehneo.fieldplaybackend.error.ConflictException;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.footballfield.FootballFieldRepository;
 import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
 import com.rehneo.fieldplaybackend.search.SearchMapper;
-import com.rehneo.fieldplaybackend.session.Session;
-import com.rehneo.fieldplaybackend.session.SessionReadDto;
 import com.rehneo.fieldplaybackend.user.User;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +53,9 @@ public class FeedbackService {
     @Transactional
     public FeedbackReadDto create(FeedbackCreateDto createDto) {
         User currentUser = userService.getCurrentUser();
+        if (repository.existsByUserIdAndFootballFieldId(currentUser.getId(), createDto.getFieldId())) {
+            throw new ConflictException("Текущий пользователь уже оставлял отзыв к данному полю");
+        }
         Feedback feedback = Feedback.builder()
                 .user(currentUser)
                 .footballField(fieldRepository.findById(createDto.getFieldId()).orElseThrow(

@@ -16,4 +16,6 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer>, Jp
 
     Page<Feedback> findAllByUserId(int userId, Pageable pageable);
 
+    boolean existsByUserIdAndFootballFieldId(int userId, int fieldId);
+
 }

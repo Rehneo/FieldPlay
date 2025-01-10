@@ -56,8 +56,6 @@ function useGetFields(
         queryFn: async () => {
             const response = await fieldService.search(
                 searchRequest, pageIndex - 1, 9, null)
-            console.log(searchRequest);
-            console.log(response.data);
             return response.data;
         },
         placeholderData: keepPreviousData,

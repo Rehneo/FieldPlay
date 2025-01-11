@@ -3,6 +3,7 @@
     height: 540px;
     display: flex;
     flex-direction: column;
+    margin: 0 auto;
 }
 
 .field-name-label {

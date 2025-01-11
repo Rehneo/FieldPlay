@@ -8,9 +8,10 @@ import SessionReadDto from "../../../interfaces/session/SessionReadDto.ts";
 import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import {DateTime} from "luxon";
 import "./SessionTableController.css"
+import {CircularProgress} from "@mui/material";
 
 interface SessionTableControllerProps {
-    fieldId: string;
+    fieldId: number;
 }
 
 export type SessionMap = Record<number, SessionReadDto | undefined>;
@@ -64,7 +65,7 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
         } catch (error) {
             if (error instanceof AxiosError) {
                 if (error.status === 409 || error.status === 403) {
-                    setSignUpError(error.message);
+                    setCancelSignUpError(error.message);
                     return;
                 }
             }
@@ -78,22 +79,27 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
     );
 
     const {
-        data: sessions,
+        data: sessions = [],
         isError: isLoadingError,
         isFetching: isFetching,
         isLoading: isLoading,
-    } = useGetSessions(startDate, fieldId);
+    } = useGetSessions(fieldId, startDate);
 
 
     return <div className="session-table-controller-container">
         <span className="session-select-label">Выберите сеанс</span>
+        {isLoading || isFetching ? <CircularProgress/> : sessions.length === 0
+            ? isLoadingError
+                ? <span className="text-red-600">Произошла ошибка при загрузке отзывов</span>
+                : ''
+            : ''}
     </div>
 
 }
 
 export default SessionTableController;
 
-function useGetSessions(startDate: DateTime, fieldId: string) {
+function useGetSessions(fieldId: number, startDate: DateTime) {
     return useQuery<SessionMap[]>({
         queryKey: [
             'sessions',

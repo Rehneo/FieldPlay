@@ -22,7 +22,7 @@ class FieldService {
         )
     }
 
-    getById = async (id: number | string): Promise<AxiosResponse<FieldFullReadDto>> => {
+    getById = async (id: number): Promise<AxiosResponse<FieldFullReadDto>> => {
         return apiService.get<FieldFullReadDto>(`/football-fields/${id}`);
     }
 

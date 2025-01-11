@@ -22,7 +22,7 @@ import {AxiosError} from "axios";
 import {UNHANDLED_ERROR_MESSAGE} from "../../config/constants.tsx";
 
 interface FeedbackControllerProps {
-    fieldId: string;
+    fieldId: number;
 }
 
 const FeedbackController: React.FC<FeedbackControllerProps> = ({fieldId}) => {
@@ -146,7 +146,7 @@ const FeedbackController: React.FC<FeedbackControllerProps> = ({fieldId}) => {
 export default FeedbackController;
 
 
-function useGetFeedbacks(fieldId: number | string, pageIndex: number) {
+function useGetFeedbacks(fieldId: number, pageIndex: number) {
     return useQuery<Page<FeedbackReadDto>>({
         queryKey: [
             'feedbacks',

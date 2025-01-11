@@ -10,6 +10,7 @@ type UserContextType = {
     authErrorMessage: string | null;
     token: string | null;
     signUp: (credentials: SignUpRequest) => void;
+    setUser: (user: User | null) => void;
     signIn: (credentials: SignInRequest) => void;
     logout: () => void;
     isLoggedIn: () => boolean;
@@ -87,7 +88,7 @@ export const AuthProvider = ({children}: Props) => {
     };
 
     return (
-        <UserContext.Provider value={{signIn, user, token, logout, isLoggedIn, signUp, authErrorMessage}}>
+        <UserContext.Provider value={{signIn, user, token, setUser, logout, isLoggedIn, signUp, authErrorMessage}}>
             {IsReady ? children : null}
         </UserContext.Provider>
     )

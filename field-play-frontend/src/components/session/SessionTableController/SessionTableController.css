@@ -1,0 +1,13 @@
+.session-table-controller-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 1040px;
+    margin: 0 auto;
+}
+
+.session-select-label {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 40px;
+}

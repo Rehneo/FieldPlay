@@ -12,4 +12,6 @@ export default interface SessionReadDto {
     signUpCount: number;
     status: Status;
     startsAt: DateTime;
+    isSignedUp: boolean;
+    isBooked: boolean;
 }

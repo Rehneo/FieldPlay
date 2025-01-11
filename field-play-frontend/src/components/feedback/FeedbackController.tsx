@@ -19,6 +19,7 @@ import FeedbackCreateDto from "../../interfaces/feedback/FeedbackCreateDto.ts";
 import {useAuth} from "../../context/UserAuth.tsx";
 import {useNavigate} from "react-router-dom";
 import {AxiosError} from "axios";
+import {UNHANDLED_ERROR_MESSAGE} from "../../config/constants.tsx";
 
 interface FeedbackControllerProps {
     fieldId: string;
@@ -71,7 +72,7 @@ const FeedbackController: React.FC<FeedbackControllerProps> = ({fieldId}) => {
                     return;
                 }
             }
-            setFormError("Произошла ошибка, повторите попытку позднее");
+            setFormError(UNHANDLED_ERROR_MESSAGE);
             return;
         }
         setFormError("");

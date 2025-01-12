@@ -25,4 +25,10 @@ public class SignUpController {
         service.cancelSignUp(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/my-sign-ups")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<SignUpReadDto> findMy(@RequestParam int sessionId) {
+        return ResponseEntity.ok(service.findMy(sessionId));
+    }
 }

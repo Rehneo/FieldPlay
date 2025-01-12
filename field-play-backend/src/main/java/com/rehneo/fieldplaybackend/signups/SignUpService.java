@@ -29,10 +29,10 @@ public class SignUpService {
                 () -> new ResourceNotFoundException("Сессия с id: " + sessionId + " не найдена")
         );
         User currentUser = userService.getCurrentUser();
-        if(blackListRepository.existsByUserIdAndCompanyId(
+        if (blackListRepository.existsByUserIdAndCompanyId(
                 currentUser.getId(),
                 session.getFootballField().getCompany().getId()
-        )){
+        )) {
             throw new AccessDeniedException("Вы находитесь в черном списке данной компании");
         }
         SignUp signUp = SignUp.builder()
@@ -58,4 +58,15 @@ public class SignUpService {
         repository.delete(signUp);
     }
 
+    @Transactional
+    public SignUpReadDto findMy(int sessionId) {
+        Session session = sessionRepository.findById(sessionId).orElseThrow(
+                () -> new ResourceNotFoundException("Сессия с id: " + sessionId + " не найдена")
+        );
+        User user = userService.getCurrentUser();
+        SignUp signUp = repository.findByUserAndSession(user, session).orElseThrow(
+                () -> new ResourceNotFoundException("Вы не записаны на данную сессию")
+        );
+        return mapper.map(signUp);
+    }
 }

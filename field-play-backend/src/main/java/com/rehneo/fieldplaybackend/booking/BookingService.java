@@ -39,4 +39,16 @@ public class BookingService {
         repository.save(booking);
         return mapper.map(booking);
     }
+
+    @Transactional
+    public BookingReadDto findMy(int sessionId) {
+        Session session = sessionRepository.findById(sessionId).orElseThrow(
+                () -> new ResourceNotFoundException("Сессия с id: " + sessionId + " не найдена")
+        );
+        User currentUser = userService.getCurrentUser();
+        Booking booking = repository.findByUserAndSession(currentUser, session).orElseThrow(
+                () -> new ResourceNotFoundException("Вы не бронировали данную сессию")
+        );
+        return mapper.map(booking);
+    }
 }

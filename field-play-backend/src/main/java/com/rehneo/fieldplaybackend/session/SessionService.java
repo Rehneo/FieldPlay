@@ -41,7 +41,12 @@ public class SessionService {
 
     public Page<SessionReadDto> search(SearchCriteriaDto criteria, Pageable pageable) {
         Page<Session> sessions = repository.findAll(searchMapper.map(criteria), pageable);
-        return sessions.map(mapper::map);
+        return sessions.map(s -> {
+            SessionReadDto dto = mapper.map(s);
+            dto.setSignUpCount(repository.getSignUpCount(dto.getId()));
+            dto.setMaxPlayers(repository.getMaxPlayers(dto.getId()));
+            return dto;
+        });
     }
 
     @Transactional

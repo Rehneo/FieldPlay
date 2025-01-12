@@ -36,7 +36,7 @@ const FieldPage = () => {
                 setIsLoading(false);
             }
         })();
-    })
+    }, [fieldId])
 
     if (isLoading) {
         return <CircularProgress/>;

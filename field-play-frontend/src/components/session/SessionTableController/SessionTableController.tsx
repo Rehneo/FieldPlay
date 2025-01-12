@@ -5,10 +5,12 @@ import {useNavigate} from "react-router-dom";
 import {AxiosError} from "axios";
 import {DAYS_IN_WEEK, SESSION_TABLE_ROWS, UNHANDLED_ERROR_MESSAGE} from "../../../config/constants.tsx";
 import SessionReadDto from "../../../interfaces/session/SessionReadDto.ts";
-import {keepPreviousData, useQuery} from "@tanstack/react-query";
+import {keepPreviousData, useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {DateTime} from "luxon";
 import "./SessionTableController.css"
 import {CircularProgress} from "@mui/material";
+import SessionTableWeekController from "./SessionTableTimeController.tsx";
+import SessionTableColumn from "../SessionTable/SessionTableColumn.tsx";
 
 interface SessionTableControllerProps {
     fieldId: number;
@@ -26,8 +28,8 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
     const onSignUp = async (sessionId: number) => {
         if (!isLoggedIn()) navigate('/sign-in')
         try {
-            const response = await sessionService.signUp(sessionId);
-            setUser(response.data.user);
+            const response = await signUp(sessionId);
+            setUser(response.user);
         } catch (error) {
             if (error instanceof AxiosError) {
                 if (error.status === 409 || error.status === 403) {
@@ -41,10 +43,9 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
 
     const onBook = async (sessionId: number) => {
         if (!isLoggedIn()) navigate('/sign-in')
-
         try {
-            const response = await sessionService.book(sessionId);
-            setUser(response.data.user);
+            const response = await book(sessionId);
+            setUser(response.user);
         } catch (error) {
             if (error instanceof AxiosError) {
                 if (error.status === 409 || error.status === 403) {
@@ -58,10 +59,8 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
 
     const onCancelSignUp = async (sessionId: number) => {
         if (!isLoggedIn()) navigate('/sign-in')
-
         try {
-            const response = await sessionService.book(sessionId);
-            setUser(response.data.user);
+            await cancelSignUp(sessionId);
         } catch (error) {
             if (error instanceof AxiosError) {
                 if (error.status === 409 || error.status === 403) {
@@ -73,7 +72,7 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
         }
     }
 
-    const [startDate, setStartDate] = useState<DateTime>
+    const [startTime, setStartTime] = useState<DateTime>
     (
         DateTime.fromISO("2024-12-21T13:00:00+00:00")
     );
@@ -83,27 +82,55 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
         isError: isLoadingError,
         isFetching: isFetching,
         isLoading: isLoading,
-    } = useGetSessions(fieldId, startDate);
+    } = useGetSessions(fieldId, startTime);
 
-
+    const {mutateAsync: signUp, isPending: isSignUpPending} = useSignUp();
+    const {mutateAsync: book, isPending: isBookPending} = useBook();
+    const {mutateAsync: cancelSignUp, isPending: isCancelSignUpPending} = useCancelSignUp();
     return <div className="session-table-controller-container">
-        <span className="session-select-label">Выберите сеанс</span>
-        {isLoading || isFetching ? <CircularProgress/> : sessions.length === 0
-            ? isLoadingError
-                ? <span className="text-red-600">Произошла ошибка при загрузке отзывов</span>
-                : ''
-            : ''}
+        <div className="session-table-header">
+            <span className="session-select-label">Выберите сеанс</span>
+            {isLoading || isFetching || isSignUpPending || isBookPending || isCancelSignUpPending ?
+                <CircularProgress/> : ''}
+            <SessionTableWeekController startTime={startTime} setStartTime={setStartTime}/>
+        </div>
+        <div className="session-table-container">
+            <div className="session-table-hours-column">
+                {Array.from({length: SESSION_TABLE_ROWS}, (_, hour) => (
+                    <div key={hour} className="session-table-left-hour-container">
+                        {startTime.plus({hours: hour}).setLocale("ru").toFormat('HH:mm')}
+                    </div>
+                ))}
+            </div>
+            {
+                Array.from({length: DAYS_IN_WEEK}, (_, day) => (
+                    <SessionTableColumn key={day}
+                                        sessions={sessions[day]}
+                                        onSignUp={onSignUp}
+                                        onCancelSignUp={onCancelSignUp}
+                                        onBook={onBook}
+                    />
+                ))
+            }
+            <div className="session-table-hours-column">
+                {Array.from({length: SESSION_TABLE_ROWS}, (_, hour) => (
+                    <div key={hour} className="session-table-right-hour-container">
+                        {startTime.plus({hours: hour}).setLocale("ru").toFormat('HH:mm')}
+                    </div>
+                ))}
+            </div>
+        </div>
     </div>
 
 }
 
 export default SessionTableController;
 
-function useGetSessions(fieldId: number, startDate: DateTime) {
+function useGetSessions(fieldId: number, startTime: DateTime) {
     return useQuery<SessionMap[]>({
         queryKey: [
             'sessions',
-            startDate
+            startTime
         ],
         queryFn: async () => {
             const sessions: SessionMap[] = [];
@@ -111,8 +138,8 @@ function useGetSessions(fieldId: number, startDate: DateTime) {
                 const session: SessionMap = {};
                 const response = await sessionService.search(
                     fieldId,
-                    startDate.plus({days: i}),
-                    startDate.plus({days: i, hours: SESSION_TABLE_ROWS}),
+                    startTime.plus({days: i}),
+                    startTime.plus({days: i, hours: SESSION_TABLE_ROWS}),
                 )
                 response.data.content.map((fetchedSession) => {
                     fetchedSession.startsAt = DateTime.fromISO(fetchedSession.startsAt.toString());
@@ -127,3 +154,38 @@ function useGetSessions(fieldId: number, startDate: DateTime) {
         refetchOnWindowFocus: false
     });
 }
+
+
+function useSignUp() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (sessionId: number) => {
+            const response = await sessionService.signUp(sessionId);
+            return response.data;
+        },
+        onSettled: () => queryClient.invalidateQueries({queryKey: ['sessions']}),
+    });
+}
+
+function useBook() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (sessionId: number) => {
+            const response = await sessionService.book(sessionId);
+            return response.data;
+        },
+        onSettled: () => queryClient.invalidateQueries({queryKey: ['sessions']}),
+    });
+}
+
+function useCancelSignUp() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (sessionId: number) => {
+            const response = await sessionService.cancelSignUp(sessionId);
+            return response.data;
+        },
+        onSettled: () => queryClient.invalidateQueries({queryKey: ['sessions']}),
+    });
+}
+

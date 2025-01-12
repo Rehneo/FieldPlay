@@ -1,13 +1,88 @@
 .session-table-controller-container {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: 1040px;
     margin: 0 auto;
+}
+
+.session-table-header {
+    position: sticky;
+    display: flex;
+    background-color: white;
+    flex-direction: column;
+    top: 0;
 }
 
 .session-select-label {
     font-weight: 600;
     text-transform: uppercase;
     font-size: 40px;
+}
+
+.session-table-week-container {
+    height: 40px;
+    position: sticky;
+    top: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.session-table-day-container {
+    width: 130px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+}
+
+.session-table-left-button {
+    width: 65px;
+    height: 40px;
+    text-align: left;
+}
+
+
+.session-table-right-button {
+    width: 65px;
+    height: 40px;
+    text-align: right;
+}
+
+.filter-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+}
+
+.filter-button:hover {
+    background-color: gray;
+}
+
+.filter-icon {
+    width: 25px;
+    height: 25px;
+    margin: 0 auto;
+}
+
+.session-table-hours-column {
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+}
+
+.session-table-left-hour-container {
+    height: 100px;
+    width: 60px;
+    text-align: left;
+    align-content: center;
+}
+
+.session-table-right-hour-container {
+    height: 100px;
+    width: 60px;
+    text-align: right;
+    align-content: center;
+}
+
+.session-table-container {
+    display: flex;
+    flex-direction: row;
 }

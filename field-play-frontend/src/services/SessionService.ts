@@ -56,6 +56,26 @@ class SessionService {
     cancelSignUp = async (sessionId: number): Promise<AxiosResponse<void>> => {
         return apiService.delete<void>(`/sessions/${sessionId}/cancel`);
     }
+
+    isSignedUp = async (sessionId: number) => {
+        try {
+            const response = await apiService.get<SignUpReadDto>(`/sessions/my-sign-ups?sessionId=${sessionId}`);
+            return response.status == 200;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            return false;
+        }
+    }
+
+    isBooked = async (sessionId: number) => {
+        try {
+            const response = await apiService.get<BookingReadDto>(`/sessions/my-bookings?sessionId=${sessionId}`);
+            return response.status == 200;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            return false;
+        }
+    }
 }
 
 const sessionService = new SessionService();

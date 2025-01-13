@@ -11,6 +11,8 @@ import "./SessionTableController.css"
 import {CircularProgress} from "@mui/material";
 import SessionTableWeekController from "./SessionTableTimeController.tsx";
 import SessionTableColumn from "../SessionTable/SessionTableColumn.tsx";
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface SessionTableControllerProps {
     fieldId: number;
@@ -21,23 +23,22 @@ export type SessionMap = Record<number, SessionReadDto | undefined>;
 const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}) => {
     const {isLoggedIn, setUser} = useAuth();
     const navigate = useNavigate();
-    const [signUpError, setSignUpError] = useState<string>('');
-    const [bookError, setBookError] = useState<string>('');
-    const [cancelSignUpError, setCancelSignUpError] = useState<string>('');
 
     const onSignUp = async (sessionId: number) => {
         if (!isLoggedIn()) navigate('/sign-in')
         try {
             const response = await signUp(sessionId);
+            toast.success('Вы успешно записались на данный сеанс');
             setUser(response.user);
         } catch (error) {
             if (error instanceof AxiosError) {
-                if (error.status === 409 || error.status === 403) {
-                    setSignUpError(error.message);
+                if (error.status === 409 || error.status === 403 || error.status === 400) {
+                    toast.error(error.response?.data.message);
+                    console.error(error.response?.data.message);
                     return;
                 }
             }
-            setSignUpError(UNHANDLED_ERROR_MESSAGE);
+            toast.error(UNHANDLED_ERROR_MESSAGE);
         }
     }
 
@@ -45,15 +46,15 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
         if (!isLoggedIn()) navigate('/sign-in')
         try {
             const response = await book(sessionId);
-            setUser(response.user);
+            toast.success('Вы успешно забронировали данный сеанс');
         } catch (error) {
             if (error instanceof AxiosError) {
-                if (error.status === 409 || error.status === 403) {
-                    setSignUpError(error.message);
+                if (error.status === 409 || error.status === 403 || error.status === 400) {
+                    toast.error(error.response?.data.message);
                     return;
                 }
             }
-            setBookError(UNHANDLED_ERROR_MESSAGE);
+            toast.error(UNHANDLED_ERROR_MESSAGE);
         }
     }
 
@@ -61,14 +62,15 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
         if (!isLoggedIn()) navigate('/sign-in')
         try {
             await cancelSignUp(sessionId);
+            toast.success('Вы успешно отписались от данного сеанса');
         } catch (error) {
             if (error instanceof AxiosError) {
                 if (error.status === 409 || error.status === 403) {
-                    setCancelSignUpError(error.message);
+                    toast.error(error.response?.data.message);
                     return;
                 }
             }
-            setCancelSignUpError(UNHANDLED_ERROR_MESSAGE);
+            toast.error(UNHANDLED_ERROR_MESSAGE);
         }
     }
 
@@ -87,40 +89,40 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
     const {mutateAsync: signUp, isPending: isSignUpPending} = useSignUp();
     const {mutateAsync: book, isPending: isBookPending} = useBook();
     const {mutateAsync: cancelSignUp, isPending: isCancelSignUpPending} = useCancelSignUp();
-    return <div className="session-table-controller-container">
-        <div className="session-table-header">
-            <span className="session-select-label">Выберите сеанс</span>
-            {isLoading || isFetching || isSignUpPending || isBookPending || isCancelSignUpPending ?
-                <CircularProgress/> : ''}
-            <SessionTableWeekController startTime={startTime} setStartTime={setStartTime}/>
-        </div>
-        <div className="session-table-container">
-            <div className="session-table-hours-column">
-                {Array.from({length: SESSION_TABLE_ROWS}, (_, hour) => (
-                    <div key={hour} className="session-table-left-hour-container">
-                        {startTime.plus({hours: hour}).setLocale("ru").toFormat('HH:mm')}
-                    </div>
-                ))}
+    return <>
+        <div className="session-table-controller-container">
+            <div className="session-table-header">
+                <span className="session-select-label">Выберите сеанс</span>
+                {isLoading || isFetching || isSignUpPending || isBookPending || isCancelSignUpPending ?
+                    <CircularProgress/> : ''}
+                <SessionTableWeekController startTime={startTime} setStartTime={setStartTime}/>
+                {isLoadingError ? <span className="text-red-600">{UNHANDLED_ERROR_MESSAGE}</span> : ''}
             </div>
-            {
-                Array.from({length: DAYS_IN_WEEK}, (_, day) => (
+            <div className="session-table-container">
+                <div className="session-table-hours-column">
+                    {Array.from({length: SESSION_TABLE_ROWS}, (_, hour) => (
+                        <div key={hour} className="session-table-left-hour-container">
+                            {startTime.plus({hours: hour}).setLocale("ru").toFormat('HH:mm')}
+                        </div>
+                    ))}
+                </div>
+                {Array.from({length: DAYS_IN_WEEK}, (_, day) => (
                     <SessionTableColumn key={day}
                                         sessions={sessions[day]}
                                         onSignUp={onSignUp}
                                         onCancelSignUp={onCancelSignUp}
-                                        onBook={onBook}
-                    />
-                ))
-            }
-            <div className="session-table-hours-column">
-                {Array.from({length: SESSION_TABLE_ROWS}, (_, hour) => (
-                    <div key={hour} className="session-table-right-hour-container">
-                        {startTime.plus({hours: hour}).setLocale("ru").toFormat('HH:mm')}
-                    </div>
+                                        onBook={onBook}/>
                 ))}
+                <div className="session-table-hours-column">
+                    {Array.from({length: SESSION_TABLE_ROWS}, (_, hour) => (
+                        <div key={hour} className="session-table-right-hour-container">
+                            {startTime.plus({hours: hour}).setLocale("ru").toFormat('HH:mm')}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
-    </div>
+        <ToastContainer position="top-right"/></>
 
 }
 
@@ -147,7 +149,6 @@ function useGetSessions(fieldId: number, startTime: DateTime) {
                 })
                 sessions.push(session);
             }
-            console.log(sessions);
             return sessions;
         },
         placeholderData: keepPreviousData,

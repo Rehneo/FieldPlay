@@ -22,4 +22,8 @@ public class UserService {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         return getByUsername(username);
     }
+
+    public int getBalanceByUser(User user) {
+        return userRepository.getBalanceByUser(user);
+    }
 }

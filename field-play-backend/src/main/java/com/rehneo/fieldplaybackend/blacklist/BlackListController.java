@@ -18,7 +18,7 @@ public class BlackListController {
     private final BlackListService service;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('FILED_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FILED_ADMIN')")
     public ResponseEntity<Page<BlackListReadDto>> findAllByCompany(
             @RequestParam int companyId,
             Pageable pageable
@@ -30,14 +30,14 @@ public class BlackListController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('FILED_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FILED_ADMIN')")
     public ResponseEntity<BlackListReadDto> create(@RequestBody BlackListCreateDto createDto) {
         BlackListReadDto blacklist = service.create(createDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(blacklist);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('FILED_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FILED_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         service.delete(id);
         return ResponseEntity.noContent().build();

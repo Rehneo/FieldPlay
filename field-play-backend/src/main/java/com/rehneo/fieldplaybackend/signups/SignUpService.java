@@ -40,11 +40,12 @@ public class SignUpService {
                 .session(session)
                 .build();
         repository.save(signUp);
+        signUp.getUser().setBalance(userService.getBalanceByUser(currentUser));
         return mapper.map(signUp);
     }
 
     @Transactional
-    public void cancelSignUp(int sessionId) {
+    public SignUpReadDto cancelSignUp(int sessionId) {
         Session session = sessionRepository.findById(sessionId).orElseThrow(
                 () -> new ResourceNotFoundException("Сессия с id: " + sessionId + " не найдена")
         );
@@ -56,6 +57,8 @@ public class SignUpService {
             throw new BadRequestException("Нельзя отписаться от закрытой сессии");
         }
         repository.delete(signUp);
+        signUp.getUser().setBalance(userService.getBalanceByUser(user));
+        return mapper.map(signUp);
     }
 
     @Transactional
@@ -68,5 +71,14 @@ public class SignUpService {
                 () -> new ResourceNotFoundException("Вы не записаны на данную сессию")
         );
         return mapper.map(signUp);
+    }
+
+    @Transactional
+    public boolean isUserSignedUp(int sessionId) {
+        User user = userService.getCurrentUser();
+        Session session = sessionRepository.findById(sessionId).orElseThrow(
+                () -> new ResourceNotFoundException("Сессия с id: " + sessionId + " не найдена")
+        );
+        return repository.findByUserAndSession(user, session).isPresent();
     }
 }

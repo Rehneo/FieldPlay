@@ -18,7 +18,7 @@ public class FieldAdminRequestController {
 
 
     @GetMapping("/pending")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('FILED_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FILED_ADMIN')")
     public ResponseEntity<Page<FieldAdminRequestReadDto>> findAllPendingByCompany(
             @RequestParam int companyId,
             Pageable pageable
@@ -33,14 +33,14 @@ public class FieldAdminRequestController {
     }
 
     @GetMapping("/my")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<FieldAdminRequestReadDto> findMy() {
         FieldAdminRequestReadDto request = service.findByUser();
         return ResponseEntity.ok(request);
     }
 
     @GetMapping("/approved")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('FILED_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FILED_ADMIN')")
     public ResponseEntity<Page<FieldAdminRequestReadDto>> findAllApprovedByCompany(
             @RequestParam int companyId,
             Pageable pageable
@@ -55,7 +55,7 @@ public class FieldAdminRequestController {
     }
 
     @GetMapping("/rejected")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('FILED_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FILED_ADMIN')")
     public ResponseEntity<Page<FieldAdminRequestReadDto>> findAllRejectedByCompany(
             @RequestParam int companyId,
             Pageable pageable
@@ -71,7 +71,7 @@ public class FieldAdminRequestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<FieldAdminRequestReadDto> create(@RequestParam int companyId) {
         FieldAdminRequestReadDto request = service.create(companyId);
         return ResponseEntity.status(HttpStatus.CREATED).body(request);
@@ -79,7 +79,7 @@ public class FieldAdminRequestController {
 
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('FIELD_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<FieldAdminRequestReadDto> process(@PathVariable int id, @RequestParam boolean approved) {
         FieldAdminRequestReadDto request = service.process(id, approved);
         return ResponseEntity.ok().body(request);

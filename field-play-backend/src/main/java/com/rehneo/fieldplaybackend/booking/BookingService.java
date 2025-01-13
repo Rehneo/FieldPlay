@@ -26,10 +26,10 @@ public class BookingService {
                 () -> new ResourceNotFoundException("Сессия с id: " + sessionId + " не найдена")
         );
         User currentUser = userService.getCurrentUser();
-        if(blackListRepository.existsByUserIdAndCompanyId(
+        if (blackListRepository.existsByUserIdAndCompanyId(
                 currentUser.getId(),
                 session.getFootballField().getCompany().getId()
-        )){
+        )) {
             throw new AccessDeniedException("Вы находитесь в черном списке данной компании");
         }
         Booking booking = Booking.builder()
@@ -37,6 +37,7 @@ public class BookingService {
                 .session(session)
                 .build();
         repository.save(booking);
+        booking.getUser().setBalance(userService.getBalanceByUser(currentUser));
         return mapper.map(booking);
     }
 
@@ -50,5 +51,14 @@ public class BookingService {
                 () -> new ResourceNotFoundException("Вы не бронировали данную сессию")
         );
         return mapper.map(booking);
+    }
+
+    @Transactional
+    public boolean isUserBooked(int sessionId) {
+        Session session = sessionRepository.findById(sessionId).orElseThrow(
+                () -> new ResourceNotFoundException("Сессия с id: " + sessionId + " не найдена")
+        );
+        User currentUser = userService.getCurrentUser();
+        return repository.findByUserAndSession(currentUser, session).isPresent();
     }
 }

@@ -41,13 +41,13 @@ public class FootballFieldController {
 
 
     @PostMapping
-    @PreAuthorize("hasRole('FIELD_ADMIN')")
+    @PreAuthorize("hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<FootballFieldFullReadDto> create(@RequestBody FootballFieldCreateDto createDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(createDto));
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('FIELD_ADMIN')")
+    @PreAuthorize("hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<FootballFieldFullReadDto> update(
             @PathVariable int id, @RequestBody FootballFieldEditDto editDto
     ) {

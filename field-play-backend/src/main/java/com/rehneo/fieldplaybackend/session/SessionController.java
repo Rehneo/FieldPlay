@@ -39,7 +39,7 @@ public class SessionController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('FIELD_ADMIN')")
+    @PreAuthorize("hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<SessionReadDto> create(@RequestBody SessionCreateDto createDto) {
         return ResponseEntity.ok().body(service.create(createDto));
     }

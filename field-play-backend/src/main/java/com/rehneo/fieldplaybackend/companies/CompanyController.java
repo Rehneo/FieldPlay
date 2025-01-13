@@ -19,7 +19,7 @@ public class CompanyController {
     private final CompanyService service;
 
     @GetMapping("/my")
-    @PreAuthorize("hasRole('FILED_ADMIN')")
+    @PreAuthorize("hasAuthority('FILED_ADMIN')")
     public ResponseEntity<Page<CompanyReadDto>> findAllMy(Pageable pageable) {
         Page<CompanyReadDto> companies = service.findAllByUser(pageable);
         return ResponseEntity.ok()

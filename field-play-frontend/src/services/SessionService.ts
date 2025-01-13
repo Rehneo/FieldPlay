@@ -8,6 +8,8 @@ import SignUpReadDto from "../interfaces/session/SignUpReadDto.ts";
 import BookingReadDto from "../interfaces/session/BookingReadDto.ts";
 import {DateTime} from "luxon";
 import {SearchOperator} from "../interfaces/search/SearchOperator.ts";
+import SignedUpResponse from "../interfaces/session/SignedUpResponse.ts";
+import BookedResponse from "../interfaces/session/BookedResponse.ts";
 
 class SessionService {
     getAllMy = async (page: number, size: number): Promise<AxiosResponse<Page<SessionReadDto>>> => {
@@ -53,14 +55,14 @@ class SessionService {
         return apiService.post<BookingReadDto>(`/sessions/${sessionId}/book`);
     }
 
-    cancelSignUp = async (sessionId: number): Promise<AxiosResponse<void>> => {
-        return apiService.delete<void>(`/sessions/${sessionId}/cancel`);
+    cancelSignUp = async (sessionId: number): Promise<AxiosResponse<SignUpReadDto>> => {
+        return apiService.delete<SignUpReadDto>(`/sessions/${sessionId}/cancel`);
     }
 
     isSignedUp = async (sessionId: number) => {
         try {
-            const response = await apiService.get<SignUpReadDto>(`/sessions/my-sign-ups?sessionId=${sessionId}`);
-            return response.status == 200;
+            const response = await apiService.get<SignedUpResponse>(`/sessions/is-signed-up?sessionId=${sessionId}`);
+            return response.data.signedUp;
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             return false;
@@ -69,8 +71,8 @@ class SessionService {
 
     isBooked = async (sessionId: number) => {
         try {
-            const response = await apiService.get<BookingReadDto>(`/sessions/my-bookings?sessionId=${sessionId}`);
-            return response.status == 200;
+            const response = await apiService.get<BookedResponse>(`/sessions/is-booked?sessionId=${sessionId}`);
+            return response.data.booked;
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             return false;

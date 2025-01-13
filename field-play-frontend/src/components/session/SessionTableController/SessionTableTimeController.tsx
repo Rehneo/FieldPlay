@@ -26,13 +26,10 @@ const SessionTableWeekController: React.FC<SessionTableTimeControllerProps> = ({
             </div>
         ))}
         <div className="session-table-right-button">
-            {!startTime.hasSame(DateTime.now(), 'day')
-                ? <button className="filter-button"
-                          onClick={() => setStartTime(startTime.plus({weeks: 1}))}>
-                    <img src={arrowRightIcon} className="filter-icon" alt="Arrow Right Icon"/>
-                </button>
-                : ''
-            }
+            <button className="filter-button"
+                    onClick={() => setStartTime(startTime.plus({weeks: 1}))}>
+                <img src={arrowRightIcon} className="filter-icon" alt="Arrow Right Icon"/>
+            </button>
         </div>
     </div>
 }

@@ -11,7 +11,7 @@ import "./SessionTableController.css"
 import {CircularProgress} from "@mui/material";
 import SessionTableWeekController from "./SessionTableTimeController.tsx";
 import SessionTableColumn from "../SessionTable/SessionTableColumn.tsx";
-import {ToastContainer, toast} from 'react-toastify';
+import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface SessionTableControllerProps {
@@ -21,15 +21,15 @@ interface SessionTableControllerProps {
 export type SessionMap = Record<number, SessionReadDto | undefined>;
 
 const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}) => {
-    const {isLoggedIn, setUser} = useAuth();
+    const {isLoggedIn, updateUser} = useAuth();
     const navigate = useNavigate();
 
     const onSignUp = async (sessionId: number) => {
         if (!isLoggedIn()) navigate('/sign-in')
         try {
             const response = await signUp(sessionId);
-            toast.success('Вы успешно записались на данный сеанс');
-            setUser(response.user);
+            toast.success(`Вы успешно записались на данный сеанс.\nТекущий баланс: ${response.user.balance}`);
+            updateUser(response.user);
         } catch (error) {
             if (error instanceof AxiosError) {
                 if (error.status === 409 || error.status === 403 || error.status === 400) {
@@ -46,7 +46,8 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
         if (!isLoggedIn()) navigate('/sign-in')
         try {
             const response = await book(sessionId);
-            toast.success('Вы успешно забронировали данный сеанс');
+            toast.success(`Вы забронировали данный сеанс.\nТекущий баланс: ${response.user.balance}`);
+            updateUser(response.user);
         } catch (error) {
             if (error instanceof AxiosError) {
                 if (error.status === 409 || error.status === 403 || error.status === 400) {
@@ -61,8 +62,9 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
     const onCancelSignUp = async (sessionId: number) => {
         if (!isLoggedIn()) navigate('/sign-in')
         try {
-            await cancelSignUp(sessionId);
-            toast.success('Вы успешно отписались от данного сеанса');
+            const response = await cancelSignUp(sessionId);
+            toast.success(`Вы успешно отписались от данного сеанса.\nТекущий баланс: ${response.user.balance}`);
+            updateUser(response.user);
         } catch (error) {
             if (error instanceof AxiosError) {
                 if (error.status === 409 || error.status === 403) {
@@ -76,7 +78,7 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
 
     const [startTime, setStartTime] = useState<DateTime>
     (
-        DateTime.fromISO("2024-12-21T13:00:00+00:00")
+        DateTime.now().startOf('day')
     );
 
     const {
@@ -141,12 +143,14 @@ function useGetSessions(fieldId: number, startTime: DateTime) {
                 const response = await sessionService.search(
                     fieldId,
                     startTime.plus({days: i}),
-                    startTime.plus({days: i, hours: SESSION_TABLE_ROWS}),
+                    startTime.plus({days: i, hours: SESSION_TABLE_ROWS - 1}),
                 )
-                response.data.content.map((fetchedSession) => {
+                for (const fetchedSession of response.data.content) {
                     fetchedSession.startsAt = DateTime.fromISO(fetchedSession.startsAt.toString());
+                    fetchedSession.isSignedUp = await sessionService.isSignedUp(fetchedSession.id);
+                    fetchedSession.isBooked = await sessionService.isBooked(fetchedSession.id);
                     session[fetchedSession.startsAt.hour] = fetchedSession;
-                })
+                }
                 sessions.push(session);
             }
             return sessions;

@@ -10,7 +10,7 @@ type UserContextType = {
     authErrorMessage: string | null;
     token: string | null;
     signUp: (credentials: SignUpRequest) => void;
-    setUser: (user: User | null) => void;
+    updateUser: (user: User) => void;
     signIn: (credentials: SignInRequest) => void;
     logout: () => void;
     isLoggedIn: () => boolean;
@@ -78,6 +78,11 @@ export const AuthProvider = ({children}: Props) => {
         return !!user;
     };
 
+    const updateUser = (user: User) => {
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+    }
+
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
@@ -88,7 +93,7 @@ export const AuthProvider = ({children}: Props) => {
     };
 
     return (
-        <UserContext.Provider value={{signIn, user, token, setUser, logout, isLoggedIn, signUp, authErrorMessage}}>
+        <UserContext.Provider value={{signIn, user, token, updateUser, logout, isLoggedIn, signUp, authErrorMessage}}>
             {IsReady ? children : null}
         </UserContext.Provider>
     )

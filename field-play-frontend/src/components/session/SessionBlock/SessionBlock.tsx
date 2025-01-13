@@ -1,5 +1,6 @@
 import SessionReadDto from "../../../interfaces/session/SessionReadDto.ts";
 import React from "react";
+import {Status} from "../../../interfaces/session/Status.ts";
 
 interface SessionBlockProps {
     session: SessionReadDto;
@@ -20,30 +21,47 @@ const SessionBlock: React.FC<SessionBlockProps> = (props) => {
                 <span>/</span>
                 <span>{session.maxPlayers}</span>
             </div>
-            <div className="text-green-900 font-semibold">Вы записаны</div>
         </div>
         <hr className="session-block-divider"/>
         <div className="session-book-container">
-            <div className="sign-up-container">
+            {session.isSignedUp ?
                 <div>
-                    Запись
+                    <span className="text-green-600 font-semibold">Вы записаны</span>
+                    <button className="sign-up-button cancel-button">
+                        <div className="font-semibold" onClick={() => onCancelSignUp(session.id)}>
+                            Отписаться
+                        </div>
+                    </button>
                 </div>
-                <button className="sign-up-button">
-                    <div className="font-semibold" onClick={() => onSignUp(session.id)}>
-                        {session.signUpPrice} р.
-                    </div>
-                </button>
-            </div>
-            <div className="book-container">
-                <div>
-                    Брон.
-                </div>
-                <button className="sign-up-button">
-                    <div className="font-semibold" onClick={() => onBook(session.id)}>
-                        {session.bookingPrice} р.
-                    </div>
-                </button>
-            </div>
+                : session.isBooked
+                    ? <span className="text-green-600 font-semibold">Вы забронировали</span>
+                    : session.status == Status.BOOKED
+                        ? <span className="text-red-600 font-semibold">Сессия забронирована</span>
+                        : session.status == Status.FILLED
+                            ? <span className="text-red-600 font-semibold">Сессия заполнена</span>
+                            : <>
+                                <div className="sign-up-container">
+                                    <div>
+                                        Запись
+                                    </div>
+                                    <button className="sign-up-button">
+                                        <div className="font-semibold" onClick={() => onSignUp(session.id)}>
+                                            {session.signUpPrice} р.
+                                        </div>
+                                    </button>
+                                </div>
+                                <div className="book-container">
+                                    <div>
+                                        Брон.
+                                    </div>
+                                    <button className="sign-up-button">
+                                        <div className="font-semibold" onClick={() => onBook(session.id)}>
+                                            {session.bookingPrice} р.
+                                        </div>
+                                    </button>
+                                </div>
+                            </>
+            }
         </div>
     </div>
 

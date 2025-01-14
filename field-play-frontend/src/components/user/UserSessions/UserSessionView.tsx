@@ -7,7 +7,7 @@ import {CircularProgress, Pagination} from "@mui/material";
 import UserSessionBlockContainer from "./UserSessionBlockContainer.tsx";
 import {toast, ToastContainer} from "react-toastify";
 import {AxiosError} from "axios";
-import {UNHANDLED_ERROR_MESSAGE} from "../../../config/constants.tsx";
+import {PAGE_SIZE, UNHANDLED_ERROR_MESSAGE} from "../../../config/constants.tsx";
 import {useAuth} from "../../../context/UserAuth.tsx";
 
 const UserSessionView = () => {
@@ -55,7 +55,7 @@ const UserSessionView = () => {
             : ''
         }
         <UserSessionBlockContainer onCancelSignUp={onCancelSignUp} sessions={page.content}/>
-        <Pagination className="pagination" count={Math.ceil(page.totalElements / 6)} page={pageIndex}
+        <Pagination className="pagination" count={Math.ceil(page.totalElements / PAGE_SIZE)} page={pageIndex}
                     onChange={handlePageIndexChange}/>
         <ToastContainer position="top-right"/>
     </div>
@@ -72,7 +72,10 @@ function useGetSessions(
             pageIndex
         ],
         queryFn: async () => {
-            const response = await sessionService.getAllMy(pageIndex - 1, 6);
+            const response = await sessionService.getAllMy(
+                pageIndex - 1,
+                PAGE_SIZE
+            );
             return response.data;
         },
         placeholderData: keepPreviousData,

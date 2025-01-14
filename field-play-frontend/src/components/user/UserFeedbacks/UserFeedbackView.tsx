@@ -5,6 +5,7 @@ import FeedbackReadDto from "../../../interfaces/feedback/FeedbackReadDto.ts";
 import feedbackService from "../../../services/FeedbackService.ts";
 import UserFeedbackBlockContainer from "./UserFeedbackBlockContainer.tsx";
 import {CircularProgress, Pagination} from "@mui/material";
+import {PAGE_SIZE} from "../../../config/constants.tsx";
 
 const UserFeedbackView = () => {
     const [pageIndex, setPageIndex] = useState<number>(1);
@@ -29,7 +30,7 @@ const UserFeedbackView = () => {
                 : <span>Вы пока не оставили ни одного отзыва</span>
             : ''}
         <UserFeedbackBlockContainer feedbacks={page.content}/>
-        <Pagination className="pagination" count={Math.ceil(page.totalElements / 6)} page={pageIndex}
+        <Pagination className="pagination" count={Math.ceil(page.totalElements / PAGE_SIZE)} page={pageIndex}
                     onChange={handlePageIndexChange}/>
     </div>
 
@@ -45,7 +46,10 @@ function useGetFeedbacks(
             pageIndex
         ],
         queryFn: async () => {
-            const response = await feedbackService.getAllMy(pageIndex - 1, 6);
+            const response = await feedbackService.getAllMy(
+                pageIndex - 1,
+                PAGE_SIZE
+            );
             return response.data;
         },
         placeholderData: keepPreviousData,

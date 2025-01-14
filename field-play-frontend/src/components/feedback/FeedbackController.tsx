@@ -19,7 +19,7 @@ import FeedbackCreateDto from "../../interfaces/feedback/FeedbackCreateDto.ts";
 import {useAuth} from "../../context/UserAuth.tsx";
 import {useNavigate} from "react-router-dom";
 import {AxiosError} from "axios";
-import {UNHANDLED_ERROR_MESSAGE} from "../../config/constants.tsx";
+import {PAGE_SIZE, UNHANDLED_ERROR_MESSAGE} from "../../config/constants.tsx";
 
 interface FeedbackControllerProps {
     fieldId: number;
@@ -103,7 +103,7 @@ const FeedbackController: React.FC<FeedbackControllerProps> = ({fieldId}) => {
         <FeedbackBlockContainer feedbacks={page.content}/>
         <Button onClick={handleFormOpen} sx={{width: 200}} variant="contained">Добавить отзыв</Button>
         <Pagination className="pagination"
-                    count={Math.ceil(page.totalElements / 6)}
+                    count={Math.ceil(page.totalElements / PAGE_SIZE)}
                     page={pageIndex}
                     onChange={handlePageIndexChange}/>
         <Dialog open={openForm} onClose={handleFormClose}>
@@ -156,7 +156,7 @@ function useGetFeedbacks(fieldId: number, pageIndex: number) {
             const response = await feedbackService.getAllByField(
                 fieldId,
                 pageIndex - 1,
-                6
+                PAGE_SIZE
             );
             return response.data;
         },

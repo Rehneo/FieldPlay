@@ -1,0 +1,39 @@
+.admin-request-block {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-request-label {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 40px;
+}
+
+.select-status-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    margin: 0 auto;
+}
+
+.request-info {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+
+.admin-request-block-container {
+    width: 1040px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin-request-process-block {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin-bottom: 10px;
+}

@@ -16,6 +16,7 @@ const CompanySelect: React.FC<CompanySelectProps> = (props) => {
         <Select
             value={selectedCompany?.id || ''}
             onChange={onChange}
+            className="text-bold"
             variant='standard'
             label="Select Company"
             disabled={disabled}

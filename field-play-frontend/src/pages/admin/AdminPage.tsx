@@ -6,6 +6,7 @@ import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import companyService from "../../services/CompanyService.ts";
 import {SelectChangeEvent} from "@mui/material";
 import CompanySelect from "../../components/select/CompanySelect.tsx";
+import AdminRequestController from "../../components/admin/AdminRequest/AdminRequestController.tsx";
 
 const AdminPage = () => {
     const [company, setCompany] = useState<Company | undefined>(undefined);
@@ -32,12 +33,21 @@ const AdminPage = () => {
                            onChange={handleChange}
                            disabled={isLoading || isFetching || isLoadingError}
             />
+            {isLoadingError
+                ? <span className="text-red-600">Произошла ошибка при загрузке компании</span>
+                : ''
+            }
+            {company
+                ? <>
+                    <AdminRequestController companyId={company.id}/>
+                </>
+                : ''
+            }
         </div>
     </>
 }
 
 export default AdminPage;
-
 
 function useGetCompanies() {
     return useQuery<Company[]>({

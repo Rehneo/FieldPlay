@@ -37,7 +37,7 @@ const UserAdminRequestPage = () => {
 
     const getAdminRequest = async (companyId: number) => {
         try {
-            const response = await companyService.getMyByCompany(companyId);
+            const response = await companyService.getMyRequestByCompany(companyId);
             setRequestStatus(response.data.status);
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
@@ -55,7 +55,7 @@ const UserAdminRequestPage = () => {
 
     const handleCreate = async () => {
         try {
-            await companyService.createAdminRequest(company!.id);
+            await companyService.createRequest(company!.id);
             await getAdminRequest(company!.id);
             toast.success("Ваша заявка успешно отправлена");
             // eslint-disable-next-line @typescript-eslint/no-unused-vars

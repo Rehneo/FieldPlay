@@ -3,6 +3,7 @@
     flex-direction: row;
     width: 300px;
     gap: 10px;
+    border-bottom: 1px solid black;
 }
 
 .session-details {
@@ -27,6 +28,10 @@
 
 .session-hours{
     align-self: center;
+}
+
+.field-name{
+    font-weight: 400;
 }
 
 .session-field-date {

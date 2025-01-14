@@ -5,16 +5,37 @@ import cityIcon from '../../../assets/city.svg'
 import footballIcon from '../../../assets/football.svg'
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../context/UserAuth.tsx";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 const UserHeader = () => {
     const navigate = useNavigate();
     const {user, logout} = useAuth();
     const [open, setOpen] = useState(false);
 
+    const collapseRef = useRef<HTMLDivElement | null>(null);
+    const buttonRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                collapseRef.current &&
+                !collapseRef.current.contains(event.target as Node) &&
+                buttonRef.current &&
+                !buttonRef.current.contains(event.target as Node)
+            ) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+
     return <div>
         <header className="header">
-            <div className="user-container">
+            <div className="user-container" ref={buttonRef}>
                 <Avatar onClick={() => setOpen(!open)}
                         className="avatar"
                         alt="User"
@@ -30,13 +51,27 @@ const UserHeader = () => {
                 <img src={cityIcon} className="icon" alt="City Icon"/>
             </div>
         </header>
-        <Collapse className="user-list" in={open} timeout="auto" unmountOnExit>
+        <Collapse ref={collapseRef} className="user-list" in={open} timeout="auto" unmountOnExit>
             <List>
                 <ListItem disablePadding>
                     <ListItemButton onClick={() => {
                         navigate("/me")
                     }}>
                         <ListItemText primary="Личный Кабинет"/>
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton onClick={() => {
+                        logout()
+                    }}>
+                        <ListItemText primary="Пополнить баланс"/>
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton onClick={() => {
+                        logout()
+                    }}>
+                        <ListItemText primary="Стать админом поля"/>
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>

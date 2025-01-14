@@ -86,7 +86,7 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
         isError: isLoadingError,
         isFetching: isFetching,
         isLoading: isLoading,
-    } = useGetSessions(fieldId, startTime);
+    } = useGetSessions(fieldId, startTime, isLoggedIn());
 
     const {mutateAsync: signUp, isPending: isSignUpPending} = useSignUp();
     const {mutateAsync: book, isPending: isBookPending} = useBook();
@@ -130,7 +130,7 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
 
 export default SessionTableController;
 
-function useGetSessions(fieldId: number, startTime: DateTime) {
+function useGetSessions(fieldId: number, startTime: DateTime, isLoggedIn: boolean) {
     return useQuery<SessionMap[]>({
         queryKey: [
             'sessions',
@@ -147,8 +147,8 @@ function useGetSessions(fieldId: number, startTime: DateTime) {
                 )
                 for (const fetchedSession of response.data.content) {
                     fetchedSession.startsAt = DateTime.fromISO(fetchedSession.startsAt.toString());
-                    fetchedSession.isSignedUp = await sessionService.isSignedUp(fetchedSession.id);
-                    fetchedSession.isBooked = await sessionService.isBooked(fetchedSession.id);
+                    fetchedSession.isSignedUp = isLoggedIn ? await sessionService.isSignedUp(fetchedSession.id) : false;
+                    fetchedSession.isBooked = isLoggedIn ? await sessionService.isBooked(fetchedSession.id) : false;
                     session[fetchedSession.startsAt.hour] = fetchedSession;
                 }
                 sessions.push(session);

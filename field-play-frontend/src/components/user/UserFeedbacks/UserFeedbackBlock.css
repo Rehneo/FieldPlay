@@ -1,15 +1,19 @@
 .user-feedback-block {
     display: flex;
     flex-direction: column;
-    width: 300px;
+    width: 400px;
 }
 
 .user-feedback-info-container {
     display: flex;
     flex-direction: row;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 400;
     gap: 5px;
+}
+
+.field-name{
+    font-size: 18px;
 }
 
 .user-feedback-date {
@@ -17,5 +21,5 @@
 }
 
 .user-feedback-message {
-    font-size: 14px;
+    font-size: 16px;
 }

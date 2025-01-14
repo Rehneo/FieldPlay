@@ -23,4 +23,6 @@ public interface CompanyRepository extends CrudRepository<Company, Integer> {
     @Query(value = "SELECT get_number_of_fields(:companyId)", nativeQuery = true)
     int getNumberOfFields(int companyId);
 
+    Page<Company> findAll(Pageable pageable);
+
 }

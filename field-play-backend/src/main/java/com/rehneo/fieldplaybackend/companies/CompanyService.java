@@ -24,4 +24,14 @@ public class CompanyService {
                 .build());
 
     }
+
+    public Page<CompanyReadDto> findAll(Pageable pageable) {
+        Page<Company> companies = repository.findAll(pageable);
+        return companies.map(company -> CompanyReadDto.builder()
+                .id(company.getId())
+                .name(company.getName())
+                .balance(company.getBalance())
+                .numberOfFields(repository.getNumberOfFields(company.getId()))
+                .build());
+    }
 }

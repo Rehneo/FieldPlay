@@ -3,5 +3,6 @@ package com.rehneo.fieldplaybackend.adminrequest;
 public enum Status {
     PENDING,
     APPROVED,
-    REJECTED
+    REJECTED,
+    DOES_NOT_EXIST
 }

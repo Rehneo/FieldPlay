@@ -26,4 +26,13 @@ public class CompanyController {
                 .header("X-Total-Count", String.valueOf(companies.getTotalElements()))
                 .body(companies);
     }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('FIELD_ADMIN')")
+    public ResponseEntity<Page<CompanyReadDto>> findAll(Pageable pageable) {
+        Page<CompanyReadDto> companies = service.findAll(pageable);
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(companies.getTotalElements()))
+                .body(companies);
+    }
 }

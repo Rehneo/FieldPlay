@@ -34,8 +34,8 @@ public class FieldAdminRequestController {
 
     @GetMapping("/my")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<FieldAdminRequestReadDto> findMy() {
-        FieldAdminRequestReadDto request = service.findByUser();
+    public ResponseEntity<FieldAdminRequestReadDto> findMyByCompany(@RequestParam int companyId) {
+        FieldAdminRequestReadDto request = service.findMyByCompanyId(companyId);
         return ResponseEntity.ok(request);
     }
 

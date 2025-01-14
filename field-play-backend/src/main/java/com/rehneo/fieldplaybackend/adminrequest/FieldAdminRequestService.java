@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,10 +44,16 @@ public class FieldAdminRequestService {
                 .map(mapper::map);
     }
 
-    public FieldAdminRequestReadDto findByUser() {
-        return repository
-                .findByUserId(userService.getCurrentUser().getId()).map(mapper::map)
-                .orElseThrow(null);
+    public FieldAdminRequestReadDto findMyByCompanyId(int companyId) {
+        User user = userService.getCurrentUser();
+        Optional<FieldAdminRequest> request = repository.findByUserIdAndCompanyId(user.getId(), companyId);
+        if (request.isPresent()) {
+            return mapper.map(request.get());
+        } else {
+            return FieldAdminRequestReadDto.builder()
+                    .status(Status.DOES_NOT_EXIST)
+                    .build();
+        }
     }
 
     @Transactional

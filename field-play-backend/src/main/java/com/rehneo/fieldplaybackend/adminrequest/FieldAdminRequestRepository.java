@@ -17,7 +17,7 @@ public interface FieldAdminRequestRepository extends JpaRepository<FieldAdminReq
                                                                             Status status,
                                                                             Pageable pageable);
 
-    Optional<FieldAdminRequest> findByUserId(int userId);
-
     boolean existsByUserAndCompany(User user, Company company);
+
+    Optional<FieldAdminRequest> findByUserIdAndCompanyId(int userId, int companyId);
 }

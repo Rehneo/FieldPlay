@@ -1,0 +1,6 @@
+.admin-page-container{
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto 0;
+    width: 1040px;
+}

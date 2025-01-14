@@ -17,6 +17,9 @@ class CompanyService {
         return apiService.get<AdminRequest>(`/field-admin-requests/my?companyId=${companyId}`);
     }
 
+    getAllMy = async (): Promise<AxiosResponse<Page<Company>>> => {
+        return apiService.get<Page<Company>>('/companies/my');
+    }
 
 }
 

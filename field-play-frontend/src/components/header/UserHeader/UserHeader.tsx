@@ -6,6 +6,7 @@ import footballIcon from '../../../assets/football.svg'
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../context/UserAuth.tsx";
 import {useEffect, useRef, useState} from "react";
+import {Role} from "../../../interfaces/auth/Role.ts";
 
 const UserHeader = () => {
     const navigate = useNavigate();
@@ -53,6 +54,17 @@ const UserHeader = () => {
         </header>
         <Collapse ref={collapseRef} className="user-list" in={open} timeout="auto" unmountOnExit>
             <List>
+                {
+                    user?.role == Role.FIELD_ADMIN
+                        ? <ListItem disablePadding>
+                            <ListItemButton onClick={() => {
+                                navigate("/admin")
+                            }}>
+                                <ListItemText primary="Админ панель"/>
+                            </ListItemButton>
+                        </ListItem>
+                        : ''
+                }
                 <ListItem disablePadding>
                     <ListItemButton onClick={() => {
                         navigate("/me")

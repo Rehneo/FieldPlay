@@ -1,14 +1,14 @@
 import Header from "../../components/header/Header.tsx";
 import "./UserAdminRequestPage.css"
 import {keepPreviousData, useQuery} from "@tanstack/react-query";
-import Page from "../../interfaces/Page.ts";
 import Company from "../../interfaces/company/Company.ts";
 import companyService from "../../services/CompanyService.ts";
-import {Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
+import {Button, CircularProgress, SelectChangeEvent} from "@mui/material";
 import {useState} from "react";
 import {AdminRequestStatus} from "../../interfaces/admin/AdminRequestStatus.ts";
 import {toast, ToastContainer} from "react-toastify";
 import {UNHANDLED_ERROR_MESSAGE} from "../../config/constants.tsx";
+import CompanySelect from "../../components/select/CompanySelect.tsx";
 
 const StatusMessage = ({status}: { status: AdminRequestStatus }) => {
     switch (status) {
@@ -29,7 +29,7 @@ const UserAdminRequestPage = () => {
     const [requestStatus, setRequestStatus] = useState<AdminRequestStatus | undefined>(undefined);
 
     const {
-        data: page = {content: [], totalElements: 0},
+        data: companies = [],
         isError: isLoadingError,
         isFetching: isFetching,
         isLoading: isLoading,
@@ -46,7 +46,7 @@ const UserAdminRequestPage = () => {
     }
 
     const handleChange = async (event: SelectChangeEvent<number>) => {
-        const selectedCompany = page.content.find(
+        const selectedCompany = companies.find(
             (c: Company) => c.id == (event.target.value)
         );
         setCompany(selectedCompany);
@@ -70,22 +70,11 @@ const UserAdminRequestPage = () => {
             <label>Стать администратором поля</label>
             {isLoading || isFetching ?
                 <CircularProgress/> : isLoadingError ? 'Произошла ошибка при загрузке компаний' : ''}
-            <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Выберите компанию</InputLabel>
-                <Select
-                    value={company?.id || ''}
-                    onChange={handleChange}
-                    variant='standard'
-                    label="Select Company"
-                    disabled={isLoading || isFetching || isLoadingError}
-                >
-                    {page.content.map((c: Company) => (
-                        <MenuItem key={c.id} value={c.id}>
-                            {c.name}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
+            <CompanySelect companies={companies}
+                           selectedCompany={company}
+                           onChange={handleChange}
+                           disabled={isLoading || isFetching || isLoadingError}
+            />
             {requestStatus
                 ? requestStatus == AdminRequestStatus.DOES_NOT_EXIST
                     ? <Button variant='contained' onClick={handleCreate}>Отправить заявку</Button>
@@ -101,13 +90,13 @@ export default UserAdminRequestPage;
 
 
 function useGetCompanies() {
-    return useQuery<Page<Company>>({
+    return useQuery<Company[]>({
         queryKey: [
             'companies',
         ],
         queryFn: async () => {
             const response = await companyService.getAll();
-            return response.data;
+            return response.data.content;
         },
         placeholderData: keepPreviousData,
         refetchOnWindowFocus: false

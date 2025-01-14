@@ -15,10 +15,6 @@
     flex-direction: column;
 }
 
-.session-info {
-    width: 140px;
-}
-
 .player-count {
     font-weight: 600;
     align-self: center;
@@ -32,6 +28,17 @@
 
 .field-name{
     font-weight: 400;
+}
+
+.cancel-button {
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    height: 30px;
+    margin-top: 20px;
+    margin-bottom: 18px;
+}
+.cancel-button:hover{
+    background-color: gray;
 }
 
 .session-field-date {

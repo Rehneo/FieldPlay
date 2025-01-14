@@ -5,12 +5,13 @@ import "./UserSessionBlockContainer.css"
 
 interface UserSessionBlockContainerProps {
     sessions: SessionReadDto[];
+    onCancelSignUp: (sessionId: number) => void;
 }
 
-const UserSessionBlockContainer: React.FC<UserSessionBlockContainerProps> = ({sessions}) => {
+const UserSessionBlockContainer: React.FC<UserSessionBlockContainerProps> = ({sessions, onCancelSignUp}) => {
     return <div className="user-session-container">
         {sessions.map((session) => {
-            return <UserSessionBlock key={session.id} session={session}/>
+            return <UserSessionBlock key={session.id} onCancelSignUp={onCancelSignUp} session={session}/>
         })}
     </div>
 }

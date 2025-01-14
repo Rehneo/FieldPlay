@@ -6,10 +6,11 @@ import {DateTime} from "luxon";
 
 interface UserSessionBlockProps {
     session: SessionReadDto;
+    onCancelSignUp: (sessionId: number) => void;
 }
 
 
-const UserSessionBlock: React.FC<UserSessionBlockProps> = ({session}) => {
+const UserSessionBlock: React.FC<UserSessionBlockProps> = ({session, onCancelSignUp}) => {
     const startsAt = DateTime.fromISO(session.startsAt.toString());
     return <div className="user-session-block">
         <div className="session-info">
@@ -21,6 +22,10 @@ const UserSessionBlock: React.FC<UserSessionBlockProps> = ({session}) => {
                 <span className="field-name">{session.fieldName}</span>
                 <span className="session-date">{startsAt.toLocaleString(DateTime.DATE_MED)}</span>
             </div>
+            {session.status == Status.ACTIVE
+                ? <button className="cancel-button" onClick={() => onCancelSignUp(session.id)}>Отписаться</button>
+                : ''
+            }
         </div>
         <div className="session-details">
             <div className="player-count">

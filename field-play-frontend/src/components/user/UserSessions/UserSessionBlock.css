@@ -6,7 +6,7 @@
     border-bottom: 1px solid black;
 }
 
-.session-details {
+.user-session-details {
     width: 150px;
     height: 150px;
     padding: 20px;
@@ -15,33 +15,34 @@
     flex-direction: column;
 }
 
-.player-count {
+.user-player-count {
     font-weight: 600;
     align-self: center;
     margin: 0 auto;
     font-size: 30px;
 }
 
-.session-hours{
+.user-session-hours {
     align-self: center;
 }
 
-.field-name{
+.user-field-name {
     font-weight: 400;
 }
 
-.cancel-button {
+.user-cancel-button {
     background-color: rgba(0, 0, 0, 0.25);
     border-radius: 20px;
     height: 30px;
-    margin-top: 20px;
-    margin-bottom: 18px;
+    margin-top: 25px;
+    width: 100px;
 }
-.cancel-button:hover{
+
+.user-cancel-button:hover {
     background-color: gray;
 }
 
-.session-field-date {
+.user-session-field-date {
     font-weight: 300;
     margin-top: 10px;
     font-size: 14px;

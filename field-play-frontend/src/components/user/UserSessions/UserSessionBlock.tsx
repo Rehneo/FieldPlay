@@ -13,22 +13,22 @@ interface UserSessionBlockProps {
 const UserSessionBlock: React.FC<UserSessionBlockProps> = ({session, onCancelSignUp}) => {
     const startsAt = DateTime.fromISO(session.startsAt.toString());
     return <div className="user-session-block">
-        <div className="session-info">
+        <div>
             {session.status == Status.CLOSED
                 ? <span className="text-red-600">Завершенный</span>
                 : <span className="text-green-700">Активный</span>
             }
-            <div className="session-field-date">
-                <span className="field-name">{session.fieldName}</span>
-                <span className="session-date">{startsAt.toLocaleString(DateTime.DATE_MED)}</span>
+            <div className="user-session-field-date">
+                <span className="user-field-name">{session.fieldName}</span>
+                <span className="user-session-date">{startsAt.toLocaleString(DateTime.DATE_MED)}</span>
             </div>
             {session.status == Status.ACTIVE
-                ? <button className="cancel-button" onClick={() => onCancelSignUp(session.id)}>Отписаться</button>
+                ? <button className="user-cancel-button" onClick={() => onCancelSignUp(session.id)}>Отписаться</button>
                 : ''
             }
         </div>
-        <div className="session-details">
-            <div className="player-count">
+        <div className="user-session-details">
+            <div className="user-player-count">
                 {session.status == Status.BOOKED
                     ? 'Брон.'
                     : <>
@@ -44,7 +44,7 @@ const UserSessionBlock: React.FC<UserSessionBlockProps> = ({session, onCancelSig
 
                 }
             </div>
-            <span className="session-hours">{
+            <span className="user-session-hours">{
                 startsAt.hour + ":00" + " - " + (startsAt.hour + 1) + ":00"
             }</span>
         </div>

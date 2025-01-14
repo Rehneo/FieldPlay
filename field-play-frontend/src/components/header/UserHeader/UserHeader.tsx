@@ -62,7 +62,7 @@ const UserHeader = () => {
                 </ListItem>
                 <ListItem disablePadding>
                     <ListItemButton onClick={() => {
-                        logout()
+                        navigate("/me/balance")
                     }}>
                         <ListItemText primary="Пополнить баланс"/>
                     </ListItemButton>

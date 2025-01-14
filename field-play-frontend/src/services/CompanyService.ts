@@ -4,6 +4,8 @@ import {AxiosResponse} from "axios";
 import apiService from "./ApiService.ts";
 import AdminRequest from "../interfaces/admin/AdminRequest.ts";
 import {AdminRequestStatus} from "../interfaces/admin/AdminRequestStatus.ts";
+import BlackListReadDto from "../interfaces/admin/BlackListReadDto.ts";
+import BlackListCreateDto from "../interfaces/admin/BlackListCreateDto.ts";
 
 class CompanyService {
     getAll = async (): Promise<AxiosResponse<Page<Company>>> => {
@@ -43,6 +45,18 @@ class CompanyService {
 
     processRequest = async (requestId: number, approved: boolean): Promise<AxiosResponse<AdminRequest>> => {
         return apiService.patch<AdminRequest>(`/field-admin-requests/${requestId}?approved=${approved}`);
+    }
+
+    getAllBlackListsByCompany = async (companyId: number, page: number, size: number): Promise<AxiosResponse<Page<BlackListReadDto>>> => {
+        return apiService.get<Page<BlackListReadDto>>(`/blacklists?companyId=${companyId}&page=${page}&size=${size}`);
+    }
+
+    createBlackList = async (blacklist: BlackListCreateDto): Promise<AxiosResponse<BlackListReadDto>> => {
+        return apiService.post<BlackListReadDto>(`/blacklists`, blacklist);
+    }
+
+    deleteBlackList = async (blacklistId: number): Promise<AxiosResponse<void>> => {
+        return apiService.delete<void>(`/blacklists/${blacklistId}`);
     }
 }
 

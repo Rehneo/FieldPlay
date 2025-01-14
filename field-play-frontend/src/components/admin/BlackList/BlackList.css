@@ -1,0 +1,29 @@
+.blacklist-block {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.blacklist-block-container {
+    width: 1040px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.blacklist-info {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+
+.blacklist-label {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 40px;
+}
+
+.blacklist-delete {
+    margin-bottom: 10px;
+}

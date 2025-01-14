@@ -86,6 +86,7 @@ function useGetRequests(companyId: number, status: AdminRequestStatus, pageIndex
         queryKey: [
             'admin-requests',
             status,
+            pageIndex,
             companyId
         ],
         queryFn: async () => {

@@ -3,7 +3,6 @@ import {SurfaceType} from "./SurfaceType.ts";
 
 export default interface FieldCreateDto {
     name: string;
-    stationIds?: number[];
     address: string;
     type: FieldType;
     surfaceType: SurfaceType;

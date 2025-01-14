@@ -1,0 +1,11 @@
+.admin-field-select-label {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 40px;
+}
+
+.admin-field-controller-container {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}

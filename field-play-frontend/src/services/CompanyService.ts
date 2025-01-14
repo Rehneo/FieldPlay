@@ -58,6 +58,16 @@ class CompanyService {
     deleteBlackList = async (blacklistId: number): Promise<AxiosResponse<void>> => {
         return apiService.delete<void>(`/blacklists/${blacklistId}`);
     }
+
+    isAdmin = async (companyId: number) => {
+        try {
+            const response = await apiService.get<{ admin: boolean }>(`/field-admins/is-admin?companyId=${companyId}`);
+            return response.data.admin;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            return false;
+        }
+    }
 }
 
 const companyService = new CompanyService();

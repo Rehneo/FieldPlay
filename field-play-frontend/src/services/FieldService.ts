@@ -34,6 +34,10 @@ class FieldService {
         return apiService.patch<FieldFullReadDto>(`/football-fields/${id}`, field);
     }
 
+    getAllByCompany = async (companyId: number, page: number, size: number): Promise<AxiosResponse<Page<FieldReadDto>>> => {
+        return apiService.get<Page<FieldReadDto>>(`/football-fields?companyId=${companyId}&page=${page}&size=${size}`);
+    }
+
 
 }
 

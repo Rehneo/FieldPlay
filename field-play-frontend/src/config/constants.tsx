@@ -3,3 +3,4 @@ export const UNHANDLED_ERROR_MESSAGE = "Произошла ошибка, пов�
 export const DAYS_IN_WEEK = 7;
 export const SESSION_TABLE_ROWS = 24;
 export const PAGE_SIZE = 6;
+export const FIELD_PAGE_SIZE = 9;

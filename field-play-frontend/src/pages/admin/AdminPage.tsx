@@ -8,6 +8,7 @@ import {SelectChangeEvent} from "@mui/material";
 import CompanySelect from "../../components/select/CompanySelect.tsx";
 import AdminRequestController from "../../components/admin/AdminRequest/AdminRequestController.tsx";
 import BlackListController from "../../components/admin/BlackList/BlackListController.tsx";
+import AdminFieldController from "../../components/admin/AdminFieldController/AdminFieldController.tsx";
 
 const AdminPage = () => {
     const [company, setCompany] = useState<Company | undefined>(undefined);
@@ -40,6 +41,7 @@ const AdminPage = () => {
             }
             {company
                 ? <>
+                    <AdminFieldController companyId={company.id}/>
                     <AdminRequestController companyId={company.id}/>
                     <BlackListController companyId={company.id}/>
                 </>

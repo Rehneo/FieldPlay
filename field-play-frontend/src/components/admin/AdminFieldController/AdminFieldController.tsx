@@ -1,22 +1,19 @@
-import React, {useState} from "react";
-import SearchRequest from "../../../interfaces/search/SearchRequest.ts";
-import FieldFilter from "../FieldFilter/FieldFilter.tsx";
-import FieldBlockContainer from "../FieldBlockContainer/FieldBlockContainer.tsx";
-import FieldReadDto from "../../../interfaces/field/FieldReadDto.ts";
-import "./FieldView.css"
+import "./AdminFieldController.css"
 import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import Page from "../../../interfaces/Page.ts";
+import FieldReadDto from "../../../interfaces/field/FieldReadDto.ts";
 import fieldService from "../../../services/FieldService.ts";
-import {CircularProgress, Pagination} from "@mui/material";
+import {PAGE_SIZE} from "../../../config/constants.tsx";
+import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {FIELD_PAGE_SIZE} from "../../../config/constants.tsx";
+import {CircularProgress, Pagination} from "@mui/material";
+import FieldBlockContainer from "../../field/FieldBlockContainer/FieldBlockContainer.tsx";
 
-const UserFieldView = (() => {
+const AdminFieldController = ({companyId}: { companyId: number }) => {
     const navigate = useNavigate();
-    const [searchRequest, setSearchRequest] = useState<SearchRequest>({criteriaList: []})
     const [pageIndex, setPageIndex] = useState<number>(1);
     const onNavigate = (fieldId: number) => {
-        navigate(`/fields/${fieldId}`);
+        navigate(`/companies/${companyId}/fields/${fieldId}`);
     };
 
     const handlePageIndexChange = (_event: React.ChangeEvent<unknown>, value: number) => {
@@ -28,12 +25,10 @@ const UserFieldView = (() => {
         isError: isLoadingError,
         isFetching: isFetching,
         isLoading: isLoading,
-    } = useGetFields(searchRequest, pageIndex);
+    } = useGetFields(companyId, pageIndex);
 
-
-    return <div className="field-view-container">
-        <span className="field-select-label">Выберите поле</span>
-        <FieldFilter onApply={setSearchRequest}/>
+    return <div className="admin-field-controller-container">
+        <span className="admin-field-select-label">Поля</span>
         {isLoading || isFetching ? <CircularProgress/> : page.content.length === 0
             ? isLoadingError
                 ? <span className="text-red-600">Произошла ошибка при загрузке полей</span>
@@ -41,31 +36,31 @@ const UserFieldView = (() => {
             : ''
         }
         <FieldBlockContainer fields={page.content} onNavigate={onNavigate}/>
-        <Pagination className="pagination" count={Math.ceil(page.totalElements / FIELD_PAGE_SIZE)}
+        <Pagination className="pagination" count={Math.ceil(page.totalElements / PAGE_SIZE)}
                     page={pageIndex}
                     onChange={handlePageIndexChange}/>
     </div>
+}
 
-})
+export default AdminFieldController;
 
 
-function useGetFields(
-    searchRequest: SearchRequest,
-    pageIndex: number) {
+function useGetFields(companyId: number, pageIndex: number) {
     return useQuery<Page<FieldReadDto>>({
         queryKey: [
             'fields',
-            searchRequest,
+            companyId,
             pageIndex
         ],
         queryFn: async () => {
-            const response = await fieldService.search(
-                searchRequest, pageIndex - 1, FIELD_PAGE_SIZE, null)
+            const response = await fieldService.getAllByCompany(
+                companyId,
+                pageIndex - 1,
+                PAGE_SIZE
+            )
             return response.data;
         },
         placeholderData: keepPreviousData,
         refetchOnWindowFocus: false
     });
 }
-
-export default UserFieldView;

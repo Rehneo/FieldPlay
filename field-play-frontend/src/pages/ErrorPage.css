@@ -1,4 +1,4 @@
-.not-found-page {
+.error-page {
     width: 300px;
     height: 300px;
     font-size: 20px;
@@ -6,13 +6,13 @@
     margin: 40px auto 0;
 }
 
-.not-found-container {
+.error-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.four-o-four-label {
+.error-label {
     align-self: center;
 }
 

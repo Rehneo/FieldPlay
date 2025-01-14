@@ -12,6 +12,7 @@ import BalancePage from "../pages/user/BalancePage.tsx";
 import UserAdminRequestPage from "../pages/user/UserAdminRequestPage.tsx";
 import ProtectedAdminRoute from "./ProtectedAdminRoute.tsx";
 import AdminPage from "../pages/admin/AdminPage.tsx";
+import AdminFieldPage from "../pages/admin/AdminFieldPage.tsx";
 
 export const router = createBrowserRouter([
 
@@ -29,7 +30,13 @@ export const router = createBrowserRouter([
             {
                 path: "/me/admin-requests", element: <ProtectedUserRoute children={<UserAdminRequestPage/>}/>
             },
-            {path: "/admin", element: <ProtectedAdminRoute children={<AdminPage/>}/>}
+            {path: "/admin", element: <ProtectedAdminRoute children={<AdminPage/>}/>},
+            {
+                path: "/companies/:companyId/fields/:fieldId",
+                element: <IdRouteGuard>
+                    <AdminFieldPage/>
+                </IdRouteGuard>
+            }
         ]
     }
 ])

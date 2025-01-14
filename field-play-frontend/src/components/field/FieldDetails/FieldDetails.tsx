@@ -6,13 +6,15 @@ import {FieldType} from "../../../interfaces/field/FieldType.ts";
 import starIcon from "../../../assets/star.svg";
 import checkmarkIcon from "../../../assets/checkmark.svg";
 import xmarkIcon from "../../../assets/xmark.svg";
+import {Button} from "@mui/material";
 
 
 interface FieldDetailsProps {
     field: FieldFullReadDto;
+    onEdit?: () => void;
 }
 
-const FieldDetails: React.FC<FieldDetailsProps> = ({field}) => {
+const FieldDetails: React.FC<FieldDetailsProps> = ({field, onEdit}) => {
 
     return <div className="field-details">
         <label className="field-name-label">{field.name}</label>
@@ -82,6 +84,10 @@ const FieldDetails: React.FC<FieldDetailsProps> = ({field}) => {
                     <img src={starIcon} className="w-5" alt="Star Icon"/>
                     <span>{field.avgRating ? parseFloat(field.avgRating.toString()).toFixed(1) : '-'}</span>
                 </div>
+                {onEdit
+                    ? <Button variant="contained" onClick={onEdit}>Изменить</Button>
+                    : ''
+                }
             </div>
         </div>
     </div>

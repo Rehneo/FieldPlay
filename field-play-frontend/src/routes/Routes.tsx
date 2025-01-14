@@ -9,6 +9,7 @@ import NotFoundPage from "../pages/NotFoundPage.tsx";
 import FieldPage from "../pages/field/FieldPage.tsx";
 import IdRouteGuard from "./IdRouteGuard.tsx";
 import BalancePage from "../pages/user/BalancePage.tsx";
+import UserAdminRequestPage from "../pages/user/UserAdminRequestPage.tsx";
 
 export const router = createBrowserRouter([
 
@@ -22,7 +23,10 @@ export const router = createBrowserRouter([
             {path: "/", element: <FieldSelectionPage/>},
             {path: "me", element: <ProtectedUserRoute children={<PersonalPage/>}/>},
             {path: "/fields/:fieldId", element: <IdRouteGuard><FieldPage/></IdRouteGuard>},
-            {path: "/me/balance", element: <ProtectedUserRoute children={<BalancePage/>}/>}
+            {path: "/me/balance", element: <ProtectedUserRoute children={<BalancePage/>}/>},
+            {
+                path: "/me/admin-requests", element: <ProtectedUserRoute children={<UserAdminRequestPage/>}/>
+            }
         ]
     }
 ])

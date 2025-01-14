@@ -80,7 +80,7 @@ const FieldDetails: React.FC<FieldDetailsProps> = ({field}) => {
                 <hr className="border-black"/>
                 <div className="mt-4 mb-4 flex flex-row gap-2">
                     <img src={starIcon} className="w-5" alt="Star Icon"/>
-                    <span>{field.avgRating ? field.avgRating : '-'}</span>
+                    <span>{field.avgRating ? parseFloat(field.avgRating.toString()).toFixed(1) : '-'}</span>
                 </div>
             </div>
         </div>

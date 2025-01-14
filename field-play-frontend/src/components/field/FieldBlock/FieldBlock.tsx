@@ -34,7 +34,7 @@ const FieldBlock: React.FC<FieldBlockProps> = ({field}) => {
                 </div>
                 <div className="rating detail">
                     <img src={starIcon} className="icon" alt="Star Icon"/>
-                    <span>{field.avgRating ? field.avgRating : '-'}</span>
+                    <span>{field.avgRating ? parseFloat(field.avgRating.toString()).toFixed(1) : '-'}</span>
                 </div>
             </div>
         </div>

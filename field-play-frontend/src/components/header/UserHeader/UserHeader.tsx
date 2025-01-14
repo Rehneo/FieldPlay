@@ -69,7 +69,7 @@ const UserHeader = () => {
                 </ListItem>
                 <ListItem disablePadding>
                     <ListItemButton onClick={() => {
-                        logout()
+                        navigate("/me/admin-requests")
                     }}>
                         <ListItemText primary="Стать админом поля"/>
                     </ListItemButton>

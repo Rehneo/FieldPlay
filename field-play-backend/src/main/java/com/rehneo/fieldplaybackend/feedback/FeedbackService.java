@@ -37,11 +37,11 @@ public class FeedbackService {
     }
 
     public Page<FeedbackReadDto> findAllByField(int fieldId, Pageable pageable) {
-        return repository.findAllByFootballFieldId(fieldId, pageable).map(mapper::map);
+        return repository.findAllByFootballFieldIdOrderByCreatedAtDesc(fieldId, pageable).map(mapper::map);
     }
 
     public Page<FeedbackReadDto> findAllMy(Pageable pageable) {
-        return repository.findAllByUser(userService.getCurrentUser(), pageable).map(mapper::map);
+        return repository.findAllByUserOrderByCreatedAtDesc(userService.getCurrentUser(), pageable).map(mapper::map);
     }
 
     public Page<FeedbackReadDto> search(SearchCriteriaDto criteria, Pageable pageable) {

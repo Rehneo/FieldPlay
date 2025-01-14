@@ -57,8 +57,9 @@ public class SignUpService {
             throw new BadRequestException("Нельзя отписаться от закрытой сессии");
         }
         repository.delete(signUp);
-        signUp.getUser().setBalance(userService.getBalanceByUser(user));
-        return mapper.map(signUp);
+        SignUpReadDto dto = mapper.map(signUp);
+        dto.getUser().setBalance(user.getBalance() + session.getSignUpPrice());
+        return dto;
     }
 
     @Transactional

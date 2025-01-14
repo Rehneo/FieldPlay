@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback, Integer>, JpaSpecificationExecutor<Feedback> {
 
-    Page<Feedback> findAllByFootballFieldId(int fieldId, Pageable pageable);
+    Page<Feedback> findAllByFootballFieldIdOrderByCreatedAtDesc(int fieldId, Pageable pageable);
 
-    Page<Feedback> findAllByUser(User user, Pageable pageable);
+    Page<Feedback> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
 
     Page<Feedback> findAllByUserId(int userId, Pageable pageable);
 

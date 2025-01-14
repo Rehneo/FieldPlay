@@ -14,7 +14,6 @@ import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldReadDto;
 import com.rehneo.fieldplaybackend.metrostation.MetroStationRepository;
 import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
 import com.rehneo.fieldplaybackend.search.SearchMapper;
-import com.rehneo.fieldplaybackend.session.Session;
 import com.rehneo.fieldplaybackend.user.User;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +46,11 @@ public class FootballFieldService {
 
     public Page<FootballFieldReadDto> search(SearchCriteriaDto criteria, Pageable pageable) {
         Page<FootballField> fields = repository.findAll(searchMapper.map(criteria), pageable);
-        return fields.map(mapper::map);
+        return fields.map(field -> {
+            FootballFieldReadDto readDto = mapper.map(field);
+            readDto.setAvgRating(repository.getAvgRating(field.getId()));
+            return readDto;
+        });
     }
 
     @Transactional

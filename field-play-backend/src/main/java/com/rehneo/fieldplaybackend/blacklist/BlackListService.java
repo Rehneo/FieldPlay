@@ -2,6 +2,7 @@ package com.rehneo.fieldplaybackend.blacklist;
 
 import com.rehneo.fieldplaybackend.companies.CompanyRepository;
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
+import com.rehneo.fieldplaybackend.error.ConflictException;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminService;
 import com.rehneo.fieldplaybackend.user.User;
@@ -23,7 +24,6 @@ public class BlackListService {
     private final UserRepository userRepository;
     private final BlackListMapper mapper;
     private final CompanyRepository companyRepository;
-
 
     public Page<BlackListReadDto> findAllByCompany(int companyId, Pageable pageable) {
         if (!companyRepository.existsById(companyId)) {
@@ -56,7 +56,9 @@ public class BlackListService {
 
     @Transactional
     public BlackListReadDto create(BlackListCreateDto createDto) {
-
+        if (repository.existsByUserIdAndCompanyId(createDto.getUserId(), createDto.getCompanyId())) {
+            throw new ConflictException("Данный пользователь уже находится в черном списке данной компании");
+        }
         BlackList blackList = BlackList.builder()
                 .user(userRepository.findById(createDto.getUserId()).orElseThrow(
                         () -> new UserNotFoundException(
@@ -76,8 +78,6 @@ public class BlackListService {
         }
 
         repository.save(blackList);
-
         return mapper.map(blackList);
-
     }
 }

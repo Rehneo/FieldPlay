@@ -30,7 +30,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/my")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<Page<FeedbackReadDto>> findAllMy(Pageable pageable) {
         Page<FeedbackReadDto> feedbacks = service.findAllMy(pageable);
         return ResponseEntity.ok()
@@ -50,13 +50,13 @@ public class FeedbackController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<FeedbackReadDto> create(@RequestBody FeedbackCreateDto createDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(createDto));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         service.delete(id);
         return ResponseEntity.noContent().build();

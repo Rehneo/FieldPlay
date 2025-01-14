@@ -16,9 +16,8 @@ public class FieldAdminRequestController {
 
     private final FieldAdminRequestService service;
 
-
     @GetMapping("/pending")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FILED_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<Page<FieldAdminRequestReadDto>> findAllPendingByCompany(
             @RequestParam int companyId,
             Pageable pageable
@@ -33,14 +32,14 @@ public class FieldAdminRequestController {
     }
 
     @GetMapping("/my")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<FieldAdminRequestReadDto> findMyByCompany(@RequestParam int companyId) {
         FieldAdminRequestReadDto request = service.findMyByCompanyId(companyId);
         return ResponseEntity.ok(request);
     }
 
     @GetMapping("/approved")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FILED_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<Page<FieldAdminRequestReadDto>> findAllApprovedByCompany(
             @RequestParam int companyId,
             Pageable pageable
@@ -55,7 +54,7 @@ public class FieldAdminRequestController {
     }
 
     @GetMapping("/rejected")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FILED_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<Page<FieldAdminRequestReadDto>> findAllRejectedByCompany(
             @RequestParam int companyId,
             Pageable pageable
@@ -71,12 +70,11 @@ public class FieldAdminRequestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<FieldAdminRequestReadDto> create(@RequestParam int companyId) {
         FieldAdminRequestReadDto request = service.create(companyId);
         return ResponseEntity.status(HttpStatus.CREATED).body(request);
     }
-
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('FIELD_ADMIN')")
@@ -84,6 +82,4 @@ public class FieldAdminRequestController {
         FieldAdminRequestReadDto request = service.process(id, approved);
         return ResponseEntity.ok().body(request);
     }
-
-
 }

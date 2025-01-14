@@ -14,7 +14,7 @@ public class UserController {
     private final UserService userService;
 
     @PatchMapping("/me/balance")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<UserReadDto> updateBalance(@RequestBody BalanceUpdateDto balance) {
         return ResponseEntity.ok(userService.updateBalance(balance));
     }

@@ -34,7 +34,6 @@ public class FootballFieldService {
     private final FieldAdminService fieldAdminService;
     private final UserService userService;
 
-
     public FootballFieldFullReadDto findById(int id) {
         FootballField field = repository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Футбольного поля с id: " + id + " не существует")
@@ -42,6 +41,15 @@ public class FootballFieldService {
         FootballFieldFullReadDto readDto = mapper.mapFull(field);
         readDto.setAvgRating(repository.getAvgRating(field.getId()));
         return readDto;
+    }
+
+    public Page<FootballFieldReadDto> findAllByCompany(int companyId, Pageable pageable) {
+        Page<FootballField> fields = repository.findAllByCompanyId(companyId, pageable);
+        return fields.map(field -> {
+            FootballFieldReadDto readDto = mapper.map(field);
+            readDto.setAvgRating(repository.getAvgRating(field.getId()));
+            return readDto;
+        });
     }
 
     public Page<FootballFieldReadDto> search(SearchCriteriaDto criteria, Pageable pageable) {

@@ -1,12 +1,10 @@
 package com.rehneo.fieldplaybackend.footballfield;
 
-
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldCreateDto;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldEditDto;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldFullReadDto;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldReadDto;
 import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
-import com.rehneo.fieldplaybackend.session.SessionReadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +37,16 @@ public class FootballFieldController {
                 .body(fields);
     }
 
+    @GetMapping
+    public ResponseEntity<Page<FootballFieldReadDto>> findAllByField(
+            @RequestParam int companyId,
+            Pageable pageable
+    ) {
+        Page<FootballFieldReadDto> fields = service.findAllByCompany(companyId, pageable);
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(fields.getTotalElements()))
+                .body(fields);
+    }
 
     @PostMapping
     @PreAuthorize("hasAuthority('FIELD_ADMIN')")

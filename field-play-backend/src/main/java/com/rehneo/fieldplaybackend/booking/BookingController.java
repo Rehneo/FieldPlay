@@ -1,6 +1,5 @@
 package com.rehneo.fieldplaybackend.booking;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,19 +17,19 @@ public class BookingController {
     private final BookingService service;
 
     @PostMapping("/{id}/book")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<BookingReadDto> book(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.book(id));
     }
 
     @GetMapping("/my-bookings")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<BookingReadDto> findMy(@RequestParam int sessionId) {
         return ResponseEntity.ok(service.findMy(sessionId));
     }
 
     @GetMapping("/is-booked")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<Map<String, Boolean>> isUserSignedUp(@RequestParam int sessionId) {
         boolean booked = service.isUserBooked(sessionId);
         return ResponseEntity.ok(Collections.singletonMap("booked", booked));

@@ -17,9 +17,8 @@ public class SessionController {
 
     private final SessionService service;
 
-
     @GetMapping("/my")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<Page<SessionReadDto>> findAllMy(Pageable pageable) {
         Page<SessionReadDto> sessions = service.findAllMy(pageable);
         return ResponseEntity.ok()

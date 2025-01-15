@@ -24,7 +24,7 @@ export const AuthProvider = ({children}: Props) => {
     const navigate = useNavigate();
     const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<User | null>(null);
-    const [IsReady, setIsReady] = useState(false);
+    const [isReady, setIsReady] = useState(false);
     const [authErrorMessage, setAuthErrorMessage] = useState<string | null>(null);
 
     useEffect(() => {
@@ -94,7 +94,7 @@ export const AuthProvider = ({children}: Props) => {
 
     return (
         <UserContext.Provider value={{signIn, user, token, updateUser, logout, isLoggedIn, signUp, authErrorMessage}}>
-            {IsReady ? children : null}
+            {isReady ? children : null}
         </UserContext.Provider>
     )
 }

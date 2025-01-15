@@ -5,8 +5,7 @@ import Page from "../interfaces/Page.ts";
 import FieldReadDto from "../interfaces/field/FieldReadDto.ts";
 import apiService from "./ApiService.ts";
 import FieldFullReadDto from "../interfaces/field/FieldFullReadDto.ts";
-import FieldCreateDto from "../interfaces/field/FieldCreateDto.ts";
-import FieldEditDto from "../interfaces/field/FieldEditDto.ts";
+import FieldCreateEditDto from "../interfaces/field/FieldCreateEditDto.ts";
 
 class FieldService {
 
@@ -26,11 +25,11 @@ class FieldService {
         return apiService.get<FieldFullReadDto>(`/football-fields/${id}`);
     }
 
-    create = async (field: FieldCreateDto): Promise<AxiosResponse<FieldFullReadDto>> => {
+    create = async (field: FieldCreateEditDto): Promise<AxiosResponse<FieldFullReadDto>> => {
         return apiService.post<FieldFullReadDto>('/football-fields', field);
     }
 
-    update = async (id: number, field: FieldEditDto): Promise<AxiosResponse<FieldFullReadDto>> => {
+    update = async (id: number, field: FieldCreateEditDto): Promise<AxiosResponse<FieldFullReadDto>> => {
         return apiService.patch<FieldFullReadDto>(`/football-fields/${id}`, field);
     }
 

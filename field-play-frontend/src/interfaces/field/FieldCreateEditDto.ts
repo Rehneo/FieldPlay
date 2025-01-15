@@ -1,7 +1,7 @@
 import {FieldType} from "./FieldType.ts";
 import {SurfaceType} from "./SurfaceType.ts";
 
-export default interface FieldCreateDto {
+export default interface FieldCreateEditDto {
     name: string;
     address: string;
     type: FieldType;

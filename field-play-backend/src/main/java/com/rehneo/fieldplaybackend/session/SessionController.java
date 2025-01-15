@@ -42,4 +42,17 @@ public class SessionController {
     public ResponseEntity<SessionReadDto> create(@RequestBody SessionCreateDto createDto) {
         return ResponseEntity.ok().body(service.create(createDto));
     }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('FIELD_ADMIN')")
+    public ResponseEntity<Void> delete(@PathVariable int id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('FIELD_ADMIN')")
+    public ResponseEntity<SessionReadDto> edit(@PathVariable int id, @RequestBody SessionEditDto editDto) {
+        return ResponseEntity.ok().body(service.edit(id, editDto));
+    }
 }

@@ -1,6 +1,5 @@
 package com.rehneo.fieldplaybackend.session;
 
-
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminService;
@@ -25,7 +24,6 @@ public class SessionService {
     private final FieldAdminService fieldAdminService;
     private final FootballFieldRepository fieldRepository;
     private final SearchMapper<Session> searchMapper;
-
 
     public Page<SessionReadDto> findAllMy(Pageable pageable) {
         User currentUser = userService.getCurrentUser();
@@ -68,6 +66,34 @@ public class SessionService {
                 .startsAt(createDto.getStartsAt())
                 .status(Status.ACTIVE)
                 .build();
+        repository.save(session);
+        return mapper.map(session);
+    }
+
+    @Transactional
+    public void delete(int sessionId) {
+        Session session = repository.findById(sessionId).orElseThrow(
+                () -> new ResourceNotFoundException("Сеанса с id: " + sessionId + " не существует")
+        );
+        User currentUser = userService.getCurrentUser();
+        if (!fieldAdminService.exists(currentUser.getId(), session.getFootballField().getCompany().getId())) {
+            throw new AccessDeniedException("Вы не являетесь админом данного поля");
+        }
+        repository.delete(session);
+    }
+
+    @Transactional
+    public SessionReadDto edit(int sessionId, SessionEditDto editDto) {
+        Session session = repository.findById(sessionId).orElseThrow(
+                () -> new ResourceNotFoundException("Сеанса с id: " + sessionId + " не существует")
+        );
+        User currentUser = userService.getCurrentUser();
+        if (!fieldAdminService.exists(currentUser.getId(), session.getFootballField().getCompany().getId())) {
+            throw new AccessDeniedException("Вы не являетесь админом данного поля");
+        }
+        session.setBookingPrice(editDto.getBookingPrice());
+        session.setSignUpPrice(editDto.getSignUpPrice());
+        session.setMinPlayers(editDto.getMinPlayers());
         repository.save(session);
         return mapper.map(session);
     }

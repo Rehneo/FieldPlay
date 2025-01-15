@@ -325,4 +325,44 @@ CREATE OR REPLACE TRIGGER check_session_start_trigger
     FOR EACH ROW
 EXECUTE FUNCTION check_session_start();
 
+CREATE OR REPLACE FUNCTION check_session_delete_conflict()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    IF (EXISTS (SELECT 1
+                FROM sign_ups
+                WHERE sign_ups.session_id = OLD.id) OR (OLD.status = 'BOOKED'))
+    THEN
+        RAISE EXCEPTION 'Невозможно удалить данный сеанс, так как он уже занят';
+    END IF;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_session_delete_conflict_trigger
+    BEFORE DELETE
+    ON sessions
+    FOR EACH ROW
+EXECUTE PROCEDURE check_session_delete_conflict();
+
+CREATE OR REPLACE FUNCTION check_session_update_conflict()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    IF (EXISTS (SELECT 1
+                FROM sign_ups
+                WHERE sign_ups.session_id = OLD.id) OR (OLD.status = 'BOOKED'))
+    THEN
+        RAISE EXCEPTION 'Невозможно изменить данный сеанс, так как он уже занят';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_session_update_conflict_trigger
+    BEFORE UPDATE
+    ON sessions
+    FOR EACH ROW
+EXECUTE PROCEDURE check_session_update_conflict();
+
 COMMIT;

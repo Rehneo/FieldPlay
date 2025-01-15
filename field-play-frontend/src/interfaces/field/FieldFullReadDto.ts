@@ -1,6 +1,7 @@
 import MetroStation from "../location/MetroStation.ts";
 import {SurfaceType} from "./SurfaceType.ts";
 import {FieldType} from "./FieldType.ts";
+import City from "../location/City.ts";
 
 export default interface FieldFullReadDto {
     id: number;
@@ -19,4 +20,5 @@ export default interface FieldFullReadDto {
     shower: boolean;
     lighting: boolean;
     parkingSpace: boolean;
+    city: City;
 }

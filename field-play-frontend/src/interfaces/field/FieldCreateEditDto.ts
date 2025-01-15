@@ -6,10 +6,10 @@ export default interface FieldCreateEditDto {
     address: string;
     type: FieldType;
     surfaceType: SurfaceType;
-    maxPlayers: number;
-    length: number;
-    width: number
-    height?: number;
+    maxPlayers: string;
+    length: string;
+    width: string;
+    height?: string;
     lockerRoom: boolean;
     stands: boolean;
     shower: boolean;

@@ -1,11 +1,11 @@
 package com.rehneo.fieldplaybackend.footballfield;
 
 
+import com.rehneo.fieldplaybackend.city.CityReadDto;
 import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldEditDto;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldFullReadDto;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldReadDto;
-import com.rehneo.fieldplaybackend.metrostation.MetroStation;
 import com.rehneo.fieldplaybackend.metrostation.MetroStationReadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,6 +46,11 @@ public class FootballFieldMapper {
                 .shower(footballField.getShower())
                 .lighting(footballField.getLighting())
                 .parkingSpace(footballField.getParkingSpace())
+                .city(CityReadDto.builder()
+                        .id(footballField.getCity().getId())
+                        .name(footballField.getCity().getName())
+                        .build()
+                )
                 .build();
     }
 

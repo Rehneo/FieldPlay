@@ -1,8 +1,8 @@
 package com.rehneo.fieldplaybackend.footballfield.data.dto;
 
+import com.rehneo.fieldplaybackend.city.CityReadDto;
 import com.rehneo.fieldplaybackend.footballfield.data.FootballFieldType;
 import com.rehneo.fieldplaybackend.footballfield.data.SurfaceType;
-import com.rehneo.fieldplaybackend.metrostation.MetroStation;
 import com.rehneo.fieldplaybackend.metrostation.MetroStationReadDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,4 +32,5 @@ public class FootballFieldFullReadDto {
     private Boolean shower;
     private Boolean lighting;
     private Boolean parkingSpace;
+    private CityReadDto city;
 }

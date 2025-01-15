@@ -9,7 +9,10 @@ import FieldCreateEditDto from "../interfaces/field/FieldCreateEditDto.ts";
 
 class FieldService {
 
-    search = async (search: SearchRequest | null, page: number, size: number, sort: SortRequest | null): Promise<AxiosResponse<Page<FieldReadDto>>> => {
+    search = async (
+        search: SearchRequest | null,
+        page: number, size: number,
+        sort: SortRequest | null): Promise<AxiosResponse<Page<FieldReadDto>>> => {
         let sortRequest = "";
         if (sort?.list) {
             sortRequest += sort.list.map((item) => `&sort=${item.key},${item.asc ? 'asc' : 'desc'}`).join('&sort=');

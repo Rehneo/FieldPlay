@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import SearchRequest from "../../../interfaces/search/SearchRequest.ts";
 import FieldFilter from "../FieldFilter/FieldFilter.tsx";
 import FieldBlockContainer from "../FieldBlockContainer/FieldBlockContainer.tsx";
@@ -10,11 +10,16 @@ import fieldService from "../../../services/FieldService.ts";
 import {CircularProgress, Pagination} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {FIELD_PAGE_SIZE} from "../../../config/constants.tsx";
+import CityContext from "../../../context/CityProvider.tsx";
+import City from "../../../interfaces/location/City.ts";
+import {SearchOperator} from "../../../interfaces/search/SearchOperator.ts";
 
 const UserFieldView = (() => {
     const navigate = useNavigate();
     const [searchRequest, setSearchRequest] = useState<SearchRequest>({criteriaList: []})
     const [pageIndex, setPageIndex] = useState<number>(1);
+    const {city} = useContext(CityContext);
+
     const onNavigate = (fieldId: number) => {
         navigate(`/fields/${fieldId}`);
     };
@@ -28,8 +33,7 @@ const UserFieldView = (() => {
         isError: isLoadingError,
         isFetching: isFetching,
         isLoading: isLoading,
-    } = useGetFields(searchRequest, pageIndex);
-
+    } = useGetFields(searchRequest, pageIndex, city!);
 
     return <div className="field-view-container">
         <span className="field-select-label">Выберите поле</span>
@@ -48,19 +52,31 @@ const UserFieldView = (() => {
 
 })
 
-
 function useGetFields(
     searchRequest: SearchRequest,
-    pageIndex: number) {
+    pageIndex: number,
+    city: City
+) {
     return useQuery<Page<FieldReadDto>>({
         queryKey: [
             'fields',
             searchRequest,
-            pageIndex
+            pageIndex,
+            city
         ],
         queryFn: async () => {
+            const search = {
+                criteriaList: [
+                    ...(searchRequest.criteriaList || []),
+                    {
+                        key: 'cityId',
+                        value: city.id,
+                        operator: SearchOperator.NESTED_CITY_ID,
+                    },
+                ],
+            };
             const response = await fieldService.search(
-                searchRequest, pageIndex - 1, FIELD_PAGE_SIZE, null)
+                search, pageIndex - 1, FIELD_PAGE_SIZE, null)
             return response.data;
         },
         placeholderData: keepPreviousData,

@@ -1,20 +1,40 @@
 import "../Header.css"
 import "./UserHeader.css"
-import {Avatar, Collapse, List, ListItem, ListItemButton, ListItemText} from "@mui/material";
+import {
+    Avatar,
+    Collapse,
+    FormControl,
+    InputLabel,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText, MenuItem,
+    Select, SelectChangeEvent
+} from "@mui/material";
 import cityIcon from '../../../assets/city.svg'
 import footballIcon from '../../../assets/football.svg'
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../context/UserAuth.tsx";
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {Role} from "../../../interfaces/auth/Role.ts";
+import CityContext from "../../../context/CityProvider.tsx";
+import City from "../../../interfaces/location/City.ts";
 
 const UserHeader = () => {
     const navigate = useNavigate();
     const {user, logout} = useAuth();
     const [open, setOpen] = useState(false);
+    const {cities, setCity, city} = useContext(CityContext);
 
     const collapseRef = useRef<HTMLDivElement | null>(null);
     const buttonRef = useRef<HTMLDivElement | null>(null);
+
+    const handleCityChange = async (event: SelectChangeEvent<number>) => {
+        const selectedCity = cities.find(
+            (c: City) => c.id == (event.target.value)
+        );
+        setCity(selectedCity!);
+    };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -48,7 +68,20 @@ const UserHeader = () => {
                 <span>Field Play</span>
             </div>
             <div className="city-container">
-                <span>Санкт-Петербург</span>
+                <FormControl sx={{width: 400}}>
+                    <InputLabel>Город</InputLabel>
+                    <Select
+                        name="type"
+                        variant="standard"
+                        value={city!.id}
+                        onChange={handleCityChange}
+                        required
+                    >
+                        {cities.map((c) => {
+                            return <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
+                        })}
+                    </Select>
+                </FormControl>
                 <img src={cityIcon} className="icon" alt="City Icon"/>
             </div>
         </header>

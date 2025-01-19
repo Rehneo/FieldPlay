@@ -4,15 +4,15 @@ import {SESSION_TABLE_ROWS} from "../../../config/constants.tsx";
 import {Status} from "../../../interfaces/session/Status.ts";
 import RawSessionBlock from "../SessionBlock/RawSessionBlock.tsx";
 import AdminSessionBlock from "../SessionBlock/AdminSessionBlock.tsx";
+import SessionReadDto from "../../../interfaces/session/SessionReadDto.ts";
 
-interface AdminSessionTableColumnsProps {
+interface AdminSessionTableColumnProps {
     sessions: SessionMap;
-    onEdit: (sessionId: number) => void;
+    onEdit: (session: SessionReadDto) => void;
     onDelete: (sessionId: number) => void;
 }
 
-
-const AdminSessionTableColumns: React.FC<AdminSessionTableColumnsProps> = (props) => {
+const AdminSessionTableColumn: React.FC<AdminSessionTableColumnProps> = (props) => {
     const {sessions, onEdit, onDelete} = props;
     return <div>
         {Array.from({length: SESSION_TABLE_ROWS}, (_, hour) => (
@@ -31,4 +31,4 @@ const AdminSessionTableColumns: React.FC<AdminSessionTableColumnsProps> = (props
 
 }
 
-export default AdminSessionTableColumns;
+export default AdminSessionTableColumn;

@@ -2,12 +2,19 @@
     margin: 0 auto;
 }
 
-.session-table-header {
+.session-table-header-container {
     position: sticky;
     display: flex;
     background-color: white;
     flex-direction: column;
     top: 0;
+}
+
+.session-table-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .session-select-label {
@@ -22,6 +29,10 @@
     top: 10px;
     display: flex;
     flex-direction: row;
+}
+
+.fill-week-button {
+    margin-bottom: 20px;
 }
 
 .session-table-day-container {

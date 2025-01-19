@@ -93,7 +93,7 @@ const SessionTableController: React.FC<SessionTableControllerProps> = ({fieldId}
     const {mutateAsync: cancelSignUp, isPending: isCancelSignUpPending} = useCancelSignUp();
     return <>
         <div className="session-table-controller-container">
-            <div className="session-table-header">
+            <div className="session-table-header-container">
                 <span className="session-select-label">Выберите сеанс</span>
                 {isLoading || isFetching || isSignUpPending || isBookPending || isCancelSignUpPending ?
                     <CircularProgress/> : ''}
@@ -144,6 +144,8 @@ function useGetSessions(fieldId: number, startTime: DateTime, isLoggedIn: boolea
                     fieldId,
                     startTime.plus({days: i}),
                     startTime.plus({days: i, hours: SESSION_TABLE_ROWS - 1}),
+                    0,
+                    SESSION_TABLE_ROWS
                 )
                 for (const fetchedSession of response.data.content) {
                     fetchedSession.startsAt = DateTime.fromISO(fetchedSession.startsAt.toString());

@@ -2,7 +2,6 @@ import apiService from "./ApiService.ts";
 import SessionReadDto from "../interfaces/session/SessionReadDto.ts";
 import Page from "../interfaces/Page.ts";
 import {AxiosResponse} from "axios";
-import SessionCreateDto from "../interfaces/session/SessionCreateDto.ts";
 import SearchRequest from "../interfaces/search/SearchRequest.ts";
 import SignUpReadDto from "../interfaces/session/SignUpReadDto.ts";
 import BookingReadDto from "../interfaces/session/BookingReadDto.ts";
@@ -10,13 +9,20 @@ import {DateTime} from "luxon";
 import {SearchOperator} from "../interfaces/search/SearchOperator.ts";
 import SignedUpResponse from "../interfaces/session/SignedUpResponse.ts";
 import BookedResponse from "../interfaces/session/BookedResponse.ts";
+import SessionCreateEditDto from "../interfaces/session/SessionCreateEditDto.ts";
 
 class SessionService {
     getAllMy = async (page: number, size: number): Promise<AxiosResponse<Page<SessionReadDto>>> => {
         return apiService.get<Page<SessionReadDto>>(`/sessions/my?page=${page}&size=${size}`)
     }
 
-    search = async (fieldId: number | string, after: DateTime, before: DateTime): Promise<AxiosResponse<Page<SessionReadDto>>> => {
+    search = async (
+        fieldId: number | string,
+        after: DateTime,
+        before: DateTime,
+        page?: number,
+        size?: number
+    ): Promise<AxiosResponse<Page<SessionReadDto>>> => {
         const search: SearchRequest = {
             criteriaList: [
                 {
@@ -38,13 +44,21 @@ class SessionService {
         }
         return apiService.post<Page<SessionReadDto>>
         (
-            `/sessions/search`,
+            `/sessions/search?page=${page}&size=${size}`,
             search
         )
     }
 
-    create = async (session: SessionCreateDto): Promise<AxiosResponse<SessionReadDto>> => {
+    create = async (session: SessionCreateEditDto): Promise<AxiosResponse<SessionReadDto>> => {
         return apiService.post<SessionReadDto>(`/sessions`, session);
+    }
+
+    update = async (sessionId: number, session: SessionCreateEditDto): Promise<AxiosResponse<SessionReadDto>> => {
+        return apiService.patch<SessionReadDto>(`/sessions/${sessionId}`, session);
+    }
+
+    delete = async (sessionId: number): Promise<AxiosResponse<void>> => {
+        return apiService.delete<void>(`/sessions/${sessionId}`);
     }
 
     signUp = async (sessionId: number): Promise<AxiosResponse<SignUpReadDto>> => {

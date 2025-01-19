@@ -14,6 +14,8 @@ import FieldCreateEditForm from "../../components/admin/FieldCreateEditForm/Fiel
 import FieldCreateEditDto from "../../interfaces/field/FieldCreateEditDto.ts";
 import {toast, ToastContainer} from "react-toastify";
 import {UNHANDLED_ERROR_MESSAGE} from "../../config/constants.tsx";
+import AdminSessionTableController
+    from "../../components/session/SessionTableController/AdminSessionTableController.tsx";
 
 const AdminFieldPage = () => {
     const {fieldId} = useParams();
@@ -76,6 +78,7 @@ const AdminFieldPage = () => {
         <FieldDetails field={field!}
                       onEdit={() => setOpenForm(true)}
         />
+        <AdminSessionTableController fieldId={field!.id}/>
         <FieldCreateEditForm onSubmit={onEditSubmit}
                              open={openForm}
                              onClose={() => setOpenForm(false)}

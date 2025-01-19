@@ -2,6 +2,7 @@ package com.rehneo.fieldplaybackend.search;
 
 import com.rehneo.fieldplaybackend.city.City;
 import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
+import com.rehneo.fieldplaybackend.metrostation.MetroStation;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,6 +10,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
@@ -58,6 +60,18 @@ public class SearchSpecification<T> implements Specification<T> {
             case NESTED_FIELD_ID -> {
                 Join<T, FootballField> fieldJoin = root.join("footballField");
                 yield cb.equal(fieldJoin.<Integer>get("id"), criteria.getValue());
+            }
+            case NESTED_STATION_ID -> {
+                Join<T, MetroStation> stationJoin = root.join("metroStations");
+                CriteriaBuilder.In<Integer> inClause = cb.in(stationJoin.get("id"));
+                List<Integer> stationIds;
+                if (criteria.getValue() instanceof List<?> list && list.stream().allMatch(id -> id instanceof Integer)) {
+                    stationIds = list.stream().map(id -> (Integer) id).toList();
+                } else {
+                    throw new IllegalArgumentException("Value must be a list of integers");
+                }
+                stationIds.forEach(inClause::value);
+                yield inClause;
             }
         };
     }

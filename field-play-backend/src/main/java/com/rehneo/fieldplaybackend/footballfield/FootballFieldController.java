@@ -6,6 +6,7 @@ import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldFullReadD
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldReadDto;
 import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Slf4j
 @RequestMapping(value = "/api/v1/football-fields", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class FootballFieldController {
@@ -50,6 +52,7 @@ public class FootballFieldController {
     @PostMapping
     @PreAuthorize("hasAuthority('FIELD_ADMIN')")
     public ResponseEntity<FootballFieldFullReadDto> create(@RequestBody FootballFieldCreateDto createDto) {
+        log.info("New football field create request: {}", createDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(createDto));
     }
 
@@ -58,6 +61,7 @@ public class FootballFieldController {
     public ResponseEntity<FootballFieldFullReadDto> update(
             @PathVariable int id, @RequestBody FootballFieldEditDto editDto
     ) {
+        log.info("New football field update request for field with id: {}, request: {}", id, editDto);
         return ResponseEntity.ok().body(service.edit(id, editDto));
     }
 }

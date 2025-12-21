@@ -1,4 +1,4 @@
-package com.rehneo.fieldplaybackend.integration;
+package com.rehneo.fieldplaybackend.repository;
 
 import com.rehneo.fieldplaybackend.annotation.IT;
 import com.rehneo.fieldplaybackend.session.Session;

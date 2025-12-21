@@ -15,6 +15,6 @@ CREATE INDEX feedbacks_football_field_id_idx ON feedbacks USING HASH (football_f
 
 
 CREATE INDEX blacklists_user_id_idx ON blacklists USING HASH (user_id);
-CREATE INDEX blacklists_football_field_id_idx ON blacklists USING HASH (football_field_id);
+CREATE INDEX blacklists_football_field_id_idx ON blacklists USING HASH (company_id);
 
 COMMIT;

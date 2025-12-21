@@ -1,5 +1,9 @@
 BEGIN;
 
+INSERT INTO cities(name)
+values ('Санкт-Петербург'),
+       ('Москва');
+
 INSERT INTO metro_stations(name, city_id)
 values ('Удельная', 1),
        ('Пионерская', 1),
@@ -92,6 +96,13 @@ values ('Озерки Арена',
         20,
         NULL,
         true, false, true, true, true, 1);
+
+INSERT INTO football_fields_metro_stations(football_field_id, metro_station_id)
+values (2, 1),
+       (2, 2),
+       (4, 3),
+       (4, 7),
+       (4, 1);
 
 
 INSERT INTO sessions (starts_at, status, min_players, sign_up_price, booking_price, football_field_id)

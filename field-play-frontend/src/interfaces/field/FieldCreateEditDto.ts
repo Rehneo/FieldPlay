@@ -4,6 +4,7 @@ import {SurfaceType} from "./SurfaceType.ts";
 export default interface FieldCreateEditDto {
     name: string;
     address: string;
+    stationIds?: string[];
     type: FieldType;
     surfaceType: SurfaceType;
     maxPlayers: string;

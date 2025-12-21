@@ -24,7 +24,7 @@ const SessionBlock: React.FC<SessionBlockProps> = (props) => {
         </div>
         <hr className="session-block-divider"/>
         <div className="session-book-container">
-            {session.isSignedUp ?
+            {session.signedUp ?
                 <div>
                     <span className="text-green-600 font-semibold">Вы записаны</span>
                     <button className="sign-up-button cancel-button">
@@ -33,7 +33,7 @@ const SessionBlock: React.FC<SessionBlockProps> = (props) => {
                         </div>
                     </button>
                 </div>
-                : session.isBooked
+                : session.booked
                     ? <span className="text-green-600 font-semibold">Вы забронировали</span>
                     : session.status == Status.BOOKED
                         ? <span className="text-red-600 font-semibold">Сессия забронирована</span>

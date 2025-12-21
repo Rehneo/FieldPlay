@@ -11,4 +11,8 @@ import java.util.Optional;
 public interface SignUpRepository extends CrudRepository<SignUp, Integer> {
 
     Optional<SignUp> findByUserAndSession(User user, Session session);
+
+    boolean existsByUserAndSession(User user, Session session);
+
+    boolean existsByUserIdAndSessionId(Integer userId, Integer sessionId);
 }

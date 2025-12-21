@@ -10,12 +10,13 @@ import {
     DialogTitle,
     FormControl,
     InputLabel,
-    MenuItem,
-    Select,
+    MenuItem, OutlinedInput,
+    Select, SelectChangeEvent,
     TextField
 } from "@mui/material";
 import FieldFullReadDto from "../../../interfaces/field/FieldFullReadDto.ts";
 import CityContext from "../../../context/CityProvider.tsx";
+import {ITEM_HEIGHT, ITEM_PADDING_TOP} from "../../select/MultipleSelect.tsx";
 
 interface FieldCreateEditFormProps {
     onSubmit: (field: FieldCreateEditDto) => void;
@@ -25,7 +26,19 @@ interface FieldCreateEditFormProps {
     field?: FieldFullReadDto;
 }
 
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
 const FieldCreateForm = ({companyId, open, onClose, field, onSubmit}: FieldCreateEditFormProps) => {
+    const {cities, city} = useContext(CityContext);
+    const {stations} = useContext(CityContext);
+
     const initialFormData = useMemo<FieldCreateEditDto>(() => ({
         name: field ? field.name : "",
         address: field ? field.address : "",
@@ -40,11 +53,19 @@ const FieldCreateForm = ({companyId, open, onClose, field, onSubmit}: FieldCreat
         shower: field ? field.shower : false,
         lighting: field ? field.lighting : false,
         parkingSpace: field ? field.parkingSpace : false,
-        cityId: field ? field.city.id : 1,
-        companyId: companyId
-    }), [field, companyId]);
+        cityId: field ? field.city.id : city!.id,
+        companyId: companyId,
+        stationIds: []
+    }), [field, city, companyId]);
 
-    const {cities} = useContext(CityContext);
+    const handleStationChange = (event: SelectChangeEvent<string[]>) => {
+        const {
+            target: {value},
+        } = event;
+        setFormData(
+            {...formData, stationIds: typeof value === 'string' ? value.split(',') : value}
+        );
+    };
 
     const handleSubmit = () => {
         const newValidationErrors: Record<string, string | undefined> = {};
@@ -118,6 +139,50 @@ const FieldCreateForm = ({companyId, open, onClose, field, onSubmit}: FieldCreat
     return <Dialog open={open} onClose={onClose} className="flex flex-col gap-10">
         <DialogTitle>{field ? 'Изменить поле' : 'Добавить поле'}</DialogTitle>
         <DialogContent className="flex flex-col gap-5" sx={{width: 500, height: 500}}>
+            {
+                !field ?
+                    <FormControl sx={{width: 400, marginTop: 2}}>
+                        <InputLabel>Город</InputLabel>
+                        <Select
+                            name="type"
+                            disabled={true}
+                            variant="standard"
+                            value={formData.cityId}
+                            onChange={(e) => {
+                                setFormData({...formData, cityId: e.target.value as number})
+                            }}
+                            required
+                        >
+                            {cities.map((c) => {
+                                return <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
+                            })}
+                        </Select>
+                    </FormControl>
+                    : ''
+            }
+            {
+                !field ?
+                    <FormControl sx={{width: 400, maxHeight: 100}}>
+                        <InputLabel>Метро</InputLabel>
+                        <Select
+                            multiple
+                            value={formData.stationIds}
+                            input={<OutlinedInput label='Метро'/>}
+                            onChange={handleStationChange}
+                            MenuProps={MenuProps}
+                            variant='standard'>
+                            {stations.map((station) => (
+                                <MenuItem
+                                    key={station.id}
+                                    value={station.id}
+                                >
+                                    {station.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    : ''
+            }
             <TextField
                 sx={{width: 400}}
                 margin="dense"
@@ -319,26 +384,6 @@ const FieldCreateForm = ({companyId, open, onClose, field, onSubmit}: FieldCreat
                     <MenuItem value={'false'}>Нет</MenuItem>
                 </Select>
             </FormControl>
-            {
-                !field ?
-                    <FormControl sx={{width: 400}}>
-                        <InputLabel>Город</InputLabel>
-                        <Select
-                            name="type"
-                            variant="standard"
-                            value={formData.cityId}
-                            onChange={(e) => {
-                                setFormData({...formData, cityId: e.target.value as number})
-                            }}
-                            required
-                        >
-                            {cities.map((c) => {
-                                return <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
-                            })}
-                        </Select>
-                    </FormControl>
-                    : ''
-            }
         </DialogContent>
         <DialogActions>
             <Button onClick={onClose} color="secondary">

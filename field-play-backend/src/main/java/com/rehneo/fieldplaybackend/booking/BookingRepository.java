@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface BookingRepository extends CrudRepository<Booking, Integer> {
     Optional<Booking> findByUserAndSession(User user, Session session);
+    boolean existsByUserAndSession(User user, Session session);
 }

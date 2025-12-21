@@ -1,16 +1,36 @@
 import SearchRequest from "../../../interfaces/search/SearchRequest.ts";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {getSurfaceTypeDisplay, SurfaceType} from "../../../interfaces/field/SurfaceType.ts";
-import {Button, Collapse, TextField} from "@mui/material";
+import {
+    Button,
+    Collapse,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    OutlinedInput,
+    Select,
+    SelectChangeEvent,
+    TextField
+} from "@mui/material";
 import "./FieldFilter.css"
-import MultipleSelect from "../../select/MultipleSelect.tsx";
+import MultipleSelect, {ITEM_HEIGHT, ITEM_PADDING_TOP} from "../../select/MultipleSelect.tsx";
 import SearchCriteria from "../../../interfaces/search/SearchCriteria.ts";
 import {SearchOperator} from "../../../interfaces/search/SearchOperator.ts";
 import OneSelect from "../../select/OneSelect.tsx";
+import CityContext from "../../../context/CityProvider.tsx";
 
 interface FieldFilterProps {
     onApply: (searchRequest: SearchRequest) => void;
 }
+
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
 
 const surfaceTypes: string[] = Object.values(SurfaceType).filter(() => true);
 
@@ -38,9 +58,11 @@ const getFeatureTypeDisplay = (feature: string) => {
 }
 
 const FieldFilter: React.FC<FieldFilterProps> = ({onApply}) => {
+    const {stations} = useContext(CityContext);
     const [address, setAddress] = useState<string>('');
     const [selectedSurfaceType, setSelectedSurfaceType] = useState<string>('');
     const [selectedFieldType, setSelectedFieldType] = useState<string | undefined>(undefined);
+    const [selectedStations, setSelectedStations] = useState<string[]>([]);
     const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
     const [open, setOpen] = React.useState(false);
 
@@ -49,14 +71,25 @@ const FieldFilter: React.FC<FieldFilterProps> = ({onApply}) => {
         setSelectedFeatures([]);
         setAddress('');
         setSelectedSurfaceType('');
+        setSelectedStations([]);
         onApply({criteriaList: []});
     }
 
     const handleFilterButtonClear = () => {
         setSelectedFieldType(undefined);
         setSelectedFeatures([]);
+        setSelectedStations([]);
         setSelectedSurfaceType('');
     }
+
+    const handleStationChange = (event: SelectChangeEvent<typeof selectedStations>) => {
+        const {
+            target: {value},
+        } = event;
+        setSelectedStations(
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
 
     const handleApply = () => {
         const criteria: SearchCriteria[] = [];
@@ -82,6 +115,15 @@ const FieldFilter: React.FC<FieldFilterProps> = ({onApply}) => {
                 operator: SearchOperator.STR_EQUAL,
             });
         })
+
+        if (selectedStations.length > 0) {
+            criteria.push({
+                key: 'stationIds',
+                value: selectedStations,
+                operator: SearchOperator.NESTED_STATION_ID
+            });
+        }
+
         if (selectedSurfaceType.length > 0) {
             criteria.push({
                 key: 'surfaceType',
@@ -142,6 +184,25 @@ const FieldFilter: React.FC<FieldFilterProps> = ({onApply}) => {
                                     setSelectedValues={setSelectedFeatures}
                                     label='Инфраструктура'
                                     display={getFeatureTypeDisplay}/>
+                    <FormControl sx={{width: 300, maxHeight: 100}}>
+                        <InputLabel>Метро</InputLabel>
+                        <Select
+                            multiple
+                            value={selectedStations}
+                            input={<OutlinedInput label='Метро'/>}
+                            onChange={handleStationChange}
+                            MenuProps={MenuProps}
+                            variant='outlined'>
+                            {stations.map((station) => (
+                                <MenuItem
+                                    key={station.id}
+                                    value={station.id}
+                                >
+                                    {station.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </div>
                 <div className="apply-container">
                     <Button className="button-font" variant='contained' onClick={handleApply}>Применить</Button>

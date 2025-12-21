@@ -3,11 +3,13 @@ import React, {createContext, useState, useEffect} from "react";
 import locationService from "../services/LocationService.ts";
 import {DEFAULT_CITY} from "../config/constants.tsx";
 import ServerErrorPage from "../pages/ServerErrorPage.tsx";
+import MetroStation from "../interfaces/location/MetroStation.ts";
 
 type CityContextType = {
     city: City | null;
     cities: City[];
     setCity: (city: City) => void;
+    stations: MetroStation[];
 };
 
 type Props = { children: React.ReactNode };
@@ -16,6 +18,7 @@ const CityContext = createContext<CityContextType>({} as CityContextType);
 
 export const CityProvider = ({children}: Props) => {
     const [city, setCity] = useState<City | null>(null);
+    const [stations, setStations] = useState<MetroStation[]>([]);
     const [cities, setCities] = useState<City[]>([]);
     const [isReady, setIsReady] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -23,8 +26,8 @@ export const CityProvider = ({children}: Props) => {
     useEffect(() => {
         (async () => {
             try {
-                const response = await locationService.getAllCities(); // Adjust endpoint
-                setCities(response.data.content);
+                const cityResponse = await locationService.getAllCities(); // Adjust endpoint
+                setCities(cityResponse.data.content);
                 const savedCity = localStorage.getItem("city");
                 if (savedCity) {
                     setCity(JSON.parse(savedCity));
@@ -41,14 +44,18 @@ export const CityProvider = ({children}: Props) => {
     }, []);
 
     useEffect(() => {
-        if (city) {
-            localStorage.setItem("city", JSON.stringify(city));
-        }
+        (async () => {
+            if (city) {
+                localStorage.setItem("city", JSON.stringify(city));
+                const stationResponse = await locationService.getAllStations(city!.id);
+                setStations(stationResponse.data.content);
+            }
+        })();
     }, [city]);
 
     return (
         <CityContext.Provider
-            value={{city, cities, setCity}}
+            value={{city, cities, setCity, stations}}
         >
             {isReady
                 ? isError ? <ServerErrorPage/> : children

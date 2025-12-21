@@ -22,4 +22,6 @@ public class SessionReadDto {
     private int signUpCount;
     private Status status;
     private ZonedDateTime startsAt;
+    private boolean signedUp;
+    private boolean booked;
 }

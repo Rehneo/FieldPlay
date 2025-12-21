@@ -1,5 +1,6 @@
 package com.rehneo.fieldplaybackend.session;
 
+import com.rehneo.fieldplaybackend.booking.BookingRepository;
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
 import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminService;
@@ -7,7 +8,9 @@ import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
 import com.rehneo.fieldplaybackend.footballfield.FootballFieldRepository;
 import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
 import com.rehneo.fieldplaybackend.search.SearchMapper;
+import com.rehneo.fieldplaybackend.signups.SignUpRepository;
 import com.rehneo.fieldplaybackend.user.User;
+import com.rehneo.fieldplaybackend.user.UserNotFoundException;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,8 @@ public class SessionService {
     private final FieldAdminService fieldAdminService;
     private final FootballFieldRepository fieldRepository;
     private final SearchMapper<Session> searchMapper;
+    private final SignUpRepository signUpRepository;
+    private final BookingRepository bookingRepository;
 
     public Page<SessionReadDto> findAllMy(Pageable pageable) {
         User currentUser = userService.getCurrentUser();
@@ -39,12 +44,26 @@ public class SessionService {
 
     public Page<SessionReadDto> search(SearchCriteriaDto criteria, Pageable pageable) {
         Page<Session> sessions = repository.findAll(searchMapper.map(criteria), pageable);
-        return sessions.map(s -> {
-            SessionReadDto dto = mapper.map(s);
-            dto.setSignUpCount(repository.getSignUpCount(dto.getId()));
-            dto.setMaxPlayers(repository.getMaxPlayers(dto.getId()));
-            return dto;
-        });
+        try {
+            User currentUser = userService.getCurrentUser();
+            return sessions.map(s -> {
+                SessionReadDto dto = mapper.map(s);
+                dto.setSignUpCount(repository.getSignUpCount(dto.getId()));
+                dto.setMaxPlayers(repository.getMaxPlayers(dto.getId()));
+                dto.setSignedUp(signUpRepository.existsByUserIdAndSessionId(currentUser.getId(), s.getId()));
+                dto.setBooked(bookingRepository.existsByUserAndSession(currentUser, s));
+                return dto;
+            });
+        } catch (UserNotFoundException e) {
+            return sessions.map(s -> {
+                SessionReadDto dto = mapper.map(s);
+                dto.setSignUpCount(repository.getSignUpCount(dto.getId()));
+                dto.setMaxPlayers(repository.getMaxPlayers(dto.getId()));
+                dto.setSignedUp(false);
+                dto.setBooked(false);
+                return dto;
+            });
+        }
     }
 
     @Transactional

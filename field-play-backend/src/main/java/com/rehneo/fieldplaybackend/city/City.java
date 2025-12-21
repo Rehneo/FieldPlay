@@ -14,7 +14,6 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "cities")
 public class City {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
@@ -24,5 +23,4 @@ public class City {
     @NotBlank
     @Column(name = "name", nullable = false)
     private String name;
-
 }

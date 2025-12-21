@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BlackListCreateDto {
-
     @NotNull(message = "id пользователя должно присутствовать")
     private Integer userId;
     @NotNull(message = "id компании должно присутствовать")
@@ -21,5 +20,4 @@ public class BlackListCreateDto {
     @NotNull(message = "Причина добавления в черный список должна присутствовать")
     @NotBlank(message = "Причина добавления пользователя в черный список не должна быть пустой")
     private String reason;
-
 }

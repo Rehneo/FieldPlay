@@ -17,7 +17,6 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @Table(name = "bookings")
 public class Booking {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)

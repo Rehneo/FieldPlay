@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Repository
 public interface FieldAdminRequestRepository extends JpaRepository<FieldAdminRequest, Integer> {
-
-
-    Page<FieldAdminRequest> findAllByCompanyIdAndStatusOrderByCreatedAtDesc(int companyId,
-                                                                            Status status,
-                                                                            Pageable pageable);
+    Page<FieldAdminRequest> findAllByCompanyIdAndStatusOrderByCreatedAtDesc(
+            int companyId,
+            Status status,
+            Pageable pageable
+    );
 
     boolean existsByUserAndCompany(User user, Company company);
 

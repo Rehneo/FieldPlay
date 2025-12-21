@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/v1/blacklists", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class BlackListController {
-
     private final BlackListService service;
 
     @GetMapping

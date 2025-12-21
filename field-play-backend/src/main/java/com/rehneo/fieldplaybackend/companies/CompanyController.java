@@ -1,6 +1,5 @@
 package com.rehneo.fieldplaybackend.companies;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/v1/companies", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class CompanyController {
-
     private final CompanyService service;
 
     @GetMapping("/my")

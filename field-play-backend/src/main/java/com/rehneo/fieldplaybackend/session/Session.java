@@ -1,6 +1,5 @@
 package com.rehneo.fieldplaybackend.session;
 
-
 import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +19,6 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @Table(name = "sessions")
 public class Session {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)

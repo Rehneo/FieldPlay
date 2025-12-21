@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/v1/football-fields", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class FootballFieldController {
-
     private final FootballFieldService service;
 
     @GetMapping("/{id}")

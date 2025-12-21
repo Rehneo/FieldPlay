@@ -19,7 +19,6 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @Table(name = "field_admin_requests")
 public class FieldAdminRequest {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)

@@ -27,7 +27,6 @@ public class Feedback {
     @JoinColumn(name = "user_id")
     private User user;
 
-
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "football_field_id", nullable = false)

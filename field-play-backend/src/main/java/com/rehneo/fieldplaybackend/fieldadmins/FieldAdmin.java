@@ -1,6 +1,5 @@
 package com.rehneo.fieldplaybackend.fieldadmins;
 
-
 import com.rehneo.fieldplaybackend.companies.Company;
 import com.rehneo.fieldplaybackend.user.User;
 import jakarta.persistence.*;
@@ -15,7 +14,6 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "field_admins")
 public class FieldAdmin {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
@@ -30,5 +28,4 @@ public class FieldAdmin {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
-
 }

@@ -31,7 +31,8 @@ public class FieldAdminRequestService {
     public Page<FieldAdminRequestReadDto> findAllByCompanyAndStatus(
             int companyId,
             Status status,
-            Pageable pageable) {
+            Pageable pageable
+    ) {
         if (!companyRepository.existsById(companyId)) {
             throw new ResourceNotFoundException("Компании с id: " + companyId + " не существует");
         }
@@ -107,5 +108,4 @@ public class FieldAdminRequestService {
         repository.save(adminRequest);
         return mapper.map(adminRequest);
     }
-
 }

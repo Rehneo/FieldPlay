@@ -9,7 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignInRequest {
-
     @NotNull
     @Size(min = 4, max = 128, message = "Логин должен содержать от 4 до 128 символов")
     private String username;

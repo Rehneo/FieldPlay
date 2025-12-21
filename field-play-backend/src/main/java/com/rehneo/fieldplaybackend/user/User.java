@@ -74,13 +74,8 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-
     public boolean isAdmin() {
         return this.role.equals(Role.ADMIN);
-    }
-
-    public boolean isFieldAdmin() {
-        return this.role.equals(Role.FIELD_ADMIN);
     }
 
     @Override

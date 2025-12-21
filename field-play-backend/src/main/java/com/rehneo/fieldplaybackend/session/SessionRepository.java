@@ -26,5 +26,4 @@ public interface SessionRepository extends JpaRepository<Session, Integer>, JpaS
                     "ORDER BY s.startsAt DESC"
     )
     Page<Session> findAllByUser(User user, Pageable pageable);
-
 }

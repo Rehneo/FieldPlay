@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/v1/field-admin-requests", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class FieldAdminRequestController {
-
     private final FieldAdminRequestService service;
 
     @GetMapping("/pending")

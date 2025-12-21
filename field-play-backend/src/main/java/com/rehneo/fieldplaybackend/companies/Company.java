@@ -1,6 +1,5 @@
 package com.rehneo.fieldplaybackend.companies;
 
-
 import com.rehneo.fieldplaybackend.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +15,6 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "companies")
 public class Company {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)

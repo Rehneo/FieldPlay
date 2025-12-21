@@ -1,6 +1,5 @@
 package com.rehneo.fieldplaybackend.feedback;
 
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,5 +19,4 @@ public class FeedbackCreateDto {
     private String message;
     @NotNull(message = "Рейтинг отзыва должен присутствовать")
     private Integer rating;
-
 }

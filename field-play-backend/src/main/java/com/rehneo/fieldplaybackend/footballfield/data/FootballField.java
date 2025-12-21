@@ -24,7 +24,6 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "football_fields")
 public class FootballField {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
@@ -109,5 +108,4 @@ public class FootballField {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
-
 }

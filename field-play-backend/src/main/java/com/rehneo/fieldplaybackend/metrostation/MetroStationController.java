@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/v1/metro-stations", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class MetroStationController {
-
     private final MetroStationService service;
 
     @GetMapping
@@ -35,5 +34,4 @@ public class MetroStationController {
                 .header("X-Total-Count", String.valueOf(stations.getTotalElements()))
                 .body(stations);
     }
-
 }

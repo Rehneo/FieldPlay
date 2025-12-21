@@ -9,7 +9,6 @@ import java.time.ZonedDateTime;
 @Data
 @Builder
 public class FieldAdminRequestReadDto {
-
     private int id;
 
     private UserReadDto user;

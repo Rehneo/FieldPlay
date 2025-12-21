@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CityService {
-
     private final CityRepository repository;
 
     public Page<CityReadDto> findAll(Pageable pageable) {

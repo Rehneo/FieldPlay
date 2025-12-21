@@ -2,7 +2,6 @@ package com.rehneo.fieldplaybackend.blacklist;
 
 
 import com.rehneo.fieldplaybackend.companies.Company;
-import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
 import com.rehneo.fieldplaybackend.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +17,6 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @Table(name = "blacklists")
 public class BlackList {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
@@ -48,5 +46,4 @@ public class BlackList {
     private void prePersist() {
         createdAt = ZonedDateTime.now();
     }
-
 }

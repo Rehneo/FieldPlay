@@ -15,7 +15,6 @@ import java.util.List;
 public class MetroStationRepositoryTest {
     private final MetroStationRepository repository;
 
-
     @Test
     void testFindByIds() {
         List<Integer> ids = new ArrayList<>();

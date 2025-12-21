@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/v1/sessions", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class SessionController {
-
     private final SessionService service;
 
     @GetMapping("/my")

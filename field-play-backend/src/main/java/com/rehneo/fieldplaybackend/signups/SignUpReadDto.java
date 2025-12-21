@@ -1,6 +1,5 @@
 package com.rehneo.fieldplaybackend.signups;
 
-
 import com.rehneo.fieldplaybackend.session.SessionReadDto;
 import com.rehneo.fieldplaybackend.user.UserReadDto;
 import lombok.Builder;

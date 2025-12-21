@@ -15,7 +15,6 @@ import java.util.List;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-
     @ExceptionHandler({ConflictException.class})
     public ResponseEntity<ErrorResponse> conflict(Exception e) {
         final ErrorResponse response = new ErrorResponse(e.getMessage());

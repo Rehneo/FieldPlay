@@ -40,5 +40,4 @@ public class SearchSpecificationBuilder<T> {
 
         return result;
     }
-
 }

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class FootballFieldMapper {
-
     public FootballFieldReadDto map(FootballField footballField) {
         return FootballFieldReadDto.builder()
                 .id(footballField.getId())

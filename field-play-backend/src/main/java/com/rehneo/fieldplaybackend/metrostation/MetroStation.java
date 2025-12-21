@@ -15,8 +15,6 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "metro_stations")
 public class MetroStation {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)

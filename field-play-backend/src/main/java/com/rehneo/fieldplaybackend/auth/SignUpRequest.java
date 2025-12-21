@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 
@@ -13,7 +12,6 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpRequest {
-
     @NotNull(message = "Имя пользователя должно присутствовать")
     @NotBlank(message = "Имя пользователя не должно быть пустым")
     private String firstName;

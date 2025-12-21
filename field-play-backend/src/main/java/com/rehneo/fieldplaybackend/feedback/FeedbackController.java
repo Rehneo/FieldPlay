@@ -1,6 +1,5 @@
 package com.rehneo.fieldplaybackend.feedback;
 
-
 import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/v1/feedbacks", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class FeedbackController {
-
     private final FeedbackService service;
 
     @GetMapping

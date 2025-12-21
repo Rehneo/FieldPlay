@@ -24,6 +24,7 @@ public class FootballFieldController {
 
     @GetMapping("/{id}")
     public ResponseEntity<FootballFieldFullReadDto> findById(@PathVariable int id) {
+        log.info("Get request for football field with id: {}", id);
         return ResponseEntity.ok().body(service.findById(id));
     }
 

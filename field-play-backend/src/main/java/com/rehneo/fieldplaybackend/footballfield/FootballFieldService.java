@@ -1,10 +1,9 @@
 package com.rehneo.fieldplaybackend.footballfield;
 
-import com.rehneo.fieldplaybackend.city.CityRepository;
+import com.rehneo.fieldplaybackend.city.CityStorage;
 import com.rehneo.fieldplaybackend.companies.Company;
-import com.rehneo.fieldplaybackend.companies.CompanyRepository;
+import com.rehneo.fieldplaybackend.companies.CompanyStorage;
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
-import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminService;
 import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
 import com.rehneo.fieldplaybackend.footballfield.data.dto.FootballFieldCreateDto;
@@ -25,59 +24,49 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class FootballFieldService {
-    private final FootballFieldRepository repository;
     private final FootballFieldMapper mapper;
-    private final CompanyRepository companyRepository;
-    private final CityRepository cityRepository;
+    private final CityStorage cityStorage;
     private final SearchMapper<FootballField> searchMapper;
     private final MetroStationRepository stationRepository;
     private final FieldAdminService fieldAdminService;
     private final UserService userService;
+    private final FootballFieldStorage storage;
+    private final CompanyStorage companyStorage;
 
     public FootballFieldFullReadDto findById(int id) {
-        FootballField field = repository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Футбольного поля с id: " + id + " не существует")
-        );
+        FootballField field = storage.findById(id);
         FootballFieldFullReadDto readDto = mapper.mapFull(field);
-        readDto.setAvgRating(repository.getAvgRating(field.getId()));
+        readDto.setAvgRating(storage.getAvgRating(field.getId()));
         return readDto;
     }
 
     public Page<FootballFieldReadDto> findAllByCompany(int companyId, Pageable pageable) {
-        Page<FootballField> fields = repository.findAllByCompanyId(companyId, pageable);
+        Page<FootballField> fields = storage.findAllByCompanyId(companyId, pageable);
         return fields.map(field -> {
             FootballFieldReadDto readDto = mapper.map(field);
-            readDto.setAvgRating(repository.getAvgRating(field.getId()));
+            readDto.setAvgRating(storage.getAvgRating(field.getId()));
             return readDto;
         });
     }
 
     public Page<FootballFieldReadDto> search(SearchCriteriaDto criteria, Pageable pageable) {
-        Page<FootballField> fields = repository.findAll(searchMapper.map(criteria), pageable);
+        Page<FootballField> fields = storage.findAll(searchMapper.map(criteria), pageable);
         return fields.map(field -> {
             FootballFieldReadDto readDto = mapper.map(field);
-            readDto.setAvgRating(repository.getAvgRating(field.getId()));
+            readDto.setAvgRating(storage.getAvgRating(field.getId()));
             return readDto;
         });
     }
 
     @Transactional
     public FootballFieldFullReadDto create(FootballFieldCreateDto createDto) {
-        Company company = companyRepository.findById(createDto.getCompanyId()).orElseThrow(
-                () -> new ResourceNotFoundException(
-                        "Компании с id: " + createDto.getCompanyId() + " не существует"
-                )
-        );
+        Company company = companyStorage.findById(createDto.getCompanyId());
         User currentUser = userService.getCurrentUser();
         if (!fieldAdminService.exists(currentUser.getId(), createDto.getCompanyId())) {
             throw new AccessDeniedException("Вы не являетесь админом данной компании");
         }
         FootballField field = FootballField.builder()
-                .city(cityRepository.findById(createDto.getCityId()).orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Города с id: " + createDto.getCityId() + " не существует"
-                        )
-                ))
+                .city(cityStorage.findById(createDto.getCityId()))
                 .name(createDto.getName())
                 .address(createDto.getAddress())
                 .type(createDto.getType())
@@ -94,22 +83,18 @@ public class FootballFieldService {
                 .stands(createDto.getStands())
                 .company(company)
                 .build();
-        repository.save(field);
-        return mapper.mapFull(field);
+        return mapper.mapFull(storage.save(field));
     }
 
     @Transactional
     public FootballFieldFullReadDto edit(int fieldId, FootballFieldEditDto editDto) {
-        FootballField field = repository.findById(fieldId).orElseThrow(
-                () -> new ResourceNotFoundException("Футбольного поля с id: " + fieldId + " не существует")
-        );
+        FootballField field = storage.findById(fieldId);
         User currentUser = userService.getCurrentUser();
         if (!fieldAdminService.exists(currentUser.getId(), field.getCompany().getId())) {
             throw new AccessDeniedException("Вы не являетесь админом данной компании");
         }
         mapper.update(editDto, field);
         field.setMetroStations(stationRepository.findAllById(editDto.getStationIds()));
-        repository.save(field);
-        return mapper.mapFull(field);
+        return mapper.mapFull(storage.save(field));
     }
 }

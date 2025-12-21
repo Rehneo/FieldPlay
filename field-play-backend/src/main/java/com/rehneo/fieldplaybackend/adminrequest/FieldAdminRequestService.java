@@ -1,10 +1,8 @@
 package com.rehneo.fieldplaybackend.adminrequest;
 
-
 import com.rehneo.fieldplaybackend.companies.Company;
-import com.rehneo.fieldplaybackend.companies.CompanyRepository;
+import com.rehneo.fieldplaybackend.companies.CompanyStorage;
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
-import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdmin;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminService;
 import com.rehneo.fieldplaybackend.user.User;
@@ -16,54 +14,40 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class FieldAdminRequestService {
-    private final FieldAdminRequestRepository repository;
-    private final CompanyRepository companyRepository;
+    private final CompanyStorage companyStorage;
     private final FieldAdminService fieldAdminService;
+    private final FieldAdminRequestStorage storage;
     private final UserService userService;
     private final FieldAdminRequestMapper mapper;
-
 
     public Page<FieldAdminRequestReadDto> findAllByCompanyAndStatus(
             int companyId,
             Status status,
             Pageable pageable
     ) {
-        if (!companyRepository.existsById(companyId)) {
-            throw new ResourceNotFoundException("Компании с id: " + companyId + " не существует");
-        }
         User currentUser = userService.getCurrentUser();
         if (!fieldAdminService.exists(currentUser.getId(), companyId) && !currentUser.isAdmin()) {
             throw new AccessDeniedException("Вы не являетесь админом данной компании");
         }
-        return repository
+        return storage
                 .findAllByCompanyIdAndStatusOrderByCreatedAtDesc(companyId, status, pageable)
                 .map(mapper::map);
     }
 
     public FieldAdminRequestReadDto findMyByCompanyId(int companyId) {
         User user = userService.getCurrentUser();
-        Optional<FieldAdminRequest> request = repository.findByUserIdAndCompanyId(user.getId(), companyId);
-        if (request.isPresent()) {
-            return mapper.map(request.get());
-        } else {
-            return FieldAdminRequestReadDto.builder()
-                    .status(Status.DOES_NOT_EXIST)
-                    .build();
-        }
+        return mapper.map(storage.findByUserIdAndCompanyId(user.getId(), companyId));
     }
 
     @Transactional
     public FieldAdminRequestReadDto create(int companyId) {
-        Company company = companyRepository.findById(companyId).orElseThrow(() ->
-                new ResourceNotFoundException("Компании с id: " + companyId + " не существует")
-        );
+        Company company = companyStorage.findById(companyId);
         User user = userService.getCurrentUser();
-        if (repository.existsByUserAndCompany(user, company)) {
+        if (storage.existsByUserAndCompany(user, company)) {
             throw new RequestAlreadyExistsException(
                     "Пользователь с логином: " + user.getUsername() + " " +
                             "уже отправил запрос компании с именем " + company.getName()
@@ -74,16 +58,13 @@ public class FieldAdminRequestService {
                 .user(user)
                 .status(Status.PENDING)
                 .build();
-        repository.save(adminRequest);
-        return mapper.map(adminRequest);
+        return mapper.map(storage.save(adminRequest));
 
     }
 
     @Transactional
     public FieldAdminRequestReadDto process(int id, boolean approved) {
-        FieldAdminRequest adminRequest = repository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Запрос с id: " + id + " не найден")
-        );
+        FieldAdminRequest adminRequest = storage.findById(id);
         User currentUser = userService.getCurrentUser();
         if (!fieldAdminService.exists(currentUser, adminRequest.getCompany()) && !currentUser.isAdmin()) {
             throw new AccessDeniedException(
@@ -105,7 +86,7 @@ public class FieldAdminRequestService {
         } else {
             adminRequest.setStatus(Status.REJECTED);
         }
-        repository.save(adminRequest);
-        return mapper.map(adminRequest);
+
+        return mapper.map(storage.save(adminRequest));
     }
 }

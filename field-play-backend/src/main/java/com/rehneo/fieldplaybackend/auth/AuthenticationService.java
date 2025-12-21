@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository userRepository;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -34,12 +33,12 @@ public class AuthenticationService {
                 .balance(0)
                 .role(Role.USER)
                 .build();
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+        if (userService.existsByUsername(signUpRequest.getUsername())) {
             throw new UserAlreadyExistsException(
                     "Пользователь с логином " + signUpRequest.getUsername() + " уже существует"
             );
         }
-        userRepository.save(user);
+        userService.save(user);
         String token = jwtService.generateToken(user);
         return new AuthenticationResponse(token, userMapper.map(user));
     }

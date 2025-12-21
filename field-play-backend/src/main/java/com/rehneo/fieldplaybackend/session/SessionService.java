@@ -1,14 +1,13 @@
 package com.rehneo.fieldplaybackend.session;
 
-import com.rehneo.fieldplaybackend.booking.BookingRepository;
+import com.rehneo.fieldplaybackend.booking.BookingStorage;
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
-import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminService;
+import com.rehneo.fieldplaybackend.footballfield.FootballFieldStorage;
 import com.rehneo.fieldplaybackend.footballfield.data.FootballField;
-import com.rehneo.fieldplaybackend.footballfield.FootballFieldRepository;
 import com.rehneo.fieldplaybackend.search.SearchCriteriaDto;
 import com.rehneo.fieldplaybackend.search.SearchMapper;
-import com.rehneo.fieldplaybackend.signups.SignUpRepository;
+import com.rehneo.fieldplaybackend.signups.SignUpStorage;
 import com.rehneo.fieldplaybackend.user.User;
 import com.rehneo.fieldplaybackend.user.UserNotFoundException;
 import com.rehneo.fieldplaybackend.user.UserService;
@@ -21,44 +20,44 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class SessionService {
-    private final SessionRepository repository;
     private final SessionMapper mapper;
+    private final SessionStorage storage;
     private final UserService userService;
     private final FieldAdminService fieldAdminService;
-    private final FootballFieldRepository fieldRepository;
+    private final FootballFieldStorage footballFieldStorage;
     private final SearchMapper<Session> searchMapper;
-    private final SignUpRepository signUpRepository;
-    private final BookingRepository bookingRepository;
+    private final SignUpStorage signUpStorage;
+    private final BookingStorage bookingStorage;
 
     public Page<SessionReadDto> findAllMy(Pageable pageable) {
         User currentUser = userService.getCurrentUser();
-        return repository.findAllByUser(currentUser, pageable).map(
+        return storage.findAllByUser(currentUser, pageable).map(
                 s -> {
                     SessionReadDto dto = mapper.map(s);
-                    dto.setSignUpCount(repository.getSignUpCount(dto.getId()));
-                    dto.setMaxPlayers(repository.getMaxPlayers(dto.getId()));
+                    dto.setSignUpCount(storage.getSignUpCount(dto.getId()));
+                    dto.setMaxPlayers(storage.getMaxPlayers(dto.getId()));
                     return dto;
                 }
         );
     }
 
     public Page<SessionReadDto> search(SearchCriteriaDto criteria, Pageable pageable) {
-        Page<Session> sessions = repository.findAll(searchMapper.map(criteria), pageable);
+        Page<Session> sessions = storage.findAll(searchMapper.map(criteria), pageable);
         try {
             User currentUser = userService.getCurrentUser();
             return sessions.map(s -> {
                 SessionReadDto dto = mapper.map(s);
-                dto.setSignUpCount(repository.getSignUpCount(dto.getId()));
-                dto.setMaxPlayers(repository.getMaxPlayers(dto.getId()));
-                dto.setSignedUp(signUpRepository.existsByUserIdAndSessionId(currentUser.getId(), s.getId()));
-                dto.setBooked(bookingRepository.existsByUserAndSession(currentUser, s));
+                dto.setSignUpCount(storage.getSignUpCount(dto.getId()));
+                dto.setMaxPlayers(storage.getMaxPlayers(dto.getId()));
+                dto.setSignedUp(signUpStorage.existsByUserIdAndSessionId(currentUser.getId(), s.getId()));
+                dto.setBooked(bookingStorage.existsByUserAndSession(currentUser, s));
                 return dto;
             });
         } catch (UserNotFoundException e) {
             return sessions.map(s -> {
                 SessionReadDto dto = mapper.map(s);
-                dto.setSignUpCount(repository.getSignUpCount(dto.getId()));
-                dto.setMaxPlayers(repository.getMaxPlayers(dto.getId()));
+                dto.setSignUpCount(storage.getSignUpCount(dto.getId()));
+                dto.setMaxPlayers(storage.getMaxPlayers(dto.getId()));
                 dto.setSignedUp(false);
                 dto.setBooked(false);
                 return dto;
@@ -68,11 +67,7 @@ public class SessionService {
 
     @Transactional
     public SessionReadDto create(SessionCreateDto createDto) {
-        FootballField field = fieldRepository.findById(createDto.getFieldId()).orElseThrow(
-                () -> new ResourceNotFoundException(
-                        "Футбольное поле с id: " + createDto.getFieldId() + "не найдено"
-                )
-        );
+        FootballField field = footballFieldStorage.findById(createDto.getFieldId());
         User currentUser = userService.getCurrentUser();
         if (!fieldAdminService.exists(currentUser.getId(), field.getCompany().getId())) {
             throw new AccessDeniedException("Вы не являетесь админом данного поля");
@@ -85,27 +80,22 @@ public class SessionService {
                 .startsAt(createDto.getStartsAt())
                 .status(Status.ACTIVE)
                 .build();
-        repository.save(session);
-        return mapper.map(session);
+        return mapper.map(storage.save(session));
     }
 
     @Transactional
     public void delete(int sessionId) {
-        Session session = repository.findById(sessionId).orElseThrow(
-                () -> new ResourceNotFoundException("Сеанса с id: " + sessionId + " не существует")
-        );
+        Session session = storage.findById(sessionId);
         User currentUser = userService.getCurrentUser();
         if (!fieldAdminService.exists(currentUser.getId(), session.getFootballField().getCompany().getId())) {
             throw new AccessDeniedException("Вы не являетесь админом данного поля");
         }
-        repository.delete(session);
+        storage.delete(session);
     }
 
     @Transactional
     public SessionReadDto edit(int sessionId, SessionEditDto editDto) {
-        Session session = repository.findById(sessionId).orElseThrow(
-                () -> new ResourceNotFoundException("Сеанса с id: " + sessionId + " не существует")
-        );
+        Session session = storage.findById(sessionId);
         User currentUser = userService.getCurrentUser();
         if (!fieldAdminService.exists(currentUser.getId(), session.getFootballField().getCompany().getId())) {
             throw new AccessDeniedException("Вы не являетесь админом данного поля");
@@ -113,7 +103,6 @@ public class SessionService {
         session.setBookingPrice(editDto.getBookingPrice());
         session.setSignUpPrice(editDto.getSignUpPrice());
         session.setMinPlayers(editDto.getMinPlayers());
-        repository.save(session);
-        return mapper.map(session);
+        return mapper.map(storage.save(session));
     }
 }

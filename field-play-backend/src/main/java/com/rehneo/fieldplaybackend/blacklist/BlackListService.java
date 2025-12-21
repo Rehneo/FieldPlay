@@ -1,13 +1,10 @@
 package com.rehneo.fieldplaybackend.blacklist;
 
-import com.rehneo.fieldplaybackend.companies.CompanyRepository;
+import com.rehneo.fieldplaybackend.companies.CompanyStorage;
 import com.rehneo.fieldplaybackend.error.AccessDeniedException;
 import com.rehneo.fieldplaybackend.error.ConflictException;
-import com.rehneo.fieldplaybackend.error.ResourceNotFoundException;
 import com.rehneo.fieldplaybackend.fieldadmins.FieldAdminService;
 import com.rehneo.fieldplaybackend.user.User;
-import com.rehneo.fieldplaybackend.user.UserNotFoundException;
-import com.rehneo.fieldplaybackend.user.UserRepository;
 import com.rehneo.fieldplaybackend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,20 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class BlackListService {
-    private final BlackListRepository repository;
     private final UserService userService;
     private final FieldAdminService fieldAdminService;
-    private final UserRepository userRepository;
+    private final BlackListStorage storage;
     private final BlackListMapper mapper;
-    private final CompanyRepository companyRepository;
+    private final CompanyStorage companyStorage;
 
+    @Transactional(readOnly = true)
     public Page<BlackListReadDto> findAllByCompany(int companyId, Pageable pageable) {
-        if (!companyRepository.existsById(companyId)) {
-            throw new ResourceNotFoundException("Компании с id: " + companyId + " не существует");
-        }
         User currentUser = userService.getCurrentUser();
         if (fieldAdminService.exists(currentUser.getId(), companyId) || currentUser.isAdmin()) {
-            return repository
+            return storage
                     .findAllByCompanyId(companyId, pageable)
                     .map(mapper::map);
         } else {
@@ -41,14 +35,12 @@ public class BlackListService {
 
     @Transactional
     public void delete(int id) {
-        BlackList blackList = repository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Записи с id: " + id + " не существует в черном списке")
-        );
+        BlackList blackList = storage.findById(id);
         User currentUser = userService.getCurrentUser();
         if (
                 fieldAdminService.exists(currentUser.getId(), blackList.getCompany().getId())
                         || currentUser.isAdmin()) {
-            repository.deleteById(id);
+            storage.delete(id);
         } else {
             throw new AccessDeniedException("Вы не являетесь админом данной компании");
         }
@@ -56,20 +48,12 @@ public class BlackListService {
 
     @Transactional
     public BlackListReadDto create(BlackListCreateDto createDto) {
-        if (repository.existsByUserIdAndCompanyId(createDto.getUserId(), createDto.getCompanyId())) {
+        if (storage.existsByUserIdAndCompanyId(createDto.getUserId(), createDto.getCompanyId())) {
             throw new ConflictException("Данный пользователь уже находится в черном списке данной компании");
         }
         BlackList blackList = BlackList.builder()
-                .user(userRepository.findById(createDto.getUserId()).orElseThrow(
-                        () -> new UserNotFoundException(
-                                "Пользователя с id: " + createDto.getUserId() + " не существует"
-                        )
-                ))
-                .company(companyRepository.findById(createDto.getCompanyId()).orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Компании с id: " + createDto.getCompanyId() + " не существует"
-                        )
-                ))
+                .user(userService.findById(createDto.getUserId()))
+                .company(companyStorage.findById(createDto.getCompanyId()))
                 .reason(createDto.getReason())
                 .build();
         User currentUser = userService.getCurrentUser();
@@ -77,7 +61,6 @@ public class BlackListService {
             throw new AccessDeniedException("Вы не являетесь админом данной компании");
         }
 
-        repository.save(blackList);
-        return mapper.map(blackList);
+        return mapper.map(storage.save(blackList));
     }
 }

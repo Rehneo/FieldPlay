@@ -13,7 +13,6 @@ public class MetroStationService {
     private final MetroStationRepository repository;
     private final SearchMapper<MetroStation> searchMapper;
 
-
     public Page<MetroStationReadDto> findAllByCity(int cityId, Pageable pageable) {
         return repository.findAllByCityId(cityId, pageable).map(station -> MetroStationReadDto.builder()
                 .id(station.getId())

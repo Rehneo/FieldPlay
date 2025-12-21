@@ -10,28 +10,28 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CompanyService {
-    private final CompanyRepository repository;
+    private final CompanyStorage storage;
     private final UserService userService;
 
     public Page<CompanyReadDto> findAllByUser(Pageable pageable) {
         User currentUser = userService.getCurrentUser();
-        Page<Company> companies = repository.findAllByUser(currentUser, pageable);
+        Page<Company> companies = storage.findAllByUser(currentUser, pageable);
         return companies.map(company -> CompanyReadDto.builder()
                 .id(company.getId())
                 .name(company.getName())
                 .balance(company.getBalance())
-                .numberOfFields(repository.getNumberOfFields(company.getId()))
+                .numberOfFields(storage.getNumberOfFields(company.getId()))
                 .build());
 
     }
 
     public Page<CompanyReadDto> findAll(Pageable pageable) {
-        Page<Company> companies = repository.findAll(pageable);
+        Page<Company> companies = storage.findAll(pageable);
         return companies.map(company -> CompanyReadDto.builder()
                 .id(company.getId())
                 .name(company.getName())
                 .balance(company.getBalance())
-                .numberOfFields(repository.getNumberOfFields(company.getId()))
+                .numberOfFields(storage.getNumberOfFields(company.getId()))
                 .build());
     }
 }

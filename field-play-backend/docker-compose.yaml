@@ -1,0 +1,77 @@
+services:
+  field-play-backend-1:
+    env_file: .env
+    build: ./
+    container_name: field-play-backend-1
+    environment:
+      - SERVER_PORT=8081
+      - SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE-ID=field-play-backend-1
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+      - consul
+    ports:
+      - "8081:8081"
+
+  field-play-backend-2:
+    env_file: .env
+    build: ./
+    container_name: field-play-backend-2
+    environment:
+      - SERVER_PORT=8082
+      - SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE-ID=field-play-backend-2
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+      - consul
+    ports:
+      - "8082:8082"
+
+  postgres:
+    env_file: .env
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    networks:
+      - app-network
+    volumes:
+      - database_data:/var/lib/postgresql/data
+
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    ports:
+      - "8085:80"
+      - "8505:8505"
+    networks:
+      - app-network
+    depends_on:
+      - field-play-backend-1
+      - field-play-backend-2
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+
+  consul:
+    image: consul:1.15
+    container_name: consul
+    ports:
+      - "8500:8500"  # Consul UI/API
+      - "8600:8600/udp"  # DNS
+    command: "agent -dev -client=0.0.0.0"
+    networks:
+      - app-network
+
+volumes:
+  database_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

@@ -76,6 +76,7 @@ public class SecurityConfiguration {
 
     private static final String[] AUTH_WHITELIST = {
             "/api/v1/auth/**",
+            "/actuator/health",
             "/api/v1/football-fields/**",
             "/api/v1/metro-stations/**",
             "/api/v1/feedbacks/**",
